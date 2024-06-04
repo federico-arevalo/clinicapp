@@ -1,0 +1,56 @@
+<!-- forked from: https://codepen.io/cuonoj/pen/JjPmMaB -->
+
+<section
+  class="relative h-screen flex flex-col items-center justify-center text-center"
+>
+  <div
+    class="fixed top-0 left-0 w-full z-50 bg-gray-200 backdrop-filter backdrop-blur-lg bg-opacity-80"
+  >
+    <div class="mx-auto max-w-7xl px-6 sm:px-6 lg:px-8">
+      <div class="relative flex h-16 justify-between">
+        <div class="flex flex-1 items-stretch justify-start">
+          <a class="flex flex-shrink-0 items-center" href="#">
+            <img
+              class="block h-12 w-auto"
+              src="https://www.svgrepo.com/show/206513/hospital-first-aid.svg"
+            />
+          </a>
+        </div>
+        <div class="flex-shrink-0 flex px-2 py-3 items-center space-x-8">
+          <a
+            class="text-gray-700 hover:text-red-950 text-sm font-medium"
+            href="/login"
+            >Ingresar</a
+          >
+          <a
+            class="text-gray-800 bg-rose-100 hover:bg-rose-200 inline-flex items-center justify-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm"
+            href="/register"
+            >Registrarse
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="video-docker absolute top-0 left-0 w-full h-full overflow-hidden">
+    <video
+      class="min-w-full min-h-full absolute object-cover brightness-75"
+      src="../../../assets/bg-clinic.mp4"
+      type="video/mp4"
+      autoplay
+      [muted]="'muted'"
+      loop
+    ></video>
+  </div>
+
+  <div
+    class="flex flex-col gap-2 rounded-xl shadow-md p-6 bg-gray-200 bg-opacity-30 backdrop-filter backdrop-blur-lg"
+  >
+    <div class="font-semibold text-5xl tracking-tight">
+      Bienvenido a Clinicapp
+    </div>
+    <div class="font-normal">
+      Clinicapp te acerca a los mas prestigiosos especialistas de la salud.
+      Registrate y saca turno para lo que necesites
+    </div>
+  </div>
+</section>
