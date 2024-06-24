@@ -53,20 +53,48 @@ export class RegisterComponent {
 
   constructor(private authService: AuthService) {}
 
-  onRegister($event: any): void {
+  onRegister($event: any, type: string): void {
     $event.preventDefault();
+    console.log(this.especialistaForm);
+    console.log($event.target.form[8].files[0]);
 
-    if (
-      this.pacienteForm.value.password ===
-      this.pacienteForm.value.repeatPassword
-    ) {
-      const { email, password } = this.pacienteForm.value;
-      this.authService.SignUp(email || '', password || '');
+    if (type === 'paciente') {
+      if (
+        this.pacienteForm.value.password ===
+        this.pacienteForm.value.repeatPassword
+      ) {
+        const { email, password } = this.pacienteForm.value;
+        this.authService.SignUp(
+          email || '',
+          password || '',
+          'paciente',
+          this.pacienteForm.value,
+          {
+            firstProfilePicture: $event.target.form[8].files[0],
+            secondProfilePicture: $event.target.form[9].files[0],
+          }
+        );
+      } else {
+        console.log('las contraseñas no coindicen');
+      }
     } else {
-      console.log('las contraseñas no coindicen');
+      if (
+        this.especialistaForm.value.password ===
+        this.especialistaForm.value.repeatPassword
+      ) {
+        const { email, password } = this.especialistaForm.value;
+        this.authService.SignUp(
+          email || '',
+          password || '',
+          'especialista',
+          this.especialistaForm.value,
+          { profilePicture: $event.target.form[8].files[0] }
+        );
+      } else {
+        console.log('las contraseñas no coindicen');
+      }
     }
   }
-
   switchTab(type: string) {
     if (type === 'paciente') this.isPaciente = true;
     else this.isPaciente = false;

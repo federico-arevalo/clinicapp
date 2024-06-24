@@ -8,6 +8,7 @@ import {
 } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
 import { publishLast } from 'rxjs';
+import { Storage, ref, uploadBytes } from '@angular/fire/storage';
 @Injectable({
   providedIn: 'root',
 })
@@ -20,7 +21,8 @@ export class AuthService {
     public afs: AngularFirestore, // Inject Firestore service
     public afAuth: AngularFireAuth, // Inject Firebase auth service
     public router: Router,
-    public ngZone: NgZone // NgZone service to remove outside scope warning
+    public ngZone: NgZone, // NgZone service to remove outside scope warning
+    private storage: Storage
   ) {
     /* Saving user data in localstorage when
     logged in and setting up null when logged out */
@@ -44,23 +46,30 @@ export class AuthService {
         // this.ngZone.run(() => {
         //   this.router.navigate(['home']);
         // });
-        this.SetUserData(result.user);
+        // this.SetUserData(result.user);
         // this.router.navigate(['home']);
         // this.router.navigateByUrl('/home');
       });
   }
   // Sign up with email/password
-  SignUp(email: string, password: string) {
+  SignUp(
+    email: string,
+    password: string,
+    userType: string,
+    newUser: any,
+    images: any
+  ) {
     return this.afAuth
       .createUserWithEmailAndPassword(email, password)
       .then((result) => {
         /* Call the SendVerificaitonMail() function when new user sign
         up and returns promise */
         // this.SendVerificationMail();
-        this.SetUserData(result.user);
+        console.log(result);
+        this.SetUserDataType(result.user, userType, newUser, images);
       })
       .catch((error) => {
-        window.alert(error.message);
+        console.log(error.message);
       });
   }
   // Send email verfificaiton when new user sign up
@@ -107,7 +116,7 @@ export class AuthService {
         this.SetUserData(result.user);
       })
       .catch((error) => {
-        window.alert(error);
+        console.log(error);
       });
   }
   /* Setting up user data when sign in with username/password,
@@ -128,6 +137,124 @@ export class AuthService {
       merge: true,
     });
   }
+
+  SetUserDataType(user: any, userType: string, newUserData: any, images: any) {
+    const userRef: AngularFirestoreDocument<any> = this.afs.doc(
+      `users/${user.uid}`
+    );
+
+    const userData = {
+      uid: user.uid,
+      email: user.email,
+      emailVerified: user.emailVerified,
+    };
+
+    let newPaciente = {};
+    let newEspecialista = {};
+
+    if (userType === 'paciente') {
+      let firstProfilePicturePath = '';
+      let secondProfilePicturePath = '';
+
+      let firstProfilePictureRef = ref(
+        this.storage,
+        `images/${
+          user.uid
+        }/firstProfilePicture.${images.firstProfilePicture.name
+          .split('.')
+          .pop()}`
+      );
+      let secondProfilePictureRef = ref(
+        this.storage,
+        `images/${
+          user.uid
+        }/secondProfilePicture.${images.secondProfilePicture.name
+          .split('.')
+          .pop()}`
+      );
+
+      uploadBytes(firstProfilePictureRef, images.firstProfilePicture)
+        .then((data) => {
+          console.log(data);
+          firstProfilePicturePath = data.metadata.fullPath;
+
+          uploadBytes(secondProfilePictureRef, images.secondProfilePicture)
+            .then((data) => {
+              console.log(data);
+              secondProfilePicturePath = data.metadata.fullPath;
+
+              newPaciente = {
+                ...userData,
+                name: newUserData.name,
+                lastName: newUserData.lastName,
+                age: newUserData.age,
+                dni: newUserData.dni,
+                obraSocial: newUserData.obraSocial,
+                firstProfilePicture: firstProfilePicturePath,
+                secondProfilePicture: secondProfilePicturePath,
+                rol: userType,
+              };
+
+              userRef
+                .set(newPaciente, {
+                  merge: true,
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else if (userType === 'especialista') {
+      let profilePictureRef = ref(
+        this.storage,
+        `images/${user.uid}/profilePicture.${images.profilePicture.name
+          .split('.')
+          .pop()}`
+      );
+
+      uploadBytes(profilePictureRef, images.profilePicture)
+        .then((data) => {
+          console.log(data);
+
+          newEspecialista = {
+            ...userData,
+            name: newUserData.name,
+            lastName: newUserData.lastName,
+            age: newUserData.age,
+            dni: newUserData.dni,
+            especialidad: newUserData.especialidad,
+            profilePicture: data.metadata.fullPath,
+            rol: userType,
+          };
+
+          userRef
+            .set(newEspecialista, {
+              merge: true,
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    return userRef
+      .set(userType === 'paciente' ? newPaciente : newEspecialista, {
+        merge: true,
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   // Sign out
   SignOut() {
     return this.afAuth.signOut().then(() => {
