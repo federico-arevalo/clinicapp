@@ -6,26 +6,47 @@
     />
   </div>
 
-  <div class="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2 flex flex-col">
-    <h1 class="text-2xl font-semibold mb-4">Registrarse</h1>
-    <div class="flex border-b border-gray-300 mb-5">
-      <button
-        class="w-1/2 py-4 text-center font-medium text-gray-700 bg-gray-100 rounded-tl-lg focus:outline-none active:bg-red-300"
-        (click)="switchTab('paciente')"
-        [ngClass]="isPaciente ? 'bg-red-300' : ''"
-      >
-        Paciente
-      </button>
-      <button
-        class="w-1/2 py-4 text-center font-medium text-gray-700 bg-gray-100 rounded-tr-lg focus:outline-none active:bg-red-300"
-        (click)="switchTab('especialista')"
-        [ngClass]="isPaciente ? '' : 'bg-red-300'"
-      >
-        Especialista
-      </button>
+  <div class="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-2/3 flex flex-col">
+    <h1 class="text-2xl font-semibold mb-4">
+      Registrarse {{ isPaciente ? "como paciente" : "como especialista" }}
+    </h1>
+    <div class="flex justify-around">
+      <div>
+        <button
+          (click)="switchTab('paciente')"
+          [ngClass]="isPaciente ? '' : 'blur-sm'"
+        >
+          <img
+            height="175"
+            width="175"
+            src="https://www.ortopediamimas.com/blog-de-ortopedia/wp-content/uploads/2022/07/portada-guia-aseo-y-cuidados-paciente-encamado.jpg"
+            alt="Registro paciente"
+            class="rounded"
+          />
+        </button>
+      </div>
+      <div>
+        <button
+          (click)="switchTab('especialista')"
+          [ngClass]="isPaciente ? 'blur-sm' : ''"
+        >
+          <img
+            height="175"
+            width="175"
+            src="https://tn.com.ar/resizer/2Bo3XTVOkJxqtztTj-r8JF6jE5g=/767x0/smart/filters:format(webp)/cloudfront-us-east-1.images.arcpublishing.com/artear/RWFITTMV2F7IQL3BTLNPVW2R6I.jpg"
+            alt="Registro especialista"
+            class="rounded"
+          />
+        </button>
+      </div>
     </div>
+
+    <ng-container
+      *ngTemplateOutlet="isPaciente ? paciente : especialista"
+    ></ng-container>
+
     <!-- FORM PACIENTE -->
-    <ng-template [ngIf]="isPaciente" [ngIfElse]="especialista">
+    <ng-template #paciente>
       <form [formGroup]="pacienteForm">
         <div class="mb-4">
           <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
@@ -265,7 +286,7 @@
         <button
           type="submit"
           class="bg-rose-500 hover:bg-rose-700 text-white font-semibold rounded-md py-2 px-4 w-full"
-          (click)="onRegister($event)"
+          (click)="onRegister($event, 'paciente')"
           [disabled]="!pacienteForm.valid"
           [ngClass]="{ 'bg-slate-400 hover:bg-slate-400': !pacienteForm.valid }"
         >
@@ -276,7 +297,7 @@
 
     <!-- FORM ESPECIALISTA -->
     <ng-template #especialista
-      ><form action="#" method="POST">
+      ><form [formGroup]="especialistaForm">
         <div class="mb-4">
           <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
             <svg
@@ -300,6 +321,7 @@
               type="text"
               name="name"
               placeholder="Nombre"
+              formControlName="name"
             />
           </div>
         </div>
@@ -326,6 +348,7 @@
               type="text"
               name="lastName"
               placeholder="Apellido"
+              formControlName="lastName"
             />
           </div>
         </div>
@@ -351,6 +374,7 @@
               type="number"
               name="age"
               placeholder="Edad"
+              formControlName="age"
             />
           </div>
         </div>
@@ -372,6 +396,7 @@
               type="number"
               name="dni"
               placeholder="DNI"
+              formControlName="dni"
             />
           </div>
         </div>
@@ -392,15 +417,12 @@
               ></path>
               <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
             </svg>
-            <input
-              id="especialidad"
-              class="pl-2 w-full outline-none border-none"
-              type="text"
-              name="especialidad"
-              placeholder="Especialidad"
+            <app-multiselect
+              (newEspecialidadEvent)="selectEspecialidades($event)"
             />
           </div>
         </div>
+
         <div class="mb-4">
           <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
             <svg
@@ -423,6 +445,7 @@
               type="email"
               name="email"
               placeholder="Correo eléctronico"
+              formControlName="email"
             />
           </div>
         </div>
@@ -446,6 +469,7 @@
               name="password"
               id="password"
               placeholder="Contraseña"
+              formControlName="password"
             />
           </div>
         </div>
@@ -465,10 +489,11 @@
             </svg>
             <input
               class="pl-2 w-full outline-none border-none"
-              type="repeatPassword"
+              type="password"
               name="repeatPassword"
               id="repeatPassword"
               placeholder="Repetir contraseña"
+              formControlName="repeatPassword"
             />
           </div>
         </div>
@@ -485,13 +510,20 @@
                 name="profilePicture"
                 type="file"
                 class="mt-2 block w-full text-sm file:mr-4 file:rounded-md file:border-0 file:bg-orange-500 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-white hover:file:bg-orange-700 focus:outline-none disabled:pointer-events-none disabled:opacity-60"
+                formControlName="profilePicture"
               />
             </div>
           </div>
         </div>
+
         <button
           type="submit"
           class="bg-rose-500 hover:bg-rose-700 text-white font-semibold rounded-md py-2 px-4 w-full"
+          (click)="onRegister($event, 'especialista')"
+          [disabled]="!especialistaForm.valid"
+          [ngClass]="{
+            'bg-slate-400 hover:bg-slate-400': !especialistaForm.valid
+          }"
         >
           Registrarse
         </button>
