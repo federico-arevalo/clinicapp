@@ -17,8 +17,8 @@
           [ngClass]="isPaciente ? '' : 'blur-sm'"
         >
           <img
-            height="200"
-            width="200"
+            height="175"
+            width="175"
             src="https://www.ortopediamimas.com/blog-de-ortopedia/wp-content/uploads/2022/07/portada-guia-aseo-y-cuidados-paciente-encamado.jpg"
             alt="Registro paciente"
             class="rounded"
@@ -31,8 +31,8 @@
           [ngClass]="isPaciente ? 'blur-sm' : ''"
         >
           <img
-            height="200"
-            width="200"
+            height="175"
+            width="175"
             src="https://tn.com.ar/resizer/2Bo3XTVOkJxqtztTj-r8JF6jE5g=/767x0/smart/filters:format(webp)/cloudfront-us-east-1.images.arcpublishing.com/artear/RWFITTMV2F7IQL3BTLNPVW2R6I.jpg"
             alt="Registro especialista"
             class="rounded"
@@ -41,8 +41,12 @@
       </div>
     </div>
 
+    <ng-container
+      *ngTemplateOutlet="isPaciente ? paciente : especialista"
+    ></ng-container>
+
     <!-- FORM PACIENTE -->
-    <ng-template [ngIf]="isPaciente" [ngIfElse]="especialista">
+    <ng-template #paciente>
       <form [formGroup]="pacienteForm">
         <div class="mb-4">
           <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
@@ -413,16 +417,12 @@
               ></path>
               <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
             </svg>
-            <input
-              id="especialidad"
-              class="pl-2 w-full outline-none border-none"
-              type="text"
-              name="especialidad"
-              placeholder="Especialidad"
-              formControlName="especialidad"
+            <app-multiselect
+              (newEspecialidadEvent)="selectEspecialidades($event)"
             />
           </div>
         </div>
+
         <div class="mb-4">
           <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
             <svg
@@ -515,6 +515,7 @@
             </div>
           </div>
         </div>
+
         <button
           type="submit"
           class="bg-rose-500 hover:bg-rose-700 text-white font-semibold rounded-md py-2 px-4 w-full"

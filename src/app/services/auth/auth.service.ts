@@ -7,7 +7,6 @@ import {
   AngularFirestoreDocument,
 } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
-import { publishLast } from 'rxjs';
 import { Storage, ref, uploadBytes } from '@angular/fire/storage';
 @Injectable({
   providedIn: 'root',
@@ -48,7 +47,8 @@ export class AuthService {
         // });
         // this.SetUserData(result.user);
         // this.router.navigate(['home']);
-        // this.router.navigateByUrl('/home');
+        this.router.navigateByUrl('/home');
+        console.log(result);
       });
   }
   // Sign up with email/password
@@ -195,6 +195,8 @@ export class AuthService {
                 rol: userType,
               };
 
+              this.userData = newPaciente;
+
               userRef
                 .set(newPaciente, {
                   merge: true,
@@ -232,6 +234,8 @@ export class AuthService {
             profilePicture: data.metadata.fullPath,
             rol: userType,
           };
+
+          this.userData = newEspecialista;
 
           userRef
             .set(newEspecialista, {

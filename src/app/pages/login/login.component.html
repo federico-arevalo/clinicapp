@@ -8,7 +8,7 @@
 
   <div class="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">
     <h1 class="text-2xl font-semibold mb-4">Ingresar</h1>
-    <form action="#" method="POST">
+    <form [formGroup]="loginForm">
       <div class="mb-4">
         <div class="flex items-center border-2 mb-8 py-2 px-3 rounded-2xl">
           <svg
@@ -31,6 +31,7 @@
             type="email"
             name="email"
             placeholder="Correo eléctronico"
+            formControlName="email"
           />
         </div>
       </div>
@@ -55,6 +56,7 @@
             name="password"
             id="password"
             placeholder="Contraseña"
+            formControlName="password"
           />
         </div>
       </div>
@@ -63,6 +65,7 @@
         <a href="#" class="hover:underline">¿Olvidaste tu contraseña?</a>
       </div>
       <button
+        (click)="onLogin($event)"
         type="submit"
         class="bg-rose-500 hover:bg-rose-700 text-white font-semibold rounded-md py-2 px-4 w-full"
       >
