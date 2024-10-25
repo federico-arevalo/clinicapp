@@ -4,38 +4,39 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LandingComponent } from './pages/landing/landing.component';
+import { authGuard } from './guards/auth/auth.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/landing', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
+  {
+    path: '',
+    redirectTo: '/landing',
+    pathMatch: 'full',
+    data: { state: 'landing' },
+  },
+  { path: 'login', component: LoginComponent, data: { state: 'login' } },
   { path: 'register', component: RegisterComponent },
-  { path: 'home', component: HomeComponent },
-  { path: 'landing', component: LandingComponent },
-  // {
-  //     path: 'quiensoy',
-  //     loadComponent: () =>
-  //       import('./pages/who-am-i/who-am-i.component').then(
-  //         (m) => m.WhoAmIComponent
-  //       ),
-  //   },
-  //   {
-  //     path: 'juegos',
-  //     children: [
-  //       {
-  //         path: '',
-  //         loadComponent: () =>
-  //           import('./pages/games/games.component').then((m) => m.GamesComponent),
-  //       },
-  //       {
-  //         path: 'mayormenor',
-  //         loadComponent: () =>
-  //           import('./components/games/mayor-menor/mayor-menor.component').then(
-  //             (m) => m.MayorMenorComponent
-  //           ),
-  //       },
-
-  //     ],
-  //     canActivate: [authGuard],
-  //   },
-  { path: '**', component: NotFoundComponent },
+  { path: 'home', component: HomeComponent, data: { state: 'home' } },
+  { path: 'landing', component: LandingComponent, data: { state: 'landing' } },
+  {
+    path: 'info',
+    loadComponent: () =>
+      import('./pages/my-information/my-information.component').then(
+        (m) => m.MyInformationComponent
+      ),
+    data: { state: 'info' },
+  },
+  {
+    path: 'turnos',
+    loadComponent: () =>
+      import('./pages/turnos/turnos.component').then((m) => m.TurnosComponent),
+    data: { state: 'turnos' },
+  },
+  {
+    path: 'users',
+    loadComponent: () =>
+      import('./pages/users/users.component').then((m) => m.UsersComponent),
+    data: { state: 'users' },
+    canActivate: [authGuard],
+  },
+  { path: '**', component: NotFoundComponent, data: { state: 'notfound' } },
 ];

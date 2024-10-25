@@ -1,5 +1,7 @@
-<div class="relative flex">
+<div class="flex flex-col">
   <app-sidebar />
-  <router-outlet class="hidden" />
-  <!-- <app-footer /> -->
+  <div [@routeTransition]="getState(o)" class="contents">
+    <router-outlet #o="outlet"></router-outlet>
+  </div>
+  <!-- <router-outlet class="hidden" /> -->
 </div>

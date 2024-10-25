@@ -1,5 +1,7 @@
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 import { routes } from './app.routes';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
@@ -19,6 +21,8 @@ const firebase = {
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideAnimations(),
+    provideAnimationsAsync(),
     provideRouter(routes),
     provideFirebaseApp(() => initializeApp(firebase)),
     provideAuth(() => getAuth()),

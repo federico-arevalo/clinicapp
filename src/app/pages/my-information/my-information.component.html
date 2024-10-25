@@ -1,0 +1,46 @@
+<div
+  class="h-full min-h-screen w-full flex flex-row content-center justify-center flex-wrap mx-auto my-32 lg:my-0 bg-gray-800"
+>
+  <!--Main Col-->
+  <div
+    id="profile"
+    class="w-full lg:w-3/5 rounded-lg lg:rounded-l-lg lg:rounded-r-none shadow-2xl bg-white opacity-75 mx-6 lg:mx-0"
+  >
+    <div class="p-4 md:p-12 text-center lg:text-left">
+      <h1 class="text-3xl font-bold pt-8 lg:pt-0">
+        {{ auth.currentUser.name + " " + auth.currentUser.lastName }}
+      </h1>
+      <div
+        class="mx-auto lg:mx-0 w-4/5 pt-3 border-b-2 border-orange-500 opacity-25"
+      ></div>
+      <p
+        class="pt-4 text-base font-bold flex items-center justify-center lg:justify-start pb-1"
+      >
+        <svg
+          class="h-4 fill-current text-orange-700 pr-4"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+        >
+          <path
+            d="M9 12H1v6a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6h-8v2H9v-2zm0-1H0V5c0-1.1.9-2 2-2h4V2a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1h4a2 2 0 0 1 2 2v6h-9V9H9v2zm3-8V2H8v1h4z"
+          />
+        </svg>
+        {{ auth.currentUser.rol.toUpperCase() }}
+      </p>
+      <p *ngIf="auth.currentUser.rol === 'especialista'">
+        Especialidad(des): {{ auth.currentUser.especialidad.join(", ") }}
+      </p>
+      <p *ngIf="auth.currentUser.rol === 'paciente'">
+        Obra Social: {{ auth.currentUser.obraSocial }}
+      </p>
+      <p>DNI: {{ auth.currentUser.dni }}</p>
+      <p>Edad: {{ auth.currentUser.age }}</p>
+      <p>Email: {{ auth.currentUser.email }}</p>
+    </div>
+  </div>
+  <img
+    [src]="auth.userImages[0]"
+    heigh="500"
+    class="lg:rounded-r-lg shadow-2xl lg:block"
+  />
+</div>

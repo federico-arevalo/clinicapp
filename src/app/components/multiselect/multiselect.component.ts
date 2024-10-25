@@ -36,7 +36,12 @@ export class MultiselectComponent implements OnInit, OnDestroy {
     if (!this.selectedEspecialidades.includes(newEspecialidad)) {
       this.selectedEspecialidades.push(newEspecialidad);
       console.log(this.selectedEspecialidades);
-      this.db.saveEspecialidades(this.selectedEspecialidades);
+
+      if (!this.allEspecialidades.includes(newEspecialidad))
+        this.db.saveEspecialidades([
+          ...this.allEspecialidades,
+          newEspecialidad,
+        ]);
     }
 
     $event.target.value = '';
