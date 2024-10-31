@@ -1,5 +1,4 @@
 import { Injectable, NgZone } from '@angular/core';
-import { Paciente, Especialista } from '../../interfaces/user/user';
 import * as auth from 'firebase/auth';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import {
@@ -8,6 +7,11 @@ import {
 } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
 import { Storage, ref, uploadBytes } from '@angular/fire/storage';
+import { collection, getDocs } from 'firebase/firestore';
+import { Firestore } from '@angular/fire/firestore';
+import { DatabaseService } from '../database/database.service';
+import { Subscription } from 'rxjs';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -15,22 +19,41 @@ export class AuthService {
   userData: any; // Save logged in user data
   error: any;
   isError: boolean = false;
+  subscriptions?: Subscription;
+  userImages: string[] = [];
+  currentUser: any;
 
   constructor(
     public afs: AngularFirestore, // Inject Firestore service
     public afAuth: AngularFireAuth, // Inject Firebase auth service
     public router: Router,
     public ngZone: NgZone, // NgZone service to remove outside scope warning
-    private storage: Storage
+    private storage: Storage,
+    private db: DatabaseService,
+    public firestore: Firestore
   ) {
     /* Saving user data in localstorage when
     logged in and setting up null when logged out */
     this.afAuth.authState.subscribe((user) => {
-      if (user) {
+      if (user && user.emailVerified) {
         this.userData = user;
-        localStorage.setItem('user', JSON.stringify(this.userData));
+        this.SetUserData(this.userData);
+        const userInfo = JSON.stringify(this.userData);
+        localStorage.setItem('user', userInfo);
         JSON.parse(localStorage.getItem('user')!);
-        this.router.navigate(['home']);
+        // this.router.navigate(['home']);
+
+        // old way to get users info
+        // this.subscriptions = this.db.getUsers().subscribe((users: any) => {
+        //   let currentUser = users.filter(
+        //     (user: any) => user.uid === JSON.parse(userInfo).uid
+        //   )[0];
+        //   localStorage.setItem('userInfo', JSON.stringify(currentUser));
+
+        //   this.currentUser = currentUser;
+        // });
+
+        this.userImages = this.db.getUserImages(this.userData.uid);
       } else {
         localStorage.setItem('user', 'null');
         JSON.parse(localStorage.getItem('user')!);
@@ -38,15 +61,57 @@ export class AuthService {
     });
   }
   // Sign in with email/password
+
+  hasEmailVerified(email: string) {
+    let hasEmailVerified = true;
+
+    return getDocs(collection(this.firestore, 'users')).then((docs: any) => {
+      docs.forEach((doc: any) => {
+        const docData = doc.data();
+
+        if (docData.email === email) {
+          if (!docData.emailVerified && docData.rol === 'paciente')
+            hasEmailVerified = false;
+        }
+      });
+
+      return hasEmailVerified;
+    });
+  }
+
+  verifyIsAdminVerified(email: string) {
+    let isAdminVerified = true;
+
+    return getDocs(collection(this.firestore, 'users')).then((docs: any) => {
+      docs.forEach((doc: any) => {
+        const docData = doc.data();
+
+        if (docData.email === email) {
+          if (!docData.isAdminVerified && docData.rol === 'especialista')
+            isAdminVerified = false;
+        }
+      });
+
+      return isAdminVerified;
+    });
+  }
+
   SignIn(email: string, password: string) {
     return this.afAuth
       .signInWithEmailAndPassword(email, password)
-      .then((result) => {
+      .then((result: any) => {
         // this.ngZone.run(() => {
         //   this.router.navigate(['home']);
         // });
         // this.SetUserData(result.user);
         // this.router.navigate(['home']);
+        getDocs(collection(this.firestore, 'users')).then((docs: any) =>
+          docs.forEach((doc: any) => {
+            if (doc.data().uid === result.user.uid)
+              // this.SetUserData({ ...doc.data() });
+              localStorage.setItem('userInfo', JSON.stringify(doc.data()));
+          })
+        );
         this.router.navigateByUrl('/home');
         console.log(result);
       });
@@ -64,7 +129,7 @@ export class AuthService {
       .then((result) => {
         /* Call the SendVerificaitonMail() function when new user sign
         up and returns promise */
-        // this.SendVerificationMail();
+        this.SendVerificationMail();
         console.log(result);
         this.SetUserDataType(result.user, userType, newUser, images);
       })
@@ -74,11 +139,7 @@ export class AuthService {
   }
   // Send email verfificaiton when new user sign up
   SendVerificationMail() {
-    return this.afAuth.currentUser
-      .then((u: any) => u.sendEmailVerification())
-      .then(() => {
-        this.router.navigate(['verify-email-address']);
-      });
+    return this.afAuth.currentUser.then((u: any) => u.sendEmailVerification());
   }
   // Reset Forggot password
   ForgotPassword(passwordResetEmail: string) {
@@ -263,6 +324,7 @@ export class AuthService {
   SignOut() {
     return this.afAuth.signOut().then(() => {
       localStorage.removeItem('user');
+      localStorage.removeItem('userInfo');
       this.router.navigate(['login']);
     });
   }
