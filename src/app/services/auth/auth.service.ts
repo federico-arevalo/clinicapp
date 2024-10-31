@@ -87,7 +87,7 @@ export class AuthService {
         const docData = doc.data();
 
         if (docData.email === email) {
-          if (!docData.isAdminVerified && docData.rol === 'especialista')
+          if (!docData.adminVerified && docData.rol === 'especialista')
             isAdminVerified = false;
         }
       });
