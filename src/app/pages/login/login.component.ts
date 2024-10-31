@@ -26,15 +26,20 @@ export class LoginComponent {
     $event.preventDefault();
 
     const { email, password } = this.loginForm.value;
-    this.authService
-      .SignIn(email || '', password || '')
-      .then(() => {
-        console.log(localStorage.getItem('user'));
-      })
-      .catch((e) => {
-        this.isError = true;
-        console.log(e);
-      });
+
+    this.authService.verifyIsAdminVerified(email || '').then((result: any) => {
+      console.log(result);
+      if (result)
+        this.authService
+          .SignIn(email || '', password || '')
+          .then(() => {
+            console.log(localStorage.getItem('user'));
+          })
+          .catch((e: any) => {
+            this.isError = true;
+            console.log(e);
+          });
+    });
   }
 
   closeAlert() {

@@ -8,6 +8,7 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
@@ -39,7 +40,7 @@ export class SidebarComponent {
   isOpen = false;
   mobileMenuOpen = false;
 
-  constructor(public authService: AuthService) {}
+  constructor(public authService: AuthService, private router: Router) {}
 
   public get isLoggedIn(): boolean {
     return this.authService.isLoggedIn;
@@ -65,5 +66,10 @@ export class SidebarComponent {
   }
   closeSidebar() {
     this.sidebarState = 'closed';
+  }
+
+  goTo(url: string) {
+    this.router.navigate([url]);
+    this.closeSidebar();
   }
 }
