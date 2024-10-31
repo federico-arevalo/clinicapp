@@ -35,7 +35,7 @@ export class AuthService {
     /* Saving user data in localstorage when
     logged in and setting up null when logged out */
     this.afAuth.authState.subscribe((user) => {
-      if (user && user.emailVerified) {
+      if (user) {
         this.userData = user;
         this.SetUserData(this.userData);
         const userInfo = JSON.stringify(this.userData);
