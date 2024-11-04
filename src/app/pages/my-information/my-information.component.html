@@ -1,46 +1,102 @@
 <div
-  class="h-full min-h-screen w-full flex flex-row content-center justify-center flex-wrap mx-auto my-32 lg:my-0 bg-gray-800"
+  class="bg-gradient-to-r from-indigo-800 to-blue-900 min-h-screen flex items-center justify-center p-4"
 >
-  <!--Main Col-->
   <div
-    id="profile"
-    class="w-full lg:w-3/5 rounded-lg lg:rounded-l-lg lg:rounded-r-none shadow-2xl bg-white opacity-75 mx-6 lg:mx-0"
+    class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-4xl w-full p-8 transition-all duration-300 animate-fade-in"
   >
-    <div class="p-4 md:p-12 text-center lg:text-left">
-      <h1 class="text-3xl font-bold pt-8 lg:pt-0">
-        {{ auth.currentUser.name + " " + auth.currentUser.lastName }}
-      </h1>
-      <div
-        class="mx-auto lg:mx-0 w-4/5 pt-3 border-b-2 border-orange-500 opacity-25"
-      ></div>
-      <p
-        class="pt-4 text-base font-bold flex items-center justify-center lg:justify-start pb-1"
-      >
-        <svg
-          class="h-4 fill-current text-orange-700 pr-4"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-        >
-          <path
-            d="M9 12H1v6a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6h-8v2H9v-2zm0-1H0V5c0-1.1.9-2 2-2h4V2a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1h4a2 2 0 0 1 2 2v6h-9V9H9v2zm3-8V2H8v1h4z"
-          />
-        </svg>
-        {{ auth.currentUser.rol.toUpperCase() }}
-      </p>
-      <p *ngIf="auth.currentUser.rol === 'especialista'">
-        Especialidad(des): {{ auth.currentUser.especialidad.join(", ") }}
-      </p>
-      <p *ngIf="auth.currentUser.rol === 'paciente'">
-        Obra Social: {{ auth.currentUser.obraSocial }}
-      </p>
-      <p>DNI: {{ auth.currentUser.dni }}</p>
-      <p>Edad: {{ auth.currentUser.age }}</p>
-      <p>Email: {{ auth.currentUser.email }}</p>
+    <div class="flex flex-col md:flex-row">
+      <div class="md:w-1/3 text-center mb-8 md:mb-0">
+        <img
+          [src]="auth.userImages[0]"
+          heigh="500"
+          class="rounded-full w-48 h-48 mx-auto mb-4 border-4 border-indigo-800 dark:border-blue-900 transition-transform duration-300 hover:scale-105"
+        />
+        <img
+          *ngIf="auth.currentUser.rol === 'paciente'"
+          [src]="auth.userImages[1]"
+          heigh="500"
+          class="rounded-full w-48 h-48 mx-auto mb-4 border-4 border-indigo-800 dark:border-blue-900 transition-transform duration-300 hover:scale-105"
+        />
+        <h1 class="text-2xl font-bold text-indigo-800 dark:text-white mb-2">
+          {{ auth.currentUser.name + " " + auth.currentUser.lastName }}
+        </h1>
+      </div>
+      <div class="md:w-2/3 md:pl-8">
+        <div class="bg-white max-w-2xl shadow overflow-hidden sm:rounded-lg">
+          <div class="px-4 py-5 sm:px-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">
+              Información del usuario
+            </h3>
+            <p class="mt-1 max-w-2xl text-sm text-gray-500">
+              Acá se encuentran los datos del paciente
+            </p>
+          </div>
+          <div class="border-t border-gray-200">
+            <dl>
+              <div
+                class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+              >
+                <dt class="text-sm font-medium text-gray-500">
+                  Nombre completo
+                </dt>
+                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  {{ auth.currentUser.name + " " + auth.currentUser.lastName }}
+                </dd>
+              </div>
+              <div
+                class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+              >
+                <dt class="text-sm font-medium text-gray-500">DNI</dt>
+                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  {{ auth.currentUser.dni }}
+                </dd>
+              </div>
+              <div
+                class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+              >
+                <dt class="text-sm font-medium text-gray-500">Rol</dt>
+                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  {{ auth.currentUser.rol.toUpperCase() }}
+                </dd>
+              </div>
+              <div
+                class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+              >
+                <dt class="text-sm font-medium text-gray-500">Edad</dt>
+                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  {{ auth.currentUser.age }}
+                </dd>
+              </div>
+              <div
+                class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+              >
+                <dt class="text-sm font-medium text-gray-500">Email</dt>
+                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  {{ auth.currentUser.email }}
+                </dd>
+              </div>
+              <div
+                *ngIf="auth.currentUser.rol === 'especialista'"
+                class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+              >
+                <dt>Especialidad(des):</dt>
+                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  {{ auth.currentUser.especialidad.join(", ") }}
+                </dd>
+              </div>
+              <div
+                *ngIf="auth.currentUser.rol === 'paciente'"
+                class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+              >
+                <dt class="text-sm font-medium text-gray-500">Obra Social</dt>
+                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  {{ auth.currentUser.obraSocial }}
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <img
-    [src]="auth.userImages[0]"
-    heigh="500"
-    class="lg:rounded-r-lg shadow-2xl lg:block"
-  />
 </div>

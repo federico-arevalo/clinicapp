@@ -44,14 +44,14 @@ export class AuthService {
         // this.router.navigate(['home']);
 
         // old way to get users info
-        // this.subscriptions = this.db.getUsers().subscribe((users: any) => {
-        //   let currentUser = users.filter(
-        //     (user: any) => user.uid === JSON.parse(userInfo).uid
-        //   )[0];
-        //   localStorage.setItem('userInfo', JSON.stringify(currentUser));
+        this.subscriptions = this.db.getUsers().subscribe((users: any) => {
+          let currentUser = users.filter(
+            (user: any) => user.uid === JSON.parse(userInfo).uid
+          )[0];
+          localStorage.setItem('userInfo', JSON.stringify(currentUser));
 
-        //   this.currentUser = currentUser;
-        // });
+          this.currentUser = currentUser;
+        });
 
         this.userImages = this.db.getUserImages(this.userData.uid);
       } else {
@@ -110,6 +110,7 @@ export class AuthService {
             if (doc.data().uid === result.user.uid)
               // this.SetUserData({ ...doc.data() });
               localStorage.setItem('userInfo', JSON.stringify(doc.data()));
+            console.log(doc.data());
           })
         );
         this.router.navigateByUrl('/home');
