@@ -62,7 +62,6 @@ export class SidebarComponent {
 
   openSidebar() {
     this.sidebarState = 'open';
-    console.log(this.authService.userImages);
   }
   closeSidebar() {
     this.sidebarState = 'closed';

@@ -30,7 +30,7 @@ export class RegisterComponent {
     name: new FormControl('', Validators.required),
     lastName: new FormControl('', Validators.required),
     age: new FormControl('', [Validators.required, Validators.min(18)]),
-    dni: new FormControl('', [Validators.required, Validators.maxLength(6)]),
+    dni: new FormControl('', [Validators.required, Validators.max(99999999)]),
     obraSocial: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required]),
@@ -43,7 +43,7 @@ export class RegisterComponent {
     name: new FormControl('', Validators.required),
     lastName: new FormControl('', Validators.required),
     age: new FormControl('', [Validators.required, Validators.min(18)]),
-    dni: new FormControl('', [Validators.required, Validators.maxLength(6)]),
+    dni: new FormControl('', [Validators.required, Validators.max(99999999)]),
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required]),
     repeatPassword: new FormControl('', [Validators.required]),
@@ -51,6 +51,7 @@ export class RegisterComponent {
   });
 
   selectedEspecialidades: string[] = [];
+  hasSelectedEspecialidades = false;
   isPaciente = false;
 
   constructor(private authService: AuthService) {}
@@ -115,6 +116,7 @@ export class RegisterComponent {
 
   selectEspecialidades(especialidades: string[]) {
     this.selectedEspecialidades = especialidades;
+    this.hasSelectedEspecialidades = true;
     console.log(especialidades);
   }
 

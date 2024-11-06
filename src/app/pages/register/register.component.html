@@ -6,7 +6,9 @@
     />
   </div>
 
-  <div class="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-2/3 flex flex-col">
+  <div
+    class="lg:px-36 md:px-52 lg:w-2/3 sm:20 p-8 w-full h-screen overflow-y-scroll flex flex-col"
+  >
     <h1 class="text-2xl font-semibold mb-4">
       Registrarse {{ isPaciente ? "como paciente" : "como especialista" }}
     </h1>
@@ -74,6 +76,14 @@
               formControlName="name"
             />
           </div>
+          <small
+            class="text-red-600"
+            *ngIf="
+              this.pacienteForm.controls.name.touched &&
+              this.pacienteForm.controls.name.hasError('required')
+            "
+            >El nombre es requerido</small
+          >
         </div>
         <div class="mb-4">
           <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
@@ -101,6 +111,14 @@
               formControlName="lastName"
             />
           </div>
+          <small
+            class="text-red-600"
+            *ngIf="
+              this.pacienteForm.controls.lastName.touched &&
+              this.pacienteForm.controls.lastName.hasError('required')
+            "
+            >El apellido es requerido</small
+          >
         </div>
         <div class="mb-4">
           <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
@@ -127,6 +145,21 @@
               formControlName="age"
             />
           </div>
+          <small
+            class="text-red-600"
+            *ngIf="
+              this.pacienteForm.controls.age.touched &&
+              this.pacienteForm.controls.age.hasError('required')
+            "
+            >La edad es requerida</small
+          ><small
+            class="text-red-600"
+            *ngIf="
+              this.pacienteForm.controls.age.touched &&
+              this.pacienteForm.controls.age.hasError('min')
+            "
+            >La edad debe ser mayor a 18 años</small
+          >
         </div>
         <div class="mb-4">
           <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
@@ -149,6 +182,21 @@
               formControlName="dni"
             />
           </div>
+          <small
+            class="text-red-600"
+            *ngIf="
+              this.pacienteForm.controls.dni.touched &&
+              this.pacienteForm.controls.dni.hasError('required')
+            "
+            >El DNI es requerido</small
+          ><small
+            class="text-red-600"
+            *ngIf="
+              this.pacienteForm.controls.dni.touched &&
+              this.pacienteForm.controls.dni.hasError('max')
+            "
+            >El DNI debe tener 8 dígitos</small
+          >
         </div>
         <div class="mb-4">
           <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
@@ -176,6 +224,14 @@
               formControlName="obraSocial"
             />
           </div>
+          <small
+            class="text-red-600"
+            *ngIf="
+              this.pacienteForm.controls.obraSocial.touched &&
+              this.pacienteForm.controls.obraSocial.hasError('required')
+            "
+            >La obra social es requerida</small
+          >
         </div>
         <div class="mb-4">
           <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
@@ -202,6 +258,14 @@
               formControlName="email"
             />
           </div>
+          <small
+            class="text-red-600"
+            *ngIf="
+              this.pacienteForm.controls.email.touched &&
+              this.pacienteForm.controls.email.hasError('required')
+            "
+            >El email es requerido</small
+          >
         </div>
         <div class="mb-4">
           <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
@@ -226,6 +290,14 @@
               formControlName="password"
             />
           </div>
+          <small
+            class="text-red-600"
+            *ngIf="
+              this.pacienteForm.controls.password.touched &&
+              this.pacienteForm.controls.password.hasError('required')
+            "
+            >La contraseña es requerida</small
+          >
         </div>
         <div class="mb-4">
           <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
@@ -250,6 +322,22 @@
               formControlName="repeatPassword"
             />
           </div>
+          <small
+            class="text-red-600"
+            *ngIf="
+              this.pacienteForm.controls.repeatPassword.touched &&
+              this.pacienteForm.controls.repeatPassword.hasError('required')
+            "
+            >La contraseña es requerida</small
+          >
+          <small
+            class="text-red-600 ml-1"
+            *ngIf="
+              this.pacienteForm.controls.repeatPassword.value !==
+              this.pacienteForm.controls.password.value
+            "
+            >Las contraseñas no coinciden</small
+          >
         </div>
         <div class="mb-4">
           <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
@@ -282,6 +370,20 @@
               />
             </div>
           </div>
+          <small
+            class="text-red-600"
+            *ngIf="
+              (this.pacienteForm.controls.firstProfilePicture.touched &&
+                this.pacienteForm.controls.firstProfilePicture.hasError(
+                  'required'
+                )) ||
+              (this.pacienteForm.controls.secondProfilePicture.touched &&
+                this.pacienteForm.controls.secondProfilePicture.hasError(
+                  'required'
+                ))
+            "
+            >Las fotos son requeridas</small
+          >
         </div>
         <button
           type="submit"
@@ -324,6 +426,14 @@
               formControlName="name"
             />
           </div>
+          <small
+            class="text-red-600"
+            *ngIf="
+              this.especialistaForm.controls.name.touched &&
+              this.especialistaForm.controls.name.hasError('required')
+            "
+            >El nombre es requerido</small
+          >
         </div>
         <div class="mb-4">
           <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
@@ -351,6 +461,14 @@
               formControlName="lastName"
             />
           </div>
+          <small
+            class="text-red-600"
+            *ngIf="
+              this.especialistaForm.controls.lastName.touched &&
+              this.especialistaForm.controls.lastName.hasError('required')
+            "
+            >El apellido es requerido</small
+          >
         </div>
         <div class="mb-4">
           <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
@@ -377,6 +495,21 @@
               formControlName="age"
             />
           </div>
+          <small
+            class="text-red-600"
+            *ngIf="
+              this.especialistaForm.controls.age.touched &&
+              this.especialistaForm.controls.age.hasError('required')
+            "
+            >La edad es requerida</small
+          ><small
+            class="text-red-600"
+            *ngIf="
+              this.especialistaForm.controls.age.touched &&
+              this.especialistaForm.controls.age.hasError('min')
+            "
+            >La edad debe ser mayor a 18 años</small
+          >
         </div>
         <div class="mb-4">
           <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
@@ -399,6 +532,21 @@
               formControlName="dni"
             />
           </div>
+          <small
+            class="text-red-600"
+            *ngIf="
+              this.especialistaForm.controls.dni.touched &&
+              this.especialistaForm.controls.dni.hasError('required')
+            "
+            >El DNI es requerido</small
+          ><small
+            class="text-red-600"
+            *ngIf="
+              this.especialistaForm.controls.dni.touched &&
+              this.especialistaForm.controls.dni.hasError('max')
+            "
+            >El DNI debe tener 8 dígitos</small
+          >
         </div>
         <div class="mb-4">
           <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
@@ -421,8 +569,15 @@
               (newEspecialidadEvent)="selectEspecialidades($event)"
             />
           </div>
+          <small
+            class="text-red-600"
+            *ngIf="
+              this.selectedEspecialidades.length === 0 &&
+              this.hasSelectedEspecialidades
+            "
+            >La especialidad es requerida</small
+          >
         </div>
-
         <div class="mb-4">
           <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
             <svg
@@ -448,6 +603,14 @@
               formControlName="email"
             />
           </div>
+          <small
+            class="text-red-600"
+            *ngIf="
+              this.especialistaForm.controls.email.touched &&
+              this.especialistaForm.controls.email.hasError('required')
+            "
+            >El email es requerido</small
+          >
         </div>
         <div class="mb-4">
           <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
@@ -472,6 +635,14 @@
               formControlName="password"
             />
           </div>
+          <small
+            class="text-red-600"
+            *ngIf="
+              this.especialistaForm.controls.password.touched &&
+              this.especialistaForm.controls.password.hasError('required')
+            "
+            >La contraseña es requerida</small
+          >
         </div>
         <div class="mb-4">
           <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
@@ -496,6 +667,22 @@
               formControlName="repeatPassword"
             />
           </div>
+          <small
+            class="text-red-600"
+            *ngIf="
+              this.especialistaForm.controls.repeatPassword.touched &&
+              this.especialistaForm.controls.repeatPassword.hasError('required')
+            "
+            >La contraseña es requerida</small
+          >
+          <small
+            class="text-red-600 ml-1"
+            *ngIf="
+              this.especialistaForm.controls.repeatPassword.value !==
+              this.especialistaForm.controls.password.value
+            "
+            >Las contraseñas no coinciden</small
+          >
         </div>
         <div class="mb-4">
           <div class="grid justify-start border-2 py-2 px-3 rounded-2xl">
@@ -514,6 +701,14 @@
               />
             </div>
           </div>
+          <small
+            class="text-red-600"
+            *ngIf="
+              this.especialistaForm.controls.profilePicture.touched &&
+              this.especialistaForm.controls.profilePicture.hasError('required')
+            "
+            >La foto es requerida</small
+          >
         </div>
 
         <button

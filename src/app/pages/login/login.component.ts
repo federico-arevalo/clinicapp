@@ -4,16 +4,26 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
+import { ModalComponent } from '../../components/modal/modal.component';
+import { ERROR_MESSAGES } from '../../utils/firebase-errors';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterOutlet, AngularFireModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterOutlet,
+    AngularFireModule,
+    ModalComponent,
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
   isError: boolean = false;
+  errorMsg: string = '';
+  showModal: boolean = false;
 
   loginForm = new FormGroup({
     email: new FormControl(''),
@@ -24,12 +34,13 @@ export class LoginComponent {
 
   onLogin($event: any) {
     $event.preventDefault();
+    this.showModal = false;
+    this.isError = false;
 
     const { email, password } = this.loginForm.value;
 
     this.authService.verifyIsAdminVerified(email || '').then((result: any) => {
-      console.log(result);
-      if (result)
+      if (result) {
         this.authService
           .SignIn(email || '', password || '')
           .then(() => {
@@ -37,12 +48,19 @@ export class LoginComponent {
           })
           .catch((e: any) => {
             this.isError = true;
-            console.log(e);
+            this.errorMsg =
+              ERROR_MESSAGES[e.code as keyof typeof ERROR_MESSAGES];
+            console.log(e.code);
           });
+      } else {
+        console.log('error');
+        this.showModal = true;
+        this.errorMsg = 'Usuario no verificado por un admin';
+      }
     });
   }
 
-  closeAlert() {
+  closeMessage() {
     this.isError = false;
   }
 }
