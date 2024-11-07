@@ -10,6 +10,8 @@ import {
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { MultiselectComponent } from '../../components/multiselect/multiselect.component';
+import { ModalComponent } from '../../components/modal/modal.component';
+import { ERROR_MESSAGES } from '../../utils/firebase-errors';
 
 @Component({
   selector: 'app-register',
@@ -23,6 +25,7 @@ import { MultiselectComponent } from '../../components/multiselect/multiselect.c
     RouterOutlet,
     ReactiveFormsModule,
     MultiselectComponent,
+    ModalComponent,
   ],
 })
 export class RegisterComponent {
@@ -54,10 +57,14 @@ export class RegisterComponent {
   hasSelectedEspecialidades = false;
   isPaciente = false;
 
+  errorMsg: string = '';
+  showModal: boolean = false;
+
   constructor(private authService: AuthService) {}
 
   onRegister($event: any, type: string): void {
     $event.preventDefault();
+    this.showModal = false;
     console.log(this.especialistaForm);
     console.log($event.target.form[9].files[0]);
 
@@ -72,16 +79,22 @@ export class RegisterComponent {
         return;
       }
       const { email, password } = this.pacienteForm.value;
-      this.authService.SignUp(
-        email || '',
-        password || '',
-        'paciente',
-        this.pacienteForm.value,
-        {
-          firstProfilePicture: $event.target.form[8].files[0],
-          secondProfilePicture: $event.target.form[9].files[0],
-        }
-      );
+      this.authService
+        .SignUp(
+          email || '',
+          password || '',
+          'paciente',
+          this.pacienteForm.value,
+          {
+            firstProfilePicture: $event.target.form[8].files[0],
+            secondProfilePicture: $event.target.form[9].files[0],
+          }
+        )
+        .catch((e: any) => {
+          this.showModal = true;
+          this.errorMsg = ERROR_MESSAGES[e.code as keyof typeof ERROR_MESSAGES];
+          console.log(e.code);
+        });
     }
 
     if (type === 'especialista') {
@@ -101,16 +114,22 @@ export class RegisterComponent {
       }
 
       const { email, password } = this.especialistaForm.value;
-      this.authService.SignUp(
-        email || '',
-        password || '',
-        'especialista',
-        {
-          ...this.especialistaForm.value,
-          especialidad: this.selectedEspecialidades,
-        },
-        { profilePicture: $event.target.form[9].files[0] }
-      );
+      this.authService
+        .SignUp(
+          email || '',
+          password || '',
+          'especialista',
+          {
+            ...this.especialistaForm.value,
+            especialidad: this.selectedEspecialidades,
+          },
+          { profilePicture: $event.target.form[9].files[0] }
+        )
+        .catch((e: any) => {
+          this.showModal = true;
+          this.errorMsg = ERROR_MESSAGES[e.code as keyof typeof ERROR_MESSAGES];
+          console.log(e.code);
+        });
     }
   }
 

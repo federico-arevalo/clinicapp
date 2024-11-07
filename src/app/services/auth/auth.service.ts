@@ -133,9 +133,6 @@ export class AuthService {
         this.SendVerificationMail();
         console.log(result);
         this.SetUserDataType(result.user, userType, newUser, images);
-      })
-      .catch((error) => {
-        console.log(error.message);
       });
   }
   // Send email verfificaiton when new user sign up
