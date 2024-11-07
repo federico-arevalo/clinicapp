@@ -70,8 +70,7 @@ export class AuthService {
         const docData = doc.data();
 
         if (docData.email === email) {
-          if (!docData.emailVerified && docData.rol === 'paciente')
-            hasEmailVerified = false;
+          if (!docData.emailVerified) hasEmailVerified = false;
         }
       });
 
@@ -110,7 +109,6 @@ export class AuthService {
             if (doc.data().uid === result.user.uid)
               // this.SetUserData({ ...doc.data() });
               localStorage.setItem('userInfo', JSON.stringify(doc.data()));
-            console.log(doc.data());
           })
         );
         this.router.navigateByUrl('/home');
@@ -133,6 +131,8 @@ export class AuthService {
         this.SendVerificationMail();
         console.log(result);
         this.SetUserDataType(result.user, userType, newUser, images);
+
+        this.SignOut();
       });
   }
   // Send email verfificaiton when new user sign up
