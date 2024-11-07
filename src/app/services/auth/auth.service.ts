@@ -41,9 +41,8 @@ export class AuthService {
         const userInfo = JSON.stringify(this.userData);
         localStorage.setItem('user', userInfo);
         JSON.parse(localStorage.getItem('user')!);
-        // this.router.navigate(['home']);
+        this.router.navigate(['home']);
 
-        // old way to get users info
         this.subscriptions = this.db.getUsers().subscribe((users: any) => {
           let currentUser = users.filter(
             (user: any) => user.uid === JSON.parse(userInfo).uid
@@ -56,6 +55,7 @@ export class AuthService {
         this.userImages = this.db.getUserImages(this.userData.uid);
       } else {
         localStorage.setItem('user', 'null');
+        localStorage.setItem('userInfo', 'null');
         JSON.parse(localStorage.getItem('user')!);
       }
     });
