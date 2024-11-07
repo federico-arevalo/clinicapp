@@ -1,5 +1,6 @@
 export const ERROR_MESSAGES = {
   'auth/invalid-email': 'Correo electrónico o contraseña incorrectos',
+  'auth/invalid-credential': 'Correo electrónico o contraseña incorrectos',
   'auth/missing-password': 'Correo electrónico o contraseña incorrectos',
   'auth/user-not-found': 'El usuario no existe',
   'auth/wrong-password': 'Contraseña incorrecta',

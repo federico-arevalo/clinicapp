@@ -36,6 +36,11 @@ export class AuthService {
     logged in and setting up null when logged out */
     this.afAuth.authState.subscribe((user) => {
       if (user) {
+        if (!user.emailVerified) {
+          this.afAuth.signOut();
+          return;
+        }
+
         this.userData = user;
         this.SetUserData(this.userData);
         const userInfo = JSON.stringify(this.userData);
@@ -61,22 +66,6 @@ export class AuthService {
     });
   }
   // Sign in with email/password
-
-  hasEmailVerified(email: string) {
-    let hasEmailVerified = true;
-
-    return getDocs(collection(this.firestore, 'users')).then((docs: any) => {
-      docs.forEach((doc: any) => {
-        const docData = doc.data();
-
-        if (docData.email === email) {
-          if (!docData.emailVerified) hasEmailVerified = false;
-        }
-      });
-
-      return hasEmailVerified;
-    });
-  }
 
   verifyIsAdminVerified(email: string) {
     let isAdminVerified = true;
@@ -104,6 +93,10 @@ export class AuthService {
         // });
         // this.SetUserData(result.user);
         // this.router.navigate(['home']);
+        if (!result.user.emailVerified) {
+          return false;
+        }
+        console.log('pase igual');
         getDocs(collection(this.firestore, 'users')).then((docs: any) =>
           docs.forEach((doc: any) => {
             if (doc.data().uid === result.user.uid)
@@ -113,6 +106,7 @@ export class AuthService {
         );
         this.router.navigateByUrl('/home');
         console.log(result);
+        return true;
       });
   }
   // Sign up with email/password

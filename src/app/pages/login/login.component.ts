@@ -41,23 +41,21 @@ export class LoginComponent {
 
     this.authService.verifyIsAdminVerified(email || '').then((result: any) => {
       if (result) {
-        this.authService.hasEmailVerified(email || '').then((result: any) => {
-          if (result)
-            this.authService
-              .SignIn(email || '', password || '')
-
-              .catch((e: any) => {
-                this.isError = true;
-                this.errorMsg =
-                  ERROR_MESSAGES[e.code as keyof typeof ERROR_MESSAGES];
-                console.log(e.code);
-              });
-          else {
-            console.log('error');
-            this.showModal = true;
-            this.errorMsg = 'Usuario sin email verificado';
-          }
-        });
+        this.authService
+          .SignIn(email || '', password || '')
+          .then((result: any) => {
+            console.log(result);
+            if (!result) {
+              this.showModal = true;
+              this.errorMsg = 'Usuario sin email verificado';
+            }
+          })
+          .catch((e: any) => {
+            this.isError = true;
+            this.errorMsg =
+              ERROR_MESSAGES[e.code as keyof typeof ERROR_MESSAGES];
+            console.log(e.code);
+          });
       } else {
         console.log('error');
         this.showModal = true;
