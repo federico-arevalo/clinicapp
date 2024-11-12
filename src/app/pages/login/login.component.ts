@@ -2,10 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { AngularFireModule } from '@angular/fire/compat';
 import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { ModalComponent } from '../../components/modal/modal.component';
 import { ERROR_MESSAGES } from '../../utils/firebase-errors';
+import { USERS } from '../../utils/users';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,6 @@ import { ERROR_MESSAGES } from '../../utils/firebase-errors';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterOutlet,
     AngularFireModule,
     ModalComponent,
   ],
@@ -66,5 +66,14 @@ export class LoginComponent {
 
   closeMessage() {
     this.isError = false;
+  }
+
+  autoComplete(user: string) {
+    this.loginForm.controls.email.setValue(
+      USERS[user as keyof typeof USERS].email
+    );
+    this.loginForm.controls.password.setValue(
+      USERS[user as keyof typeof USERS].password
+    );
   }
 }

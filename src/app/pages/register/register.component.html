@@ -385,9 +385,14 @@
             >Las fotos son requeridas</small
           >
         </div>
+        <re-captcha
+          (resolved)="executeRecaptcha($event)"
+          siteKey="6LfU43sqAAAAAD3Xla1f3kWSqQY2WwcoP7sKgg15"
+          formControlName="recaptcha"
+        ></re-captcha>
         <button
           type="submit"
-          class="bg-rose-500 hover:bg-rose-700 text-white font-semibold rounded-md py-2 px-4 w-full"
+          class="bg-rose-500 hover:bg-rose-700 text-white font-semibold rounded-md mt-2 py-2 px-4 w-full"
           (click)="onRegister($event, 'paciente')"
           [disabled]="!pacienteForm.valid"
           [ngClass]="{ 'bg-slate-400 hover:bg-slate-400': !pacienteForm.valid }"
@@ -710,10 +715,14 @@
             >La foto es requerida</small
           >
         </div>
-
+        <re-captcha
+          (resolved)="executeRecaptcha($event)"
+          siteKey="6LfU43sqAAAAAD3Xla1f3kWSqQY2WwcoP7sKgg15"
+          formControlName="recaptcha"
+        ></re-captcha>
         <button
           type="submit"
-          class="bg-rose-500 hover:bg-rose-700 text-white font-semibold rounded-md py-2 px-4 w-full"
+          class="bg-rose-500 hover:bg-rose-700 text-white font-semibold rounded-md mt-2 py-2 px-4 w-full"
           (click)="onRegister($event, 'especialista')"
           [disabled]="!especialistaForm.valid"
           [ngClass]="{
@@ -729,4 +738,5 @@
     </div>
   </div>
 </div>
+
 <app-modal [showModal]="showModal" [msg]="errorMsg"></app-modal>

@@ -124,3 +124,50 @@
   </div>
 </div>
 <app-modal [showModal]="showModal" [msg]="errorMsg"></app-modal>
+<div class="group fixed bottom-[66%] right-0 p-2 grid gap-8 w-24 h-24">
+  <!-- ESPECIALISTAS -->
+  <div>
+    <button (click)="autoComplete('especialista1')">
+      <img
+        src="https://faceclinic.es/wp-content/uploads/2024/03/cara-perfecta.jpeg"
+        class="bg-gradient-to-r from-purple-500 to-blue-500 rounded-md p-1 object-center hover:scale-110"
+      />
+    </button>
+    <button (click)="autoComplete('especialista2')">
+      <img
+        src="https://faceclinic.es/wp-content/uploads/2024/03/cara-perfecta.jpeg"
+        class="bg-gradient-to-r from-purple-500 to-blue-500 rounded-md p-1 object-center hover:scale-110"
+      />
+    </button>
+    <button (click)="autoComplete('especialista3')">
+      <img
+        src="https://faceclinic.es/wp-content/uploads/2024/03/cara-perfecta.jpeg"
+        class="bg-gradient-to-r from-purple-500 to-blue-500 rounded-md p-1 object-center hover:scale-110"
+      />
+    </button>
+  </div>
+  <!-- PACIENTES -->
+  <div>
+    <button (click)="autoComplete('paciente1')">
+      <img
+        src="https://faceclinic.es/wp-content/uploads/2024/03/cara-perfecta.jpeg"
+        class="bg-gradient-to-r from-red-500 to-orange-500 rounded-md p-1 object-center hover:scale-110"
+      />
+    </button>
+    <button (click)="autoComplete('paciente2')">
+      <img
+        src="https://faceclinic.es/wp-content/uploads/2024/03/cara-perfecta.jpeg"
+        class="bg-gradient-to-r from-red-500 to-orange-500 rounded-md p-1 object-center hover:scale-110"
+      />
+    </button>
+  </div>
+  <!-- ADMIN-->
+  <div>
+    <button (click)="autoComplete('admin')">
+      <img
+        src="https://faceclinic.es/wp-content/uploads/2024/03/cara-perfecta.jpeg"
+        class="bg-gradient-to-r from-green-500 to-yellow-500 rounded-md p-1 object-center hover:scale-110"
+      />
+    </button>
+  </div>
+</div>

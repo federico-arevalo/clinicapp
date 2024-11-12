@@ -48,6 +48,7 @@ export class SidebarComponent {
 
   logout() {
     this.authService.SignOut();
+    this.closeSidebar();
   }
   public get currentUser(): string {
     return JSON.parse(localStorage.getItem('user')!).email;

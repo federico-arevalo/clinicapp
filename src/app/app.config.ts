@@ -1,4 +1,4 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -9,6 +9,13 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
+import {
+  RECAPTCHA_SETTINGS,
+  RECAPTCHA_V3_SITE_KEY,
+  RecaptchaModule,
+  RecaptchaSettings,
+  ReCaptchaV3Service,
+} from 'ng-recaptcha';
 
 const firebase = {
   projectId: 'federico-arevalo-clinica',
@@ -29,5 +36,17 @@ export const appConfig: ApplicationConfig = {
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
     { provide: FIREBASE_OPTIONS, useValue: firebase },
+    importProvidersFrom(RecaptchaModule),
+    // {
+    //   provide: RECAPTCHA_V3_SITE_KEY,
+    //   useValue: '6LfU43sqAAAAAD3Xla1f3kWSqQY2WwcoP7sKgg15',
+    // },
+    ReCaptchaV3Service,
+    {
+      provide: RECAPTCHA_SETTINGS,
+      useValue: {
+        siteKey: '6LfU43sqAAAAAD3Xla1f3kWSqQY2WwcoP7sKgg15',
+      } as RecaptchaSettings,
+    },
   ],
 };
