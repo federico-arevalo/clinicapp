@@ -10,5 +10,14 @@ import { CommonModule } from '@angular/common';
   styleUrl: './my-information.component.scss',
 })
 export class MyInformationComponent {
+  showMisHorarios: boolean = false;
   constructor(public auth: AuthService) {}
+
+  openMisHorarios() {
+    this.showMisHorarios = true;
+  }
+
+  closeMisHorarios() {
+    this.showMisHorarios = false;
+  }
 }

@@ -286,6 +286,14 @@ export class AuthService {
             especialidad: newUserData.especialidad,
             profilePicture: data.metadata.fullPath,
             rol: userType,
+            tiemposDisponibles: {
+              lunes: { inicio: '08:00', fin: '19:00' },
+              martes: { inicio: '08:00', fin: '19:00' },
+              miercoles: { inicio: '08:00', fin: '19:00' },
+              jueves: { inicio: '08:00', fin: '19:00' },
+              viernes: { inicio: '08:00', fin: '19:00' },
+              sabado: { inicio: '08:00', fin: '14:00' },
+            },
           };
 
           this.userData = newEspecialista;

@@ -20,83 +20,314 @@
         <h1 class="text-2xl font-bold text-indigo-800 dark:text-white mb-2">
           {{ auth.currentUser.name + " " + auth.currentUser.lastName }}
         </h1>
-      </div>
-      <div class="md:w-2/3 md:pl-8">
-        <div class="bg-white max-w-2xl shadow overflow-hidden sm:rounded-lg">
-          <div class="px-4 py-5 sm:px-6">
-            <h3 class="text-lg leading-6 font-medium text-gray-900">
-              Información del usuario
-            </h3>
-            <p class="mt-1 max-w-2xl text-sm text-gray-500">
-              Acá se encuentran los datos del paciente
-            </p>
+        <button
+          class="rounded-full w-48 h-16 text-white font-semibold lg:mt-10"
+          [ngClass]="showMisHorarios ? 'bg-rose-500' : 'bg-gray-600'"
+          (click)="openMisHorarios()"
+        >
+          <div class="flex gap-3 justify-center items-center">
+            <span>
+              <svg
+                class="w-8 h-8"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"
+                />
+              </svg>
+            </span>
+            <span class="text-xl">Mis horarios</span>
           </div>
-          <div class="border-t border-gray-200">
-            <dl>
-              <div
-                class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
-              >
-                <dt class="text-sm font-medium text-gray-500">
-                  Nombre completo
-                </dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {{ auth.currentUser.name + " " + auth.currentUser.lastName }}
-                </dd>
-              </div>
-              <div
-                class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
-              >
-                <dt class="text-sm font-medium text-gray-500">DNI</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {{ auth.currentUser.dni }}
-                </dd>
-              </div>
-              <div
-                class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
-              >
-                <dt class="text-sm font-medium text-gray-500">Rol</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {{ auth.currentUser.rol.toUpperCase() }}
-                </dd>
-              </div>
-              <div
-                class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
-              >
-                <dt class="text-sm font-medium text-gray-500">Edad</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {{ auth.currentUser.age }}
-                </dd>
-              </div>
-              <div
-                class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
-              >
-                <dt class="text-sm font-medium text-gray-500">Email</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {{ auth.currentUser.email }}
-                </dd>
-              </div>
-              <div
-                *ngIf="auth.currentUser.rol === 'especialista'"
-                class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
-              >
-                <dt>Especialidad(des):</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {{ auth.currentUser.especialidad.join(", ") }}
-                </dd>
-              </div>
-              <div
-                *ngIf="auth.currentUser.rol === 'paciente'"
-                class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
-              >
-                <dt class="text-sm font-medium text-gray-500">Obra Social</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {{ auth.currentUser.obraSocial }}
-                </dd>
-              </div>
-            </dl>
-          </div>
-        </div>
+        </button>
       </div>
+
+      <ng-content
+        *ngIf="showMisHorarios; then misHorarios; else information"
+      ></ng-content>
     </div>
   </div>
 </div>
+
+<ng-template #information>
+  <div class="md:w-2/3 md:pl-8">
+    <div class="bg-white max-w-2xl shadow overflow-hidden sm:rounded-lg">
+      <div class="px-4 py-5 sm:px-6">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">
+          Información del usuario
+        </h3>
+        <p class="mt-1 max-w-2xl text-sm text-gray-500">
+          Acá se encuentran los datos del paciente
+        </p>
+      </div>
+      <div class="border-t border-gray-200">
+        <dl>
+          <div
+            class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+          >
+            <dt class="text-sm font-medium text-gray-500">Nombre completo</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ auth.currentUser.name + " " + auth.currentUser.lastName }}
+            </dd>
+          </div>
+          <div
+            class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+          >
+            <dt class="text-sm font-medium text-gray-500">DNI</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ auth.currentUser.dni }}
+            </dd>
+          </div>
+          <div
+            class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+          >
+            <dt class="text-sm font-medium text-gray-500">Rol</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ auth.currentUser.rol.toUpperCase() }}
+            </dd>
+          </div>
+          <div
+            class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+          >
+            <dt class="text-sm font-medium text-gray-500">Edad</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ auth.currentUser.age }}
+            </dd>
+          </div>
+          <div
+            class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+          >
+            <dt class="text-sm font-medium text-gray-500">Email</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ auth.currentUser.email }}
+            </dd>
+          </div>
+          <div
+            *ngIf="auth.currentUser.rol === 'especialista'"
+            class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+          >
+            <dt>Especialidad(des):</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ auth.currentUser.especialidad.join(", ") }}
+            </dd>
+          </div>
+          <div
+            *ngIf="auth.currentUser.rol === 'paciente'"
+            class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+          >
+            <dt class="text-sm font-medium text-gray-500">Obra Social</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ auth.currentUser.obraSocial }}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #misHorarios>
+  <div class="md:w-2/3 md:pl-8">
+    <div class="bg-white max-w-2xl shadow overflow-hidden sm:rounded-lg">
+      <div class="px-4 py-5 sm:px-6">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">
+          Mis horarios
+        </h3>
+        <p class="mt-1 max-w-2xl text-sm text-gray-500">
+          Acá se pueden cambiar los horarios donde se encuentra disponible
+        </p>
+      </div>
+      <div class="border-t border-gray-200">
+        <dl>
+          <div
+            class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+          >
+            <dt class="text-sm font-medium text-gray-500">Lunes</dt>
+            <dd
+              class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2 flex items-center justify-between"
+            >
+              Inicio
+              <select
+                class="block text-sm font-medium transition duration-75 border border-gray-800 rounded-lg shadow-sm h-9 focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600 bg-none"
+              >
+                <ng-container *ngTemplateOutlet="horarios"></ng-container>
+              </select>
+              Fin
+              <select
+                class="block text-sm font-medium transition duration-75 border border-gray-800 rounded-lg shadow-sm h-9 focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600 bg-none"
+              >
+                <ng-container *ngTemplateOutlet="horarios"></ng-container>
+              </select>
+            </dd>
+          </div>
+          <div
+            class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+          >
+            <dt class="text-sm font-medium text-gray-500">Martes</dt>
+            <dd
+              class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2 flex items-center justify-between"
+            >
+              Inicio
+              <select
+                class="block text-sm font-medium transition duration-75 border border-gray-800 rounded-lg shadow-sm h-9 focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600 bg-none"
+              >
+                <ng-container *ngTemplateOutlet="horarios"></ng-container>
+              </select>
+              Fin
+              <select
+                class="block text-sm font-medium transition duration-75 border border-gray-800 rounded-lg shadow-sm h-9 focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600 bg-none"
+              >
+                <ng-container *ngTemplateOutlet="horarios"></ng-container>
+              </select>
+            </dd>
+          </div>
+          <div
+            class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+          >
+            <dt class="text-sm font-medium text-gray-500">Miércoles</dt>
+            <dd
+              class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2 flex items-center justify-between"
+            >
+              Inicio
+              <select
+                class="block text-sm font-medium transition duration-75 border border-gray-800 rounded-lg shadow-sm h-9 focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600 bg-none"
+              >
+                <ng-container *ngTemplateOutlet="horarios"></ng-container>
+              </select>
+              Fin
+              <select
+                class="block text-sm font-medium transition duration-75 border border-gray-800 rounded-lg shadow-sm h-9 focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600 bg-none"
+              >
+                <ng-container *ngTemplateOutlet="horarios"></ng-container>
+              </select>
+            </dd>
+          </div>
+          <div
+            class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+          >
+            <dt class="text-sm font-medium text-gray-500">Jueves</dt>
+            <dd
+              class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2 flex items-center justify-between"
+            >
+              Inicio
+              <select
+                class="block text-sm font-medium transition duration-75 border border-gray-800 rounded-lg shadow-sm h-9 focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600 bg-none"
+              >
+                <ng-container *ngTemplateOutlet="horarios"></ng-container>
+              </select>
+              Fin
+              <select
+                class="block text-sm font-medium transition duration-75 border border-gray-800 rounded-lg shadow-sm h-9 focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600 bg-none"
+              >
+                <ng-container *ngTemplateOutlet="horarios"></ng-container>
+              </select>
+            </dd>
+          </div>
+          <div
+            class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+          >
+            <dt class="text-sm font-medium text-gray-500">Viernes</dt>
+            <dd
+              class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2 flex items-center justify-between"
+            >
+              Inicio
+              <select
+                class="block text-sm font-medium transition duration-75 border border-gray-800 rounded-lg shadow-sm h-9 focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600 bg-none"
+              >
+                <ng-container *ngTemplateOutlet="horarios"></ng-container>
+              </select>
+              Fin
+              <select
+                class="block text-sm font-medium transition duration-75 border border-gray-800 rounded-lg shadow-sm h-9 focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600 bg-none"
+              >
+                <ng-container *ngTemplateOutlet="horarios"></ng-container>
+              </select>
+            </dd>
+          </div>
+          <div
+            class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+          >
+            <dt class="text-sm font-medium text-gray-500">Sábado</dt>
+            <dd
+              class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2 flex items-center justify-between"
+            >
+              Inicio
+              <select
+                class="block text-sm font-medium transition duration-75 border border-gray-800 rounded-lg shadow-sm h-9 focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600 bg-none"
+              >
+                <ng-container *ngTemplateOutlet="horarios"></ng-container>
+              </select>
+              Fin
+              <select
+                class="block text-sm font-medium transition duration-75 border border-gray-800 rounded-lg shadow-sm h-9 focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600 bg-none"
+              >
+                <ng-container *ngTemplateOutlet="horarios"></ng-container>
+              </select>
+            </dd>
+          </div>
+          <div
+            *ngIf="auth.currentUser.rol === 'paciente'"
+            class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+          >
+            <dt class="text-sm font-medium text-gray-500">Obra Social</dt>
+            <dd
+              class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2 flex items-center justify-between"
+            >
+              Inicio
+              <select
+                class="block text-sm font-medium transition duration-75 border border-gray-800 rounded-lg shadow-sm h-9 focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600 bg-none"
+              >
+                <ng-container *ngTemplateOutlet="horarios"></ng-container>
+              </select>
+              Fin
+              <select
+                class="block text-sm font-medium transition duration-75 border border-gray-800 rounded-lg shadow-sm h-9 focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600 bg-none"
+              >
+                <ng-container *ngTemplateOutlet="horarios"></ng-container>
+              </select>
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+    <button
+      class="rounded-full w-48 h-16 text-white font-semibold lg:mt-10 bg-green-500"
+      (click)="closeMisHorarios()"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>
+
+<!-- HORARIOS -->
+<ng-template #horarios>
+  <option value="08:00">08:00</option>
+  <option value="08:30">08:30</option>
+  <option value="09:00">09:00</option>
+  <option value="09:30">09:30</option>
+  <option value="10:00">10:00</option>
+  <option value="10:30">10:30</option>
+  <option value="11:00">11:00</option>
+  <option value="11:30">11:30</option>
+  <option value="12:00">12:00</option>
+  <option value="12:30">12:30</option>
+  <option value="13:00">13:00</option>
+  <option value="13:30">13:30</option>
+  <option value="14:00">14:00</option>
+  <option value="14:30">14:30</option>
+  <option value="15:00">15:00</option>
+  <option value="15:30">15:30</option>
+  <option value="16:00">16:00</option>
+  <option value="16:30">16:30</option>
+  <option value="17:00">17:00</option>
+  <option value="17:30">17:30</option>
+  <option value="18:00">18:00</option>
+  <option value="18:30">18:30</option>
+  <option value="19:00">19:00</option>
+  <option value="N/A">N/A</option>
+</ng-template>
