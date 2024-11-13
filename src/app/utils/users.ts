@@ -1,26 +1,26 @@
 export const USERS = {
   especialista1: {
-    email: 'especialista1@gmail.com',
+    email: 'specified.gorilla.grow@flashpost.net',
     password: '123456',
   },
   especialista2: {
-    email: 'especialista2@gmail.com',
+    email: 'alt.to-6jwwdsv@yopmail.com',
     password: '123456',
   },
   especialista3: {
-    email: 'especialista3@gmail.com',
+    email: 'fc19e5fec5@emailfoxi.pro',
     password: '123456',
   },
   paciente1: {
-    email: 'paciente1@gmail.com',
+    email: 'totad29256@opposir.com',
     password: '123456',
   },
   paciente2: {
-    email: 'paciente2@gmail.com',
+    email: '7fjyjsy4fa@smykwb.com',
     password: '123456',
   },
   admin: {
-    email: 'admin@gmail.com',
+    email: 'jamlekugna@gufum.com',
     password: '123456',
   },
 };
