@@ -9,7 +9,7 @@ Esta es una aplicación web desarrollada con Angular y Firebase/Firestore, dise�
   - [Página de Inicio](#página-de-inicio)
   - [Página de Inicio de Sesión](#página-de-inicio-de-sesión)
   - [Página de Registro](#página-de-registro)
-  - [Página de Mis Citas](#página-de-mis-citas)
+  - [Página de Mis Turnos](#página-de-mis-turnos)
   - [Página de Usuarios (Solo Administrador)](#página-de-usuarios-solo-administrador)
   - [Página de Mi Información](#página-de-mi-información)
 - [Tecnologías Utilizadas](#tecnologías-utilizadas)
@@ -31,29 +31,52 @@ Esta es la página inicial que introduce a los usuarios a la aplicación de la c
 
 ![image](https://github.com/user-attachments/assets/0fe5ae27-f1a8-47a5-9e6c-7b9da9d865a3)
 
-
 ### Página de Inicio de Sesión
 
 La página de inicio de sesión permite a los usuarios acceder a la aplicación ingresando sus credenciales. Solo los usuarios registrados pueden iniciar sesión, con autenticación manejada a través de Firebase.
+
+![image](https://github.com/user-attachments/assets/7dfc27fe-18ed-4f01-bb62-4ecea577ecc3)
 
 ### Página de Registro
 
 En esta página, los nuevos usuarios pueden crear una cuenta proporcionando la información necesaria. Los usuarios pueden elegir registrarse como **paciente** o **especialista**. Los pacientes podrán solicitar citas, mientras que los especialistas podrán aceptar o rechazar estas solicitudes según su disponibilidad.
 
-### Página de Mis Citas
+#### Formulario para especialistas
 
-Esta página muestra la información de las citas del usuario:
+![image](https://github.com/user-attachments/assets/637196ac-5dc2-47f6-a277-b4d79f222dcd)
+
+#### Formulario para pacientes
+
+![image](https://github.com/user-attachments/assets/9575b2ef-aa8a-4ca0-8d2b-dfb0f00375f9)
+
+### Página de Mis Turnos
+
+Esta página muestra la información de los turnos del usuario:
 - **Para Pacientes:** Ver citas programadas, pendientes y pasadas con especialistas. Los pacientes también pueden solicitar nuevas citas según los horarios y especialidades disponibles.
+
+![image](https://github.com/user-attachments/assets/fa54ff1f-84e2-46cc-af70-fc629f65f559)
+
 - **Para Especialistas:** Ver y gestionar citas solicitadas por pacientes. Los especialistas pueden marcar citas como completadas o cancelarlas.
+
+falta imagen****
 
 ### Página de Usuarios (Solo Administrador)
 
 Esta página es accesible solo para administradores. Aquí, los administradores pueden ver y gestionar a todos los usuarios en el sistema, incluyendo pacientes y especialistas. Los administradores pueden actualizar la información de los usuarios, restablecer contraseñas o desactivar cuentas si es necesario.
 
+![image](https://github.com/user-attachments/assets/3677c84f-a8c6-4fe3-8da1-2d70cf52fa13)
+
 ### Página de Mi Información
 
 Esta página muestra la información personal de cada usuario.
-- **Pacientes y Especialistas:** Pueden ver y editar sus propios detalles, como nombre, información de contacto, especialidad (para especialistas) y otros detalles de perfil.
+- **Pacientes y Especialistas:** Pueden ver sus propios detalles, como nombre, información de contacto, especialidad (para especialistas) y otros detalles de perfil.
+- **Solo especialistas:** Pueden cambiar los horarios donde se encuentran disponibles.
+
+![image](https://github.com/user-attachments/assets/814293e8-7057-4248-87d5-0ccd4268113e)
+
+#### Mis horarios (solo para especialistas)
+
+![image](https://github.com/user-attachments/assets/d933e507-5095-4c6c-9015-60a6c3a44fa8)
 
 ## Tecnologías Utilizadas
 
@@ -66,8 +89,8 @@ Esta página muestra la información personal de cada usuario.
 
 1. **Clonar el Repositorio**  
    ```bash
-   git clone <repository-url>
-   cd clinic-app
+   git clone https://github.com/federico-arevalo/clinicapp/
+   cd clinicapp
    ```
 
 2. **Instalar Dependencias**  
@@ -89,5 +112,3 @@ Esta página muestra la información personal de cada usuario.
    Abre un navegador y ve a `http://localhost:4200`.
 
 ---
-
-Este README proporciona una visión general del propósito de la aplicación, su estructura y las instrucciones de configuración. Para una documentación más detallada, consulta los comentarios dentro del código y los archivos de configuración.
