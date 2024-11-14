@@ -35,49 +35,37 @@ export class AuthService {
     /* Saving user data in localstorage when
     logged in and setting up null when logged out */
     this.afAuth.authState.subscribe((user) => {
-      if (user && user.emailVerified) {
+      if (user) {
+        if (!user.emailVerified) {
+          this.afAuth.signOut();
+          return;
+        }
+
         this.userData = user;
         this.SetUserData(this.userData);
         const userInfo = JSON.stringify(this.userData);
         localStorage.setItem('user', userInfo);
         JSON.parse(localStorage.getItem('user')!);
-        // this.router.navigate(['home']);
+        this.router.navigate(['home']);
 
-        // old way to get users info
-        // this.subscriptions = this.db.getUsers().subscribe((users: any) => {
-        //   let currentUser = users.filter(
-        //     (user: any) => user.uid === JSON.parse(userInfo).uid
-        //   )[0];
-        //   localStorage.setItem('userInfo', JSON.stringify(currentUser));
+        this.subscriptions = this.db.getUsers().subscribe((users: any) => {
+          let currentUser = users.filter(
+            (user: any) => user.uid === JSON.parse(userInfo).uid
+          )[0];
+          localStorage.setItem('userInfo', JSON.stringify(currentUser));
 
-        //   this.currentUser = currentUser;
-        // });
+          this.currentUser = currentUser;
+        });
 
         this.userImages = this.db.getUserImages(this.userData.uid);
       } else {
         localStorage.setItem('user', 'null');
+        localStorage.setItem('userInfo', 'null');
         JSON.parse(localStorage.getItem('user')!);
       }
     });
   }
   // Sign in with email/password
-
-  hasEmailVerified(email: string) {
-    let hasEmailVerified = true;
-
-    return getDocs(collection(this.firestore, 'users')).then((docs: any) => {
-      docs.forEach((doc: any) => {
-        const docData = doc.data();
-
-        if (docData.email === email) {
-          if (!docData.emailVerified && docData.rol === 'paciente')
-            hasEmailVerified = false;
-        }
-      });
-
-      return hasEmailVerified;
-    });
-  }
 
   verifyIsAdminVerified(email: string) {
     let isAdminVerified = true;
@@ -87,7 +75,7 @@ export class AuthService {
         const docData = doc.data();
 
         if (docData.email === email) {
-          if (!docData.isAdminVerified && docData.rol === 'especialista')
+          if (!docData.adminVerified && docData.rol === 'especialista')
             isAdminVerified = false;
         }
       });
@@ -105,6 +93,10 @@ export class AuthService {
         // });
         // this.SetUserData(result.user);
         // this.router.navigate(['home']);
+        if (!result.user.emailVerified) {
+          return false;
+        }
+        console.log('pase igual');
         getDocs(collection(this.firestore, 'users')).then((docs: any) =>
           docs.forEach((doc: any) => {
             if (doc.data().uid === result.user.uid)
@@ -114,6 +106,7 @@ export class AuthService {
         );
         this.router.navigateByUrl('/home');
         console.log(result);
+        return true;
       });
   }
   // Sign up with email/password
@@ -132,9 +125,8 @@ export class AuthService {
         this.SendVerificationMail();
         console.log(result);
         this.SetUserDataType(result.user, userType, newUser, images);
-      })
-      .catch((error) => {
-        console.log(error.message);
+
+        this.SignOut();
       });
   }
   // Send email verfificaiton when new user sign up
@@ -294,6 +286,14 @@ export class AuthService {
             especialidad: newUserData.especialidad,
             profilePicture: data.metadata.fullPath,
             rol: userType,
+            tiemposDisponibles: {
+              lunes: { inicio: '08:00', fin: '18:30' },
+              martes: { inicio: '08:00', fin: '18:30' },
+              miercoles: { inicio: '08:00', fin: '18:30' },
+              jueves: { inicio: '08:00', fin: '18:30' },
+              viernes: { inicio: '08:00', fin: '18:30' },
+              sabado: { inicio: '08:00', fin: '13:30' },
+            },
           };
 
           this.userData = newEspecialista;

@@ -1,1 +1,16 @@
-<p>turnos works!</p>
+<div
+  class="bg-gradient-to-r from-indigo-800 to-blue-900 min-h-screen sm:h-full flex items-center justify-center p-4 overflow-auto"
+>
+  <!-- ADMIN -->
+  <ng-container *ngIf="authService.currentUser.rol === 'admin'">
+    <p>admin</p></ng-container
+  >
+  <!-- ESPECIALISTA -->
+  <ng-container *ngIf="authService.currentUser.rol === 'especialista'">
+    <p>especialista</p></ng-container
+  >
+  <!-- PACIENTE -->
+  <ng-container *ngIf="authService.currentUser.rol === 'paciente'">
+    <app-turnos-paciente></app-turnos-paciente>
+  </ng-container>
+</div>
