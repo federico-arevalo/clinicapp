@@ -287,12 +287,12 @@ export class AuthService {
             profilePicture: data.metadata.fullPath,
             rol: userType,
             tiemposDisponibles: {
-              lunes: { inicio: '08:00', fin: '19:00' },
-              martes: { inicio: '08:00', fin: '19:00' },
-              miercoles: { inicio: '08:00', fin: '19:00' },
-              jueves: { inicio: '08:00', fin: '19:00' },
-              viernes: { inicio: '08:00', fin: '19:00' },
-              sabado: { inicio: '08:00', fin: '14:00' },
+              lunes: { inicio: '08:00', fin: '18:30' },
+              martes: { inicio: '08:00', fin: '18:30' },
+              miercoles: { inicio: '08:00', fin: '18:30' },
+              jueves: { inicio: '08:00', fin: '18:30' },
+              viernes: { inicio: '08:00', fin: '18:30' },
+              sabado: { inicio: '08:00', fin: '13:30' },
             },
           };
 

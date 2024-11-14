@@ -20,10 +20,13 @@
         <h1 class="text-2xl font-bold text-indigo-800 dark:text-white mb-2">
           {{ auth.currentUser.name + " " + auth.currentUser.lastName }}
         </h1>
+
+        <!-- MIS HORARIOS BUTTON -->
         <button
           class="rounded-full w-48 h-16 text-white font-semibold lg:mt-10"
           [ngClass]="showMisHorarios ? 'bg-rose-500' : 'bg-gray-600'"
           (click)="openMisHorarios()"
+          *ngIf="auth.currentUser.rol === 'especialista'"
         >
           <div class="flex gap-3 justify-center items-center">
             <span>
@@ -132,7 +135,7 @@
 </ng-template>
 
 <ng-template #misHorarios>
-  <div class="md:w-2/3 md:pl-8">
+  <form [formGroup]="horariosForm" class="md:w-2/3 md:pl-8">
     <div class="bg-white max-w-2xl shadow overflow-hidden sm:rounded-lg">
       <div class="px-4 py-5 sm:px-6">
         <h3 class="text-lg leading-6 font-medium text-gray-900">
@@ -153,12 +156,14 @@
             >
               Inicio
               <select
+                formControlName="lunesInicio"
                 class="block text-sm font-medium transition duration-75 border border-gray-800 rounded-lg shadow-sm h-9 focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600 bg-none"
               >
                 <ng-container *ngTemplateOutlet="horarios"></ng-container>
               </select>
               Fin
               <select
+                formControlName="lunesFin"
                 class="block text-sm font-medium transition duration-75 border border-gray-800 rounded-lg shadow-sm h-9 focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600 bg-none"
               >
                 <ng-container *ngTemplateOutlet="horarios"></ng-container>
@@ -174,12 +179,14 @@
             >
               Inicio
               <select
+                formControlName="martesInicio"
                 class="block text-sm font-medium transition duration-75 border border-gray-800 rounded-lg shadow-sm h-9 focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600 bg-none"
               >
                 <ng-container *ngTemplateOutlet="horarios"></ng-container>
               </select>
               Fin
               <select
+                formControlName="martesFin"
                 class="block text-sm font-medium transition duration-75 border border-gray-800 rounded-lg shadow-sm h-9 focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600 bg-none"
               >
                 <ng-container *ngTemplateOutlet="horarios"></ng-container>
@@ -195,12 +202,14 @@
             >
               Inicio
               <select
+                formControlName="miercolesInicio"
                 class="block text-sm font-medium transition duration-75 border border-gray-800 rounded-lg shadow-sm h-9 focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600 bg-none"
               >
                 <ng-container *ngTemplateOutlet="horarios"></ng-container>
               </select>
               Fin
               <select
+                formControlName="miercolesFin"
                 class="block text-sm font-medium transition duration-75 border border-gray-800 rounded-lg shadow-sm h-9 focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600 bg-none"
               >
                 <ng-container *ngTemplateOutlet="horarios"></ng-container>
@@ -216,12 +225,14 @@
             >
               Inicio
               <select
+                formControlName="juevesInicio"
                 class="block text-sm font-medium transition duration-75 border border-gray-800 rounded-lg shadow-sm h-9 focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600 bg-none"
               >
                 <ng-container *ngTemplateOutlet="horarios"></ng-container>
               </select>
               Fin
               <select
+                formControlName="juevesFin"
                 class="block text-sm font-medium transition duration-75 border border-gray-800 rounded-lg shadow-sm h-9 focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600 bg-none"
               >
                 <ng-container *ngTemplateOutlet="horarios"></ng-container>
@@ -237,12 +248,14 @@
             >
               Inicio
               <select
+                formControlName="viernesInicio"
                 class="block text-sm font-medium transition duration-75 border border-gray-800 rounded-lg shadow-sm h-9 focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600 bg-none"
               >
                 <ng-container *ngTemplateOutlet="horarios"></ng-container>
               </select>
               Fin
               <select
+                formControlName="viernesFin"
                 class="block text-sm font-medium transition duration-75 border border-gray-800 rounded-lg shadow-sm h-9 focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600 bg-none"
               >
                 <ng-container *ngTemplateOutlet="horarios"></ng-container>
@@ -258,15 +271,17 @@
             >
               Inicio
               <select
+                formControlName="sabadoInicio"
                 class="block text-sm font-medium transition duration-75 border border-gray-800 rounded-lg shadow-sm h-9 focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600 bg-none"
               >
-                <ng-container *ngTemplateOutlet="horarios"></ng-container>
+                <ng-container *ngTemplateOutlet="horariosSabado"></ng-container>
               </select>
               Fin
               <select
+                formControlName="sabadoFin"
                 class="block text-sm font-medium transition duration-75 border border-gray-800 rounded-lg shadow-sm h-9 focus:border-blue-600 focus:ring-1 focus:ring-inset focus:ring-blue-600 bg-none"
               >
-                <ng-container *ngTemplateOutlet="horarios"></ng-container>
+                <ng-container *ngTemplateOutlet="horariosSabado"></ng-container>
               </select>
             </dd>
           </div>
@@ -297,11 +312,11 @@
     </div>
     <button
       class="rounded-full w-48 h-16 text-white font-semibold lg:mt-10 bg-green-500"
-      (click)="closeMisHorarios()"
+      (click)="guardarHorarios()"
     >
       Guardar
     </button>
-  </div>
+  </form>
 </ng-template>
 
 <!-- HORARIOS -->
@@ -329,5 +344,22 @@
   <option value="18:00">18:00</option>
   <option value="18:30">18:30</option>
   <option value="19:00">19:00</option>
+  <option value="N/A">N/A</option>
+</ng-template>
+
+<!-- HORARIOS SABADO -->
+<ng-template #horariosSabado>
+  <option value="08:00">08:00</option>
+  <option value="08:30">08:30</option>
+  <option value="09:00">09:00</option>
+  <option value="09:30">09:30</option>
+  <option value="10:00">10:00</option>
+  <option value="10:30">10:30</option>
+  <option value="11:00">11:00</option>
+  <option value="11:30">11:30</option>
+  <option value="12:00">12:00</option>
+  <option value="12:30">12:30</option>
+  <option value="13:00">13:00</option>
+  <option value="13:30">13:30</option>
   <option value="N/A">N/A</option>
 </ng-template>
