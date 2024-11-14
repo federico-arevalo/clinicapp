@@ -52,13 +52,14 @@ En esta página, los nuevos usuarios pueden crear una cuenta proporcionando la i
 ### Página de Mis Turnos
 
 Esta página muestra la información de los turnos del usuario:
+
 - **Para Pacientes:** Ver citas programadas, pendientes y pasadas con especialistas. Los pacientes también pueden solicitar nuevas citas según los horarios y especialidades disponibles.
 
 ![image](https://github.com/user-attachments/assets/fa54ff1f-84e2-46cc-af70-fc629f65f559)
 
 - **Para Especialistas:** Ver y gestionar citas solicitadas por pacientes. Los especialistas pueden marcar citas como completadas o cancelarlas.
 
-falta imagen****
+falta imagen\*\*\*\*
 
 ### Página de Usuarios (Solo Administrador)
 
@@ -69,6 +70,7 @@ Esta página es accesible solo para administradores. Aquí, los administradores 
 ### Página de Mi Información
 
 Esta página muestra la información personal de cada usuario.
+
 - **Pacientes y Especialistas:** Pueden ver sus propios detalles, como nombre, información de contacto, especialidad (para especialistas) y otros detalles de perfil.
 - **Solo especialistas:** Pueden cambiar los horarios donde se encuentran disponibles.
 
@@ -83,27 +85,31 @@ Esta página muestra la información personal de cada usuario.
 - **Angular**: Framework frontend para construir la interfaz de usuario.
 - **Firebase Authentication**: Para manejar el registro de usuarios, inicio de sesión y acceso basado en roles.
 - **Firebase Firestore**: Base de datos para almacenar de manera segura información de usuarios, citas e información de administradores.
-- **Angular Material**: Para componentes de interfaz de usuario y estilos.
+- **Tailwind CSS**: Para estilos.
 
 ## Instalación y Configuración
 
-1. **Clonar el Repositorio**  
+1. **Clonar el Repositorio**
+
    ```bash
    git clone https://github.com/federico-arevalo/clinicapp/
    cd clinicapp
    ```
 
-2. **Instalar Dependencias**  
+2. **Instalar Dependencias**
+
    ```bash
    npm install
    ```
 
-3. **Configuración de Firebase**  
+3. **Configuración de Firebase**
+
    - Configura un proyecto de Firebase en la Consola de Firebase.
    - Habilita Authentication y Firestore Database en tu proyecto de Firebase.
    - Copia tu configuración de Firebase en el archivo `environment.ts`.
 
-4. **Ejecutar la Aplicación**  
+4. **Ejecutar la Aplicación**
+
    ```bash
    ng serve
    ```
