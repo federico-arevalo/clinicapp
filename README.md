@@ -29,6 +29,9 @@ Esta es una aplicación web desarrollada con Angular y Firebase/Firestore, dise�
 
 Esta es la página inicial que introduce a los usuarios a la aplicación de la clínica. Aquí, los usuarios pueden navegar hacia el inicio de sesión o el registro, y conocer los servicios y el propósito de la clínica.
 
+![image](https://github.com/user-attachments/assets/0fe5ae27-f1a8-47a5-9e6c-7b9da9d865a3)
+
+
 ### Página de Inicio de Sesión
 
 La página de inicio de sesión permite a los usuarios acceder a la aplicación ingresando sus credenciales. Solo los usuarios registrados pueden iniciar sesión, con autenticación manejada a través de Firebase.
