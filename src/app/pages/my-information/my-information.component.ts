@@ -39,7 +39,6 @@ export class MyInformationComponent implements OnInit {
     '17:30',
     '18:00',
     '18:30',
-    '19:00',
     'N/A',
   ];
 
