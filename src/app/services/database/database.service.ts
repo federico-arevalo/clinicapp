@@ -24,10 +24,6 @@ export class DatabaseService {
     return collectionData(collection(this.firestore, 'utils'));
   }
 
-  getUserInfo(userId: string) {
-    return collectionData(collection(this.firestore, `users/${userId}`));
-  }
-
   getUsers() {
     return collectionData(collection(this.firestore, `users`));
   }
@@ -36,6 +32,13 @@ export class DatabaseService {
     const vehiculoRef = doc(this.firestore, 'users', id);
     updateDoc(vehiculoRef, {
       adminVerified: !usuario.adminVerified,
+    });
+  }
+
+  guardarHorarios(id: string, horarios: any) {
+    const usersRef = doc(this.firestore, 'users', id);
+    updateDoc(usersRef, {
+      tiemposDisponibles: horarios,
     });
   }
 
