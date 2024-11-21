@@ -170,8 +170,8 @@
       </div>
     </div>
 
-    <!-- Form Steps -->
-    <form id="multi-step-form">
+    <!-- Steps -->
+    <div>
       <!-- Step 1: Especialidades -->
       <div
         id="step-1"
@@ -200,121 +200,35 @@
       <!-- Step 2: Especialistas -->
       <div
         id="step-2"
-        class="step"
+        class="grid grid-cols-2 lg:grid-cols-4 gap-4 justify-items-center"
         [ngClass]="currentStep === 2 ? '' : 'hidden'"
       >
-        <div class="mb-6">
-          <label
-            for="username"
-            class="block mb-2 text-sm font-medium text-gray-900"
-            >Username</label
-          >
-          <input
-            type="text"
-            id="username"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5"
-            required
+        <button
+          class="bg-sky-200 p-2 flex flex-col justify-center items-center hover:bg-sky-400 transition-all duration-300 ease-in-out cursor-pointer w-[170px] h-[120px]"
+          *ngFor="let especialista of filteredEspecialistas"
+          [ngClass]="especialista === selectedEspecialista ? 'bg-sky-400' : ''"
+          (click)="selectedEspecialista = especialista"
+        >
+          <p class="text-sm">
+            {{ especialista.name + " " + especialista.lastName }}
+          </p>
+
+          <img
+            class="max-w-20 min-w-20 max-h-20 min-h-20 object-fill"
+            [src]="especialista.profilePicture"
           />
-        </div>
-        <div class="mb-6">
-          <label
-            for="password"
-            class="block mb-2 text-sm font-medium text-gray-900"
-            >Password</label
-          >
-          <input
-            type="password"
-            id="password"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5"
-            required
-          />
-        </div>
-        <div class="mb-6">
-          <label
-            for="confirmPassword"
-            class="block mb-2 text-sm font-medium text-gray-900"
-            >Confirm Password</label
-          >
-          <input
-            type="password"
-            id="confirmPassword"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5"
-            required
-          />
-        </div>
+        </button>
       </div>
 
       <!-- Step 3: Fecha y hora -->
-      <div
-        id="step-3"
-        class="step"
-        [ngClass]="currentStep === 3 ? '' : 'hidden'"
-      >
-        <div class="mb-6">
-          <label class="block mb-2 text-sm font-medium text-gray-900"
-            >Preferred Contact Method</label
-          >
-          <div class="flex items-center mb-4">
-            <input
-              id="contact-email"
-              type="radio"
-              name="contact"
-              value="email"
-              class="w-4 h-4 text-sky-600 bg-gray-100 border-gray-300 focus:ring-sky-500 focus:ring-2"
-            />
-            <label
-              for="contact-email"
-              class="ml-2 text-sm font-medium text-gray-900"
-              >Email</label
-            >
-          </div>
-          <div class="flex items-center">
-            <input
-              id="contact-phone"
-              type="radio"
-              name="contact"
-              value="phone"
-              class="w-4 h-4 text-sky-600 bg-gray-100 border-gray-300 focus:ring-sky-500 focus:ring-2"
-            />
-            <label
-              for="contact-phone"
-              class="ml-2 text-sm font-medium text-gray-900"
-              >Phone</label
-            >
-          </div>
-        </div>
-        <div class="mb-6">
-          <label
-            for="interests"
-            class="block mb-2 text-sm font-medium text-gray-900"
-            >Interests (select all that apply)</label
-          >
-          <select
-            id="interests"
-            multiple
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5"
-          >
-            <option value="technology">Technology</option>
-            <option value="finance">Finance</option>
-            <option value="health">Health & Wellness</option>
-            <option value="travel">Travel</option>
-            <option value="food">Food & Cooking</option>
-          </select>
-        </div>
-        <div class="flex items-center mb-6">
-          <input
-            id="newsletter"
-            type="checkbox"
-            class="w-4 h-4 text-sky-600 bg-gray-100 border-gray-300 rounded focus:ring-sky-500"
-          />
-          <label for="newsletter" class="ml-2 text-sm font-medium text-gray-900"
-            >Subscribe to newsletter</label
-          >
-        </div>
+      <div id="step-3" [ngClass]="currentStep === 3 ? '' : 'hidden'">
+        <app-appointment-scheduler-component></app-appointment-scheduler-component>
       </div>
+
       <small class="text-xs text-red-500" *ngIf="isError">
         {{ errorMsg }}
       </small>
+
       <!-- Navigation Buttons -->
       <div class="flex justify-between mt-8">
         <button
@@ -353,6 +267,6 @@
           Cancelar
         </button>
       </div>
-    </form>
+    </div>
   </div>
 </ng-template>

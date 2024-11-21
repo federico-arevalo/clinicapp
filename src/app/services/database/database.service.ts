@@ -6,6 +6,7 @@ import {
   doc,
   updateDoc,
 } from '@angular/fire/firestore';
+import { collection as col } from 'firebase/firestore';
 import { Storage, ref, listAll, getDownloadURL } from '@angular/fire/storage';
 
 @Injectable({
@@ -22,6 +23,10 @@ export class DatabaseService {
 
   getEspecialidades() {
     return collectionData(collection(this.firestore, 'utils'));
+  }
+
+  getEspecialistas() {
+    return collectionData(collection(this.firestore, 'users'));
   }
 
   getUsers() {

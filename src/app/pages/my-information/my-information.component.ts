@@ -100,12 +100,8 @@ export class MyInformationComponent implements OnInit {
     });
   }
 
-  openMisHorarios() {
-    this.showMisHorarios = true;
-  }
-
-  closeMisHorarios() {
-    this.showMisHorarios = false;
+  toggleMisHorarios() {
+    this.showMisHorarios = !this.showMisHorarios;
   }
 
   guardarHorarios() {
@@ -138,7 +134,6 @@ export class MyInformationComponent implements OnInit {
     this.db.guardarHorarios(this.auth.currentUser.uid, horarios);
 
     this.isModifying = false;
-    this.closeMisHorarios();
   }
 
   modificarHorarios() {

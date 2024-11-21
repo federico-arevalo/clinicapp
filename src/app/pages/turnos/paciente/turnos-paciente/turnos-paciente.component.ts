@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { DatabaseService } from '../../../../services/database/database.service';
+import { AppointmentSchedulerComponentComponent } from '../../../../components/appointment-scheduler-component/appointment-scheduler-component.component';
 
 @Component({
   selector: 'app-turnos-paciente',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, AppointmentSchedulerComponentComponent],
   templateUrl: './turnos-paciente.component.html',
   styleUrl: './turnos-paciente.component.scss',
 })
@@ -23,6 +24,7 @@ export class TurnosPacienteComponent implements OnInit {
 
   especialidades: any[] = [];
   especialistas: any[] = [];
+  filteredEspecialistas: any[] = [];
   selectedEspecialidad: string = '';
   selectedEspecialista: any;
 
@@ -52,10 +54,15 @@ export class TurnosPacienteComponent implements OnInit {
       this.especialidades = respuesta[0].especialidades;
     });
 
-    this.db.getUsers().subscribe((respuesta: any) => {
+    this.db.getEspecialistas().subscribe((respuesta: any) => {
       this.especialistas = respuesta.filter(
         (user: any) => user.rol === 'especialista'
       );
+      this.especialistas.map((user: any) => {
+        this.db.getUserImageById(user.uid).then((imagesUrl) => {
+          user.profilePicture = imagesUrl;
+        });
+      });
     });
   }
 
@@ -67,6 +74,19 @@ export class TurnosPacienteComponent implements OnInit {
         return;
       }
     }
+
+    if (this.currentStep === 2) {
+      if (!this.selectedEspecialista) {
+        this.isError = true;
+        this.errorMsg = '* Selecciona un especialista';
+        return;
+      }
+    }
+
+    this.filteredEspecialistas = this.especialistas.filter(
+      (especialista: any) =>
+        especialista.especialidad.includes(this.selectedEspecialidad)
+    );
 
     this.isError = false;
     if (this.currentStep < 3) this.currentStep++;
