@@ -1,4 +1,30 @@
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+  <ng-content *ngIf="showForm; then turnoForm; else allTurnos"></ng-content>
+
+  <!-- BOTTOM BUTTON -->
+  <div class="animate-bounce fixed bottom-4 right-4">
+    <button
+      *ngIf="!showForm"
+      class="p-0 w-16 h-16 bg-red-600 rounded-full hover:bg-red-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none"
+      (click)="openForm()"
+    >
+      <svg
+        viewBox="0 0 20 20"
+        enable-background="new 0 0 20 20"
+        class="w-6 h-6 inline-block"
+      >
+        <path
+          fill="#FFFFFF"
+          d="M16,10c0,0.553-0.048,1-0.601,1H11v4.399C11,15.951,10.553,16,10,16c-0.553,0-1-0.049-1-0.601V11H4.601
+                        C4.049,11,4,10.553,4,10c0-0.553,0.049-1,0.601-1H9V4.601C9,4.048,9.447,4,10,4c0.553,0,1,0.048,1,0.601V9h4.399
+                        C15.952,9,16,9.447,16,10z"
+        />
+      </svg>
+    </button>
+  </div>
+</div>
+
+<ng-template #allTurnos>
   <div
     class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900"
   >
@@ -106,25 +132,227 @@
       </tbody>
     </table>
   </div>
+</ng-template>
 
-  <!-- BOTTOM BUTTON -->
-  <div class="animate-bounce fixed bottom-4 right-4">
-    <button
-      class="p-0 w-16 h-16 bg-red-600 rounded-full hover:bg-red-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none"
-      (click)="openForm()"
-    >
-      <svg
-        viewBox="0 0 20 20"
-        enable-background="new 0 0 20 20"
-        class="w-6 h-6 inline-block"
+<ng-template #turnoForm>
+  <div
+    class="bg-white rounded-lg shadow-lg p-6 md:p-10 max-w-3xl mx-auto lg:w-[800px]"
+  >
+    <h1 class="text-3xl font-bold text-center mb-8">Solicitar Nuevo Turno</h1>
+
+    <!-- Progress Bar -->
+    <div class="mb-8">
+      <div class="flex justify-between mb-2">
+        <span
+          class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-sky-600 bg-sky-200"
+          id="step1"
+        >
+          Especialidad
+        </span>
+        <span
+          class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-sky-600 bg-sky-200 opacity-50"
+          id="step2"
+        >
+          Especialista
+        </span>
+        <span
+          class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-sky-600 bg-sky-200 opacity-50"
+          id="step3"
+        >
+          Fecha y hora
+        </span>
+      </div>
+      <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-sky-200">
+        <div
+          id="progress-bar"
+          class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-sky-500 w-0 transition-all duration-500 ease-in-out"
+        ></div>
+      </div>
+    </div>
+
+    <!-- Form Steps -->
+    <form id="multi-step-form">
+      <!-- Step 1: Especialidades -->
+      <div
+        id="step-1"
+        class="grid grid-cols-2 lg:grid-cols-4 gap-4 justify-items-center"
+        [ngClass]="currentStep === 1 ? '' : 'hidden'"
       >
-        <path
-          fill="#FFFFFF"
-          d="M16,10c0,0.553-0.048,1-0.601,1H11v4.399C11,15.951,10.553,16,10,16c-0.553,0-1-0.049-1-0.601V11H4.601
-                        C4.049,11,4,10.553,4,10c0-0.553,0.049-1,0.601-1H9V4.601C9,4.048,9.447,4,10,4c0.553,0,1,0.048,1,0.601V9h4.399
-                        C15.952,9,16,9.447,16,10z"
-        />
-      </svg>
-    </button>
+        <button
+          class="bg-sky-200 p-2 flex flex-col justify-center items-center hover:bg-sky-400 transition-all duration-300 ease-in-out cursor-pointer w-[120px] h-[120px]"
+          *ngFor="let especialidad of especialidades"
+          [ngClass]="especialidad === selectedEspecialidad ? 'bg-sky-400' : ''"
+          (click)="selectedEspecialidad = especialidad"
+        >
+          <img
+            class="max-w-20 min-w-20 max-h-20 min-h-20 object-fill"
+            [src]="
+              '../../../../../assets/images/especialidades/' +
+              especialidad +
+              '.png'
+            "
+            onerror="this.src='../../../../../assets/images/especialidades/default.png'"
+          />
+          <!-- {{ especialidad }} -->
+        </button>
+      </div>
+
+      <!-- Step 2: Especialistas -->
+      <div
+        id="step-2"
+        class="step"
+        [ngClass]="currentStep === 2 ? '' : 'hidden'"
+      >
+        <div class="mb-6">
+          <label
+            for="username"
+            class="block mb-2 text-sm font-medium text-gray-900"
+            >Username</label
+          >
+          <input
+            type="text"
+            id="username"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5"
+            required
+          />
+        </div>
+        <div class="mb-6">
+          <label
+            for="password"
+            class="block mb-2 text-sm font-medium text-gray-900"
+            >Password</label
+          >
+          <input
+            type="password"
+            id="password"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5"
+            required
+          />
+        </div>
+        <div class="mb-6">
+          <label
+            for="confirmPassword"
+            class="block mb-2 text-sm font-medium text-gray-900"
+            >Confirm Password</label
+          >
+          <input
+            type="password"
+            id="confirmPassword"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5"
+            required
+          />
+        </div>
+      </div>
+
+      <!-- Step 3: Fecha y hora -->
+      <div
+        id="step-3"
+        class="step"
+        [ngClass]="currentStep === 3 ? '' : 'hidden'"
+      >
+        <div class="mb-6">
+          <label class="block mb-2 text-sm font-medium text-gray-900"
+            >Preferred Contact Method</label
+          >
+          <div class="flex items-center mb-4">
+            <input
+              id="contact-email"
+              type="radio"
+              name="contact"
+              value="email"
+              class="w-4 h-4 text-sky-600 bg-gray-100 border-gray-300 focus:ring-sky-500 focus:ring-2"
+            />
+            <label
+              for="contact-email"
+              class="ml-2 text-sm font-medium text-gray-900"
+              >Email</label
+            >
+          </div>
+          <div class="flex items-center">
+            <input
+              id="contact-phone"
+              type="radio"
+              name="contact"
+              value="phone"
+              class="w-4 h-4 text-sky-600 bg-gray-100 border-gray-300 focus:ring-sky-500 focus:ring-2"
+            />
+            <label
+              for="contact-phone"
+              class="ml-2 text-sm font-medium text-gray-900"
+              >Phone</label
+            >
+          </div>
+        </div>
+        <div class="mb-6">
+          <label
+            for="interests"
+            class="block mb-2 text-sm font-medium text-gray-900"
+            >Interests (select all that apply)</label
+          >
+          <select
+            id="interests"
+            multiple
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5"
+          >
+            <option value="technology">Technology</option>
+            <option value="finance">Finance</option>
+            <option value="health">Health & Wellness</option>
+            <option value="travel">Travel</option>
+            <option value="food">Food & Cooking</option>
+          </select>
+        </div>
+        <div class="flex items-center mb-6">
+          <input
+            id="newsletter"
+            type="checkbox"
+            class="w-4 h-4 text-sky-600 bg-gray-100 border-gray-300 rounded focus:ring-sky-500"
+          />
+          <label for="newsletter" class="ml-2 text-sm font-medium text-gray-900"
+            >Subscribe to newsletter</label
+          >
+        </div>
+      </div>
+      <small class="text-xs text-red-500" *ngIf="isError">
+        {{ errorMsg }}
+      </small>
+      <!-- Navigation Buttons -->
+      <div class="flex justify-between mt-8">
+        <button
+          type="button"
+          id="prevBtn"
+          class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 focus:outline-none focus:shadow-outline"
+          (click)="prev()"
+          *ngIf="currentStep !== 1"
+        >
+          Anterior
+        </button>
+        <button
+          type="button"
+          id="nextBtn"
+          class="px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 focus:outline-none focus:shadow-outline"
+          (click)="next()"
+          *ngIf="currentStep !== 3"
+        >
+          Siguiente
+        </button>
+        <button
+          type="button"
+          id="submitBtn"
+          class="px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 focus:outline-none focus:shadow-outline"
+          (click)="crearTurno()"
+          *ngIf="currentStep === 3"
+        >
+          Solicitar Turno
+        </button>
+        <button
+          type="button"
+          id="cancelarBtn"
+          class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:shadow-outline"
+          (click)="cerrarForm()"
+        >
+          Cancelar
+        </button>
+      </div>
+    </form>
   </div>
-</div>
+</ng-template>
