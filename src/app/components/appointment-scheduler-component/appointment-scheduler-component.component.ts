@@ -96,7 +96,10 @@ export class AppointmentSchedulerComponentComponent
         .toLowerCase();
       if (day === 'domingo') continue; // Skip Sundays
 
-      const availability = this.especialista.tiemposDisponibles[day];
+      const availability = this.especialista.tiemposDisponibles.find(
+        (especialidad: any) => especialidad.especialidad === this.especialidad
+      ).tiemposDisponibles[day];
+      console.log(availability);
       if (availability) {
         const startTime = new Date(
           date.toISOString().split('T')[0] + 'T' + availability.inicio
@@ -126,6 +129,7 @@ export class AppointmentSchedulerComponentComponent
     }
 
     this.intervals = intervals;
+    console.log(this.intervals);
   }
 
   requestAppointment(interval: {

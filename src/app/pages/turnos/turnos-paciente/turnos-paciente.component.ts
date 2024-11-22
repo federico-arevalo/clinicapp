@@ -5,11 +5,16 @@ import { AppointmentSchedulerComponentComponent } from '../../../components/appo
 import { Turno } from '../../../interfaces/turno/turno';
 import { TurnosService } from '../../../services/turnos/turnos.service';
 import { AuthService } from '../../../services/auth/auth.service';
+import { ShortDatePipe } from '../../../pipes/short-date.pipe';
 
 @Component({
   selector: 'app-turnos-paciente',
   standalone: true,
-  imports: [CommonModule, AppointmentSchedulerComponentComponent],
+  imports: [
+    CommonModule,
+    AppointmentSchedulerComponentComponent,
+    ShortDatePipe,
+  ],
   templateUrl: './turnos-paciente.component.html',
   styleUrl: './turnos-paciente.component.scss',
 })
@@ -167,17 +172,21 @@ export class TurnosPacienteComponent implements OnInit {
   // ALL TURNOS METHODS
   cancelarTurno(id: string) {
     console.log(id);
+    this.openDropdownIndex = null;
   }
 
   verReview(turno: Turno) {
     console.log(turno);
+    this.openDropdownIndex = null;
   }
 
   verComentario(turno: Turno) {
     console.log(turno);
+    this.openDropdownIndex = null;
   }
 
   calificarAtencion(id: string) {
     console.log(id);
+    this.openDropdownIndex = null;
   }
 }
