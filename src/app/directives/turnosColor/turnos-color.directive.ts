@@ -16,13 +16,13 @@ export class TurnosColorDirective {
         this.el.nativeElement.style.backgroundColor = 'yellow';
         break;
       case 'Realizado':
-        this.el.nativeElement.style.backgroundColor = 'green';
+        this.el.nativeElement.style.backgroundColor = 'limegreen';
         break;
       case 'Cancelado':
-        this.el.nativeElement.style.backgroundColor = 'orange';
+        this.el.nativeElement.style.backgroundColor = 'darkorange';
         break;
       case 'Aceptado':
-        this.el.nativeElement.style.backgroundColor = 'blue';
+        this.el.nativeElement.style.backgroundColor = 'cyan';
         break;
       case 'Rechazado':
         this.el.nativeElement.style.backgroundColor = 'red';
