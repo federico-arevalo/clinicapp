@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { DatabaseService } from '../../services/database/database.service';
 import { CommonModule } from '@angular/common';
-import { IsVerifiedDirective } from '../../directives/is-verified.directive';
+import { IsVerifiedDirective } from '../../directives/isVerified/is-verified.directive';
 import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, IsVerifiedDirective],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
 })

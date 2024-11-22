@@ -6,6 +6,7 @@ import { Turno } from '../../../interfaces/turno/turno';
 import { TurnosService } from '../../../services/turnos/turnos.service';
 import { AuthService } from '../../../services/auth/auth.service';
 import { ShortDatePipe } from '../../../pipes/short-date.pipe';
+import { TurnosColorDirective } from '../../../directives/turnosColor/turnos-color.directive';
 
 @Component({
   selector: 'app-turnos-paciente',
@@ -14,6 +15,7 @@ import { ShortDatePipe } from '../../../pipes/short-date.pipe';
     CommonModule,
     AppointmentSchedulerComponentComponent,
     ShortDatePipe,
+    TurnosColorDirective,
   ],
   templateUrl: './turnos-paciente.component.html',
   styleUrl: './turnos-paciente.component.scss',
