@@ -40,6 +40,7 @@ export class TurnosPacienteComponent implements OnInit {
 
   isError: boolean = false;
   errorMsg: string = '';
+  showSpinner: boolean = true;
 
   createdTurno!: Turno;
 
@@ -90,6 +91,7 @@ export class TurnosPacienteComponent implements OnInit {
             comentario: turno.comentario,
           };
         });
+      this.showSpinner = false;
     });
   }
 
@@ -138,6 +140,12 @@ export class TurnosPacienteComponent implements OnInit {
   }
 
   prev() {
+    if (this.currentStep === 2) {
+      this.selectedEspecialista = null;
+    }
+    if (this.currentStep === 3) {
+    }
+
     if (this.currentStep > 1) this.currentStep--;
     this.showStep(this.currentStep);
   }

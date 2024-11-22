@@ -1,6 +1,6 @@
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
   <ng-content *ngIf="showForm; then turnoForm; else allTurnos"></ng-content>
-  <ng-content *ngIf="turnos.length !== 0; else loading"></ng-content>
+  <ng-content *ngIf="showSpinner; then loading"></ng-content>
 
   <!-- BOTTOM BUTTON -->
   <div class="animate-bounce fixed bottom-4 right-4">
@@ -27,7 +27,7 @@
 
 <ng-template #allTurnos>
   <div
-    class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900"
+    class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 bg-white dark:bg-gray-900"
   >
     <div class="flex items-center justify-center p-2 w-full">
       <h2 class="text-4xl font-extrabold dark:text-white">Mis turnos</h2>
@@ -63,7 +63,7 @@
             </div>
           </th>
           <td class="px-6 py-4">{{ turno.especialidad }}</td>
-          <td class="px-6 py-4">{{ turno.date }}</td>
+          <td class="px-6 py-4">{{ turno.date | shortDate }}</td>
           <td class="px-6 py-4">{{ turno.time }}</td>
           <td class="px-6 py-4">
             <div class="flex items-center">
@@ -109,32 +109,62 @@
                 aria-labelledby="dropdownDefaultButton"
               >
                 <button
+                  [disabled]="turno.estado === 'Cancelado'"
                   (click)="cancelarTurno(turno)"
-                  class="w-44 flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  class="w-44 flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white disabled:text-gray-400"
                 >
                   Cancelar
                 </button>
 
                 <button
+                  [disabled]="turno.review === ''"
                   (click)="verReview(turno)"
-                  class="w-44 flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  class="w-44 flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white disabled:text-gray-400"
                 >
                   Ver reseña
                 </button>
 
                 <button
+                  [disabled]="turno.comentario === ''"
                   (click)="verComentario(turno)"
-                  class="w-44 flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  class="w-44 flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white disabled:text-gray-400"
                 >
                   Ver comentario
                 </button>
 
                 <button
+                  [disabled]="turno.review === ''"
                   (click)="calificarAtencion(turno)"
-                  class="w-44 flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  class="w-44 flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white disabled:text-gray-400"
                 >
                   Calificar atención
                 </button>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="turnos.length === 0">
+          <td class="px-6 py-4 text-center" colspan="6">
+            <div
+              class="flex items-center p-4 text-sm text-gray-800 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-300"
+              role="alert"
+            >
+              <svg
+                class="flex-shrink-0 inline w-4 h-4 me-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+                />
+              </svg>
+              <span class="sr-only">Info</span>
+              <div>
+                <span class="font-medium"
+                  >No has solicitado ningún turno aún.</span
+                >
               </div>
             </div>
           </td>

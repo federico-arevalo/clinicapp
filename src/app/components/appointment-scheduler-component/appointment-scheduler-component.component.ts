@@ -52,7 +52,6 @@ export class AppointmentSchedulerComponentComponent
   ngOnInit(): void {
     this.generateIntervalsForTwoWeeks();
     this.turnosService.getTurnos().subscribe((turnos: any) => {
-      console.log(turnos);
       this.turnos = turnos.map((turno: any) => {
         return {
           id: turno.id,
@@ -73,8 +72,10 @@ export class AppointmentSchedulerComponentComponent
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['especialidad'] || changes['especialista'])
+    if (changes['especialidad'] || changes['especialista']) {
+      this.selectedTurno = null;
       this.generateIntervalsForTwoWeeks();
+    }
   }
 
   generateIntervalsForTwoWeeks() {
@@ -99,6 +100,7 @@ export class AppointmentSchedulerComponentComponent
       const availability = this.especialista.tiemposDisponibles.find(
         (especialidad: any) => especialidad.especialidad === this.especialidad
       ).tiemposDisponibles[day];
+      console.log(this.especialista);
       console.log(availability);
       if (availability) {
         const startTime = new Date(
@@ -113,7 +115,8 @@ export class AppointmentSchedulerComponentComponent
           const isBooked = this.turnos.some(
             (appt) =>
               appt.date === date.toISOString().split('T')[0] &&
-              appt.time === timeString
+              appt.time === timeString &&
+              appt.especialista.uid === this.especialista.uid
           );
 
           intervals.push({
@@ -129,7 +132,6 @@ export class AppointmentSchedulerComponentComponent
     }
 
     this.intervals = intervals;
-    console.log(this.intervals);
   }
 
   requestAppointment(interval: {
