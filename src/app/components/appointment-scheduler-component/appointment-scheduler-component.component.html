@@ -6,10 +6,10 @@
     <button
       [disabled]="interval.disabled"
       (click)="requestAppointment(interval)"
-      class="text-white rounded-lg p-2"
-      [ngClass]="interval === selectedTurno ? 'bg-blue-700' : 'bg-sky-300'"
+      class="text-white rounded-lg p-2 disabled:bg-red-600"
+      [ngClass]="interval === selectedTurno ? 'bg-blue-700' : 'bg-green-700'"
     >
-      {{ interval.date + " " + interval.time }}
+      {{ (interval.date | shortDate) + " " + interval.time }}
     </button>
   </ng-container>
 </div>

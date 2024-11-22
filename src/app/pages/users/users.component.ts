@@ -7,7 +7,7 @@ import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [CommonModule, IsVerifiedDirective],
+  imports: [CommonModule],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
 })

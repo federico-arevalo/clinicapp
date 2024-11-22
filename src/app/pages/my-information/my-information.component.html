@@ -144,7 +144,25 @@
         <p class="mt-1 max-w-2xl text-sm text-gray-500">
           Acá se pueden cambiar los horarios donde se encuentra disponible
         </p>
+        <label
+          for="countries"
+          class="block mb-1 mt-2 text-sm font-medium text-gray-900"
+          >Selecciona una especialidad</label
+        >
+        <select
+          id="countries"
+          (change)="onChangeSelect($event)"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        >
+          <option
+            *ngFor="let especialidad of especialidades"
+            [value]="especialidad.especialidad"
+          >
+            {{ especialidad.especialidad }}
+          </option>
+        </select>
       </div>
+
       <div class="border-t border-gray-200">
         <dl>
           <div

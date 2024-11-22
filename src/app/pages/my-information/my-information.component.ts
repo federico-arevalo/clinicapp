@@ -15,6 +15,8 @@ export class MyInformationComponent implements OnInit {
   showMisHorarios: boolean = false;
   defaultAvailability: any;
   isModifying: boolean = false;
+  especialidades: any[] = [];
+  selectedEspecialidad: string = '';
 
   times = [
     '08:00',
@@ -77,61 +79,84 @@ export class MyInformationComponent implements OnInit {
   constructor(public auth: AuthService, private db: DatabaseService) {}
 
   ngOnInit(): void {
+    if (this.auth.currentUser.rol !== 'especialista') return;
     this.db.getUsers().subscribe((respuesta: any) => {
-      this.defaultAvailability = respuesta.filter(
+      this.especialidades = respuesta.filter(
         (user: any) => user.uid === this.auth.currentUser.uid
       )[0].tiemposDisponibles;
+      this.defaultAvailability = this.especialidades[0].tiemposDisponibles;
+      this.selectedEspecialidad = this.especialidades[0].especialidad;
 
-      this.horariosForm.setValue({
-        lunesInicio: this.defaultAvailability.lunes.inicio,
-        lunesFin: this.defaultAvailability.lunes.fin,
-        martesInicio: this.defaultAvailability.martes.inicio,
-        martesFin: this.defaultAvailability.martes.fin,
-        miercolesInicio: this.defaultAvailability.miercoles.inicio,
-        miercolesFin: this.defaultAvailability.miercoles.fin,
-        juevesInicio: this.defaultAvailability.jueves.inicio,
-        juevesFin: this.defaultAvailability.jueves.fin,
-        viernesInicio: this.defaultAvailability.viernes.inicio,
-        viernesFin: this.defaultAvailability.viernes.fin,
-        sabadoInicio: this.defaultAvailability.sabado.inicio,
-        sabadoFin: this.defaultAvailability.sabado.fin,
-      });
+      this.setValues();
     });
+  }
+
+  setValues() {
+    this.horariosForm.setValue({
+      lunesInicio: this.defaultAvailability.lunes.inicio,
+      lunesFin: this.defaultAvailability.lunes.fin,
+      martesInicio: this.defaultAvailability.martes.inicio,
+      martesFin: this.defaultAvailability.martes.fin,
+      miercolesInicio: this.defaultAvailability.miercoles.inicio,
+      miercolesFin: this.defaultAvailability.miercoles.fin,
+      juevesInicio: this.defaultAvailability.jueves.inicio,
+      juevesFin: this.defaultAvailability.jueves.fin,
+      viernesInicio: this.defaultAvailability.viernes.inicio,
+      viernesFin: this.defaultAvailability.viernes.fin,
+      sabadoInicio: this.defaultAvailability.sabado.inicio,
+      sabadoFin: this.defaultAvailability.sabado.fin,
+    });
+  }
+
+  onChangeSelect(event: any) {
+    this.selectedEspecialidad = event.target.value;
+    this.defaultAvailability = this.especialidades.filter(
+      (especialidad: any) => especialidad.especialidad === event.target.value
+    )[0].tiemposDisponibles;
+    this.setValues();
   }
 
   toggleMisHorarios() {
     this.showMisHorarios = !this.showMisHorarios;
+    this.isModifying = false;
   }
 
   guardarHorarios() {
-    const horarios = {
-      lunes: {
-        inicio: this.horariosForm.value.lunesInicio,
-        fin: this.horariosForm.value.lunesFin,
-      },
-      martes: {
-        inicio: this.horariosForm.value.martesInicio,
-        fin: this.horariosForm.value.martesFin,
-      },
-      miercoles: {
-        inicio: this.horariosForm.value.miercolesInicio,
-        fin: this.horariosForm.value.miercolesFin,
-      },
-      jueves: {
-        inicio: this.horariosForm.value.juevesInicio,
-        fin: this.horariosForm.value.juevesFin,
-      },
-      viernes: {
-        inicio: this.horariosForm.value.viernesInicio,
-        fin: this.horariosForm.value.viernesFin,
-      },
-      sabado: {
-        inicio: this.horariosForm.value.sabadoInicio,
-        fin: this.horariosForm.value.sabadoFin,
-      },
-    };
-    this.db.guardarHorarios(this.auth.currentUser.uid, horarios);
+    const horarios = this.especialidades.map((especialidad: any) => {
+      if (especialidad.especialidad === this.selectedEspecialidad) {
+        return {
+          especialidad: especialidad.especialidad,
+          tiemposDisponibles: {
+            lunes: {
+              inicio: this.horariosForm.value.lunesInicio,
+              fin: this.horariosForm.value.lunesFin,
+            },
+            martes: {
+              inicio: this.horariosForm.value.martesInicio,
+              fin: this.horariosForm.value.martesFin,
+            },
+            miercoles: {
+              inicio: this.horariosForm.value.miercolesInicio,
+              fin: this.horariosForm.value.miercolesFin,
+            },
+            jueves: {
+              inicio: this.horariosForm.value.juevesInicio,
+              fin: this.horariosForm.value.juevesFin,
+            },
+            viernes: {
+              inicio: this.horariosForm.value.viernesInicio,
+              fin: this.horariosForm.value.viernesFin,
+            },
+            sabado: {
+              inicio: this.horariosForm.value.sabadoInicio,
+              fin: this.horariosForm.value.sabadoFin,
+            },
+          },
+        };
+      } else return especialidad;
+    });
 
+    this.db.guardarHorarios(this.auth.currentUser.uid, horarios);
     this.isModifying = false;
   }
 

@@ -2,6 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { DatabaseService } from '../../../../services/database/database.service';
 import { AppointmentSchedulerComponentComponent } from '../../../../components/appointment-scheduler-component/appointment-scheduler-component.component';
+import { Turno } from '../../../../interfaces/turno/turno';
+import { TurnosService } from '../../../../services/turnos/turnos.service';
+import { AuthService } from '../../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-turnos-paciente',
@@ -31,23 +34,16 @@ export class TurnosPacienteComponent implements OnInit {
   isError: boolean = false;
   errorMsg: string = '';
 
-  constructor(private el: ElementRef, private db: DatabaseService) {}
+  createdTurno!: Turno;
 
-  showStep(step: any) {
-    this.progressBar = this.el.nativeElement.querySelector('#progress-bar');
+  turnos: any[] = [];
 
-    // this.progressBar.style.width = `${(step / 3) * 100}%`;
-    this.progressBar.style.width =
-      step === 1 ? '0%' : step === 2 ? '50%' : '100%';
-    for (let i = 1; i <= 3; i++) {
-      const stepIndicator = document.getElementById(`step${i}`);
-      if (i <= step) {
-        stepIndicator?.classList.remove('opacity-50');
-      } else {
-        stepIndicator?.classList.add('opacity-50');
-      }
-    }
-  }
+  constructor(
+    private el: ElementRef,
+    private db: DatabaseService,
+    private turnosService: TurnosService,
+    public authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.db.getEspecialidades().subscribe((respuesta: any) => {
@@ -64,6 +60,48 @@ export class TurnosPacienteComponent implements OnInit {
         });
       });
     });
+
+    this.turnosService.getTurnos().subscribe((turnos: any) => {
+      console.log(turnos);
+      this.turnos = turnos
+        .filter(
+          (turno: any) => turno.paciente === this.authService.currentUser.uid
+        )
+        .map((turno: any) => {
+          return {
+            id: turno.id,
+            date: turno.date,
+            time: turno.time,
+            review: turno.review,
+            atencion: turno.atencion,
+            estado: turno.estado,
+            especialista: {
+              uid: turno.especialista.uid,
+              fullName: turno.especialista.fullName,
+            },
+            paciente: turno.paciente,
+            especialidad: turno.especialidad,
+            comentario: turno.comentario,
+          };
+        });
+    });
+  }
+
+  // NEW TURNO METHODS
+  showStep(step: any) {
+    this.progressBar = this.el.nativeElement.querySelector('#progress-bar');
+
+    // this.progressBar.style.width = `${(step / 3) * 100}%`;
+    this.progressBar.style.width =
+      step === 1 ? '0%' : step === 2 ? '50%' : '100%';
+    for (let i = 1; i <= 3; i++) {
+      const stepIndicator = document.getElementById(`step${i}`);
+      if (i <= step) {
+        stepIndicator?.classList.remove('opacity-50');
+      } else {
+        stepIndicator?.classList.add('opacity-50');
+      }
+    }
   }
 
   next() {
@@ -102,11 +140,6 @@ export class TurnosPacienteComponent implements OnInit {
     this.showForm = true;
   }
 
-  cancelarTurno(id: string) {
-    console.log(id);
-    this.openDropdownIndex = null;
-  }
-
   toggleDropdown(index: number) {
     this.openDropdownIndex = this.openDropdownIndex === index ? null : index;
   }
@@ -114,7 +147,38 @@ export class TurnosPacienteComponent implements OnInit {
   cerrarForm() {
     this.showForm = false;
     this.currentStep = 1;
+    this.selectedEspecialidad = '';
+    this.selectedEspecialista = null;
   }
 
-  crearTurno() {}
+  crearTurno(turno: Turno) {
+    if (this.currentStep === 3) {
+      if (!this.createdTurno) {
+        this.isError = true;
+        this.errorMsg = '* Selecciona un turno';
+        return;
+      }
+    }
+
+    this.isError = false;
+    console.log(turno);
+    // this.turnosService.saveTurno(turno);
+  }
+
+  // ALL TURNOS METHODS
+  cancelarTurno(id: string) {
+    console.log(id);
+  }
+
+  verReview(turno: Turno) {
+    console.log(turno);
+  }
+
+  verComentario(turno: Turno) {
+    console.log(turno);
+  }
+
+  calificarAtencion(id: string) {
+    console.log(id);
+  }
 }
