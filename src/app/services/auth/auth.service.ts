@@ -96,7 +96,6 @@ export class AuthService {
         if (!result.user.emailVerified) {
           return false;
         }
-        console.log('pase igual');
         getDocs(collection(this.firestore, 'users')).then((docs: any) =>
           docs.forEach((doc: any) => {
             if (doc.data().uid === result.user.uid)
@@ -105,7 +104,6 @@ export class AuthService {
           })
         );
         this.router.navigateByUrl('/home');
-        console.log(result);
         return true;
       });
   }

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
-import { TurnosPacienteComponent } from './paciente/turnos-paciente/turnos-paciente.component';
+import { TurnosPacienteComponent } from './turnos-paciente/turnos-paciente.component';
 
 @Component({
   selector: 'app-turnos',

@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit } from '@angular/core';
-import { DatabaseService } from '../../../../services/database/database.service';
-import { AppointmentSchedulerComponentComponent } from '../../../../components/appointment-scheduler-component/appointment-scheduler-component.component';
-import { Turno } from '../../../../interfaces/turno/turno';
-import { TurnosService } from '../../../../services/turnos/turnos.service';
-import { AuthService } from '../../../../services/auth/auth.service';
+import { DatabaseService } from '../../../services/database/database.service';
+import { AppointmentSchedulerComponentComponent } from '../../../components/appointment-scheduler-component/appointment-scheduler-component.component';
+import { Turno } from '../../../interfaces/turno/turno';
+import { TurnosService } from '../../../services/turnos/turnos.service';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-turnos-paciente',
@@ -62,7 +62,6 @@ export class TurnosPacienteComponent implements OnInit {
     });
 
     this.turnosService.getTurnos().subscribe((turnos: any) => {
-      console.log(turnos);
       this.turnos = turnos
         .filter(
           (turno: any) => turno.paciente === this.authService.currentUser.uid
