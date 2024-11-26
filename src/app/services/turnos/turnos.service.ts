@@ -4,6 +4,8 @@ import {
   addDoc,
   collection,
   collectionData,
+  doc,
+  updateDoc,
 } from '@angular/fire/firestore';
 import { Turno } from '../../interfaces/turno/turno';
 
@@ -18,6 +20,16 @@ export class TurnosService {
   }
 
   getTurnos() {
-    return collectionData(collection(this.firestore, 'turnos'));
+    return collectionData(collection(this.firestore, 'turnos'), {
+      idField: 'id',
+    });
+  }
+
+  modificarTurno(id: string, estado: string, comentario: string) {
+    const turnosRef = doc(this.firestore, 'turnos', id);
+    updateDoc(turnosRef, {
+      estado: estado,
+      comentario: comentario,
+    });
   }
 }

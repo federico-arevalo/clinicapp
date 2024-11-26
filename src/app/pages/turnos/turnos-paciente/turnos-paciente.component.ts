@@ -7,6 +7,7 @@ import { TurnosService } from '../../../services/turnos/turnos.service';
 import { AuthService } from '../../../services/auth/auth.service';
 import { ShortDatePipe } from '../../../pipes/short-date.pipe';
 import { TurnosColorDirective } from '../../../directives/turnosColor/turnos-color.directive';
+import { ModalTextComponent } from '../../../components/modal-text/modal-text.component';
 
 @Component({
   selector: 'app-turnos-paciente',
@@ -16,6 +17,7 @@ import { TurnosColorDirective } from '../../../directives/turnosColor/turnos-col
     AppointmentSchedulerComponentComponent,
     ShortDatePipe,
     TurnosColorDirective,
+    ModalTextComponent,
   ],
   templateUrl: './turnos-paciente.component.html',
   styleUrl: './turnos-paciente.component.scss',
@@ -41,6 +43,12 @@ export class TurnosPacienteComponent implements OnInit {
   isError: boolean = false;
   errorMsg: string = '';
   showSpinner: boolean = true;
+  showToast: boolean = false;
+
+  modalAccion: string = '';
+  showModal: boolean = false;
+  turnoId: string = '';
+  msg: string = '';
 
   createdTurno!: Turno;
 
@@ -72,7 +80,8 @@ export class TurnosPacienteComponent implements OnInit {
     this.turnosService.getTurnos().subscribe((turnos: any) => {
       this.turnos = turnos
         .filter(
-          (turno: any) => turno.paciente === this.authService.currentUser.uid
+          (turno: any) =>
+            turno.paciente.uid === this.authService.currentUser.uid
         )
         .map((turno: any) => {
           return {
@@ -93,6 +102,10 @@ export class TurnosPacienteComponent implements OnInit {
         });
       this.showSpinner = false;
     });
+  }
+
+  toggleDropdown(index: number) {
+    this.openDropdownIndex = this.openDropdownIndex === index ? null : index;
   }
 
   // NEW TURNO METHODS
@@ -154,10 +167,6 @@ export class TurnosPacienteComponent implements OnInit {
     this.showForm = true;
   }
 
-  toggleDropdown(index: number) {
-    this.openDropdownIndex = this.openDropdownIndex === index ? null : index;
-  }
-
   cerrarForm() {
     this.showForm = false;
     this.currentStep = 1;
@@ -176,22 +185,58 @@ export class TurnosPacienteComponent implements OnInit {
 
     this.isError = false;
     console.log(turno);
-    // this.turnosService.saveTurno(turno);
+    this.cerrarForm();
+    this.showToast = true;
+
+    setTimeout(() => {
+      this.showToast = false;
+    }, 3000);
+
+    this.turnosService.saveTurno(turno);
   }
 
   // ALL TURNOS METHODS
   cancelarTurno(id: string) {
-    console.log(id);
+    this.modalAccion = 'Cancelar';
+    this.showModal = false;
+    setTimeout(() => {
+      this.showModal = true;
+    }, 100);
+    this.turnoId = id;
+
     this.openDropdownIndex = null;
   }
 
+  turnoDispatcher(modal: { texto: string | null; accion: string; id: string }) {
+    let estado = '';
+    if (modal.accion === 'Cancelar') {
+      estado = 'Cancelado';
+    } else if (modal.accion === 'Rechazar') {
+      estado = 'Rechazado';
+    }
+
+    this.turnosService.modificarTurno(modal.id, estado, modal.texto!);
+  }
+
   verReview(turno: Turno) {
-    console.log(turno);
+    this.modalAccion = 'Ver review';
+    this.showModal = false;
+    this.msg = turno.review;
+    setTimeout(() => {
+      this.showModal = true;
+    }, 100);
+
     this.openDropdownIndex = null;
   }
 
   verComentario(turno: Turno) {
-    console.log(turno);
+    this.modalAccion = 'Ver comentario';
+    this.showModal = false;
+    this.msg = turno.comentario;
+    setTimeout(() => {
+      this.showModal = true;
+    }, 100);
+
     this.openDropdownIndex = null;
   }
 

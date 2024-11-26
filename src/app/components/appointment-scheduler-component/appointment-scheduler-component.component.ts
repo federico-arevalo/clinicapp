@@ -22,15 +22,6 @@ import { TurnosService } from '../../services/turnos/turnos.service';
 export class AppointmentSchedulerComponentComponent
   implements OnInit, OnChanges
 {
-  // availability = {
-  //   lunes: { inicio: '08:00', fin: '18:30' },
-  //   martes: { inicio: '08:00', fin: '18:30' },
-  //   miercoles: { inicio: '08:00', fin: '18:30' },
-  //   jueves: { inicio: '08:00', fin: '18:30' },
-  //   viernes: { inicio: '08:00', fin: '18:30' },
-  //   sabado: { inicio: '08:00', fin: '13:30' },
-  // };
-
   @Input() especialidad!: any;
   @Input() especialista!: any;
   @Input() paciente!: any;
@@ -64,6 +55,10 @@ export class AppointmentSchedulerComponentComponent
             uid: turno.especialista.uid,
             fullName: turno.especialista.fullName,
           },
+          paciente: {
+            uid: turno.paciente.uid,
+            fullName: turno.paciente.fullName,
+          },
           especialidad: turno.especialidad,
           comentario: turno.comentario,
         };
@@ -72,7 +67,11 @@ export class AppointmentSchedulerComponentComponent
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['especialidad'] || changes['especialista']) {
+    if (
+      changes['especialidad'] ||
+      changes['especialista'] ||
+      changes['paciente']
+    ) {
       this.selectedTurno = null;
       this.generateIntervalsForTwoWeeks();
     }
@@ -80,6 +79,7 @@ export class AppointmentSchedulerComponentComponent
 
   generateIntervalsForTwoWeeks() {
     if (!this.especialista) return;
+    if (!this.paciente) return;
 
     const today = new Date();
     const endDate = new Date(today);
@@ -100,8 +100,9 @@ export class AppointmentSchedulerComponentComponent
       const availability = this.especialista.tiemposDisponibles.find(
         (especialidad: any) => especialidad.especialidad === this.especialidad
       ).tiemposDisponibles[day];
-      console.log(this.especialista);
+
       console.log(availability);
+
       if (availability) {
         const startTime = new Date(
           date.toISOString().split('T')[0] + 'T' + availability.inicio
@@ -111,12 +112,14 @@ export class AppointmentSchedulerComponentComponent
         );
 
         while (startTime < endTime) {
+          console.log(this.turnos);
           const timeString = startTime.toTimeString().slice(0, 5);
           const isBooked = this.turnos.some(
             (appt) =>
               appt.date === date.toISOString().split('T')[0] &&
               appt.time === timeString &&
-              appt.especialista.uid === this.especialista.uid
+              (appt.especialista.uid === this.especialista.uid ||
+                appt.paciente.uid === this.paciente.uid)
           );
 
           intervals.push({
@@ -131,6 +134,7 @@ export class AppointmentSchedulerComponentComponent
       }
     }
 
+    console.log(intervals);
     this.intervals = intervals;
   }
 
@@ -159,7 +163,10 @@ export class AppointmentSchedulerComponentComponent
       },
       especialidad: this.especialidad,
       comentario: '',
-      paciente: this.paciente,
+      paciente: {
+        uid: this.paciente.uid,
+        fullName: this.paciente.fullName,
+      },
     };
 
     this.turnoCreated.emit(turno);

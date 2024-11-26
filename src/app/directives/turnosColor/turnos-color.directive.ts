@@ -10,7 +10,6 @@ export class TurnosColorDirective {
   constructor(private el: ElementRef) {}
 
   ngOnInit() {
-    console.log(this.state);
     switch (this.state) {
       case 'Pendiente':
         this.el.nativeElement.style.backgroundColor = 'yellow';
@@ -19,13 +18,13 @@ export class TurnosColorDirective {
         this.el.nativeElement.style.backgroundColor = 'limegreen';
         break;
       case 'Cancelado':
-        this.el.nativeElement.style.backgroundColor = 'darkorange';
+        this.el.nativeElement.style.backgroundColor = 'red';
         break;
       case 'Aceptado':
         this.el.nativeElement.style.backgroundColor = 'cyan';
         break;
       case 'Rechazado':
-        this.el.nativeElement.style.backgroundColor = 'red';
+        this.el.nativeElement.style.backgroundColor = 'darkorange';
         break;
       default:
         this.el.nativeElement.style.backgroundColor = 'red';

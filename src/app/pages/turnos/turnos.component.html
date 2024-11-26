@@ -3,12 +3,12 @@
 >
   <!-- ADMIN -->
   <ng-container *ngIf="authService.currentUser.rol === 'admin'">
-    <p>admin</p></ng-container
-  >
+    <app-turnos-admin></app-turnos-admin
+  ></ng-container>
   <!-- ESPECIALISTA -->
   <ng-container *ngIf="authService.currentUser.rol === 'especialista'">
-    <p>especialista</p></ng-container
-  >
+    <app-turnos-especialista></app-turnos-especialista>
+  </ng-container>
   <!-- PACIENTE -->
   <ng-container *ngIf="authService.currentUser.rol === 'paciente'">
     <app-turnos-paciente></app-turnos-paciente>
