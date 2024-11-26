@@ -25,11 +25,33 @@ export class TurnosService {
     });
   }
 
+  aceptarTurno(id: string) {
+    const turnosRef = doc(this.firestore, 'turnos', id);
+    updateDoc(turnosRef, {
+      estado: 'Aceptado',
+    });
+  }
+
+  calificarAtencion(id: string, atencion: string) {
+    const turnosRef = doc(this.firestore, 'turnos', id);
+    updateDoc(turnosRef, {
+      atencion: atencion,
+    });
+  }
+
+  finalizarTurno(id: string, estado: string, comentario: string) {
+    const turnosRef = doc(this.firestore, 'turnos', id);
+    updateDoc(turnosRef, {
+      estado: estado,
+      review: comentario,
+    });
+  }
+
   modificarTurno(id: string, estado: string, comentario: string) {
     const turnosRef = doc(this.firestore, 'turnos', id);
     updateDoc(turnosRef, {
       estado: estado,
-      comentario: comentario,
+      comentario: comentario ? comentario : '',
     });
   }
 }

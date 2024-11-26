@@ -27,11 +27,12 @@ export class ModalTextComponent {
     this.showModal = false;
   }
 
-  cancelarTurno() {
+  dispatchTurno() {
     if (this.textArea === '') {
       this.isMandatory = true;
       return;
     }
+
     this.turnoDispatched.emit({
       texto: this.textArea,
       accion: this.accion,

@@ -1,16 +1,22 @@
 import { Component } from '@angular/core';
-import { ShortDatePipe } from '../../../../pipes/short-date.pipe';
+import { ShortDatePipe } from '../../../pipes/short-date.pipe';
 import { CommonModule } from '@angular/common';
-import { Turno } from '../../../../interfaces/turno/turno';
-import { AuthService } from '../../../../services/auth/auth.service';
-import { DatabaseService } from '../../../../services/database/database.service';
-import { TurnosService } from '../../../../services/turnos/turnos.service';
-import { TurnosColorDirective } from '../../../../directives/turnosColor/turnos-color.directive';
+import { Turno } from '../../../interfaces/turno/turno';
+import { AuthService } from '../../../services/auth/auth.service';
+import { DatabaseService } from '../../../services/database/database.service';
+import { TurnosService } from '../../../services/turnos/turnos.service';
+import { TurnosColorDirective } from '../../../directives/turnosColor/turnos-color.directive';
+import { ModalTextComponent } from '../../../components/modal-text/modal-text.component';
 
 @Component({
   selector: 'app-turnos-especialista',
   standalone: true,
-  imports: [ShortDatePipe, CommonModule, TurnosColorDirective],
+  imports: [
+    ShortDatePipe,
+    CommonModule,
+    TurnosColorDirective,
+    ModalTextComponent,
+  ],
   templateUrl: './turnos-especialista.component.html',
   styleUrl: './turnos-especialista.component.scss',
 })
@@ -36,6 +42,11 @@ export class TurnosEspecialistaComponent {
   errorMsg: string = '';
   showSpinner: boolean = true;
   showToast: boolean = false;
+
+  modalAccion: string = '';
+  showModal: boolean = false;
+  turnoId: string = '';
+  msg: string = '';
 
   createdTurno!: Turno;
 
@@ -94,23 +105,90 @@ export class TurnosEspecialistaComponent {
     this.openDropdownIndex = this.openDropdownIndex === index ? null : index;
   }
 
-  cancelarTurno(id: string) {
-    console.log(id);
+  aceptarTurno(turno: Turno) {
+    this.turnosService.aceptarTurno(turno.id);
+
     this.openDropdownIndex = null;
   }
 
+  finalizarTurno(turno: Turno) {
+    this.modalAccion = 'Realizar';
+    this.showModal = false;
+    setTimeout(() => {
+      this.showModal = true;
+    }, 100);
+    this.turnoId = turno.id;
+
+    this.openDropdownIndex = null;
+  }
+
+  cancelarTurno(turno: Turno) {
+    this.modalAccion = 'Cancelar';
+    this.showModal = false;
+    setTimeout(() => {
+      this.showModal = true;
+    }, 100);
+    this.turnoId = turno.id;
+
+    this.openDropdownIndex = null;
+  }
+
+  rechazarTurno(turno: Turno) {
+    this.modalAccion = 'Rechazar';
+    this.showModal = false;
+    setTimeout(() => {
+      this.showModal = true;
+    }, 100);
+    this.turnoId = turno.id;
+
+    this.openDropdownIndex = null;
+  }
+
+  turnoDispatcher(modal: { texto: string | null; accion: string; id: string }) {
+    if (modal.accion === 'Cancelar') {
+      this.turnosService.modificarTurno(modal.id, 'Cancelado', modal.texto!);
+    } else if (modal.accion === 'Rechazar') {
+      this.turnosService.modificarTurno(modal.id, 'Rechazado', modal.texto!);
+    } else if (modal.accion === 'Finalizar') {
+      this.turnosService.modificarTurno(modal.id, 'Realizado', modal.texto!);
+    }
+  }
+
   verReview(turno: Turno) {
-    console.log(turno);
+    this.modalAccion = 'Ver review';
+    this.showModal = false;
+    this.msg = turno.review;
+    setTimeout(() => {
+      this.showModal = true;
+    }, 100);
+
     this.openDropdownIndex = null;
   }
 
   verComentario(turno: Turno) {
-    console.log(turno);
+    this.modalAccion = 'Ver comentario';
+    this.showModal = false;
+    this.msg = turno.comentario;
+    setTimeout(() => {
+      this.showModal = true;
+    }, 100);
+
     this.openDropdownIndex = null;
   }
 
-  calificarAtencion(id: string) {
-    console.log(id);
+  verCalificacion(turno: Turno) {
+    this.modalAccion = 'Ver atencion';
+    this.showModal = false;
+    this.msg = turno.atencion;
+    setTimeout(() => {
+      this.showModal = true;
+    }, 100);
+
+    this.openDropdownIndex = null;
+  }
+
+  cargarHistoriaClinica(turno: Turno) {
+    console.log(turno);
     this.openDropdownIndex = null;
   }
 }

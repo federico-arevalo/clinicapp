@@ -184,7 +184,6 @@ export class TurnosPacienteComponent implements OnInit {
     }
 
     this.isError = false;
-    console.log(turno);
     this.cerrarForm();
     this.showToast = true;
 
@@ -199,23 +198,22 @@ export class TurnosPacienteComponent implements OnInit {
   cancelarTurno(id: string) {
     this.modalAccion = 'Cancelar';
     this.showModal = false;
+    this.turnoId = id;
     setTimeout(() => {
       this.showModal = true;
     }, 100);
-    this.turnoId = id;
 
     this.openDropdownIndex = null;
   }
 
   turnoDispatcher(modal: { texto: string | null; accion: string; id: string }) {
-    let estado = '';
     if (modal.accion === 'Cancelar') {
-      estado = 'Cancelado';
+      this.turnosService.modificarTurno(modal.id, 'Cancelado', modal.texto!);
     } else if (modal.accion === 'Rechazar') {
-      estado = 'Rechazado';
+      this.turnosService.modificarTurno(modal.id, 'Rechazado', modal.texto!);
+    } else if (modal.accion === 'Calificar atencion') {
+      this.turnosService.calificarAtencion(modal.id, modal.texto!);
     }
-
-    this.turnosService.modificarTurno(modal.id, estado, modal.texto!);
   }
 
   verReview(turno: Turno) {
@@ -240,8 +238,15 @@ export class TurnosPacienteComponent implements OnInit {
     this.openDropdownIndex = null;
   }
 
-  calificarAtencion(id: string) {
-    console.log(id);
+  calificarAtencion(turno: Turno) {
+    this.modalAccion = 'Calificar atencion';
+    this.showModal = false;
+    this.msg = turno.comentario;
+    this.turnoId = turno.id;
+    setTimeout(() => {
+      this.showModal = true;
+    }, 100);
+
     this.openDropdownIndex = null;
   }
 }

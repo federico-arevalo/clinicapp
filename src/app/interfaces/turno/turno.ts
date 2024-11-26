@@ -8,5 +8,5 @@ export interface Turno {
   estado: 'Pendiente' | 'Realizado' | 'Cancelado' | 'Aceptado' | 'Rechazado';
   review: string;
   comentario: string;
-  atencion: number;
+  atencion: string;
 }

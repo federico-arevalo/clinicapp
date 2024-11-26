@@ -12,7 +12,7 @@
         class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
       >
         <tr>
-          <th scope="col" class="px-6 py-3">Especialista</th>
+          <th scope="col" class="px-6 py-3">Paciente</th>
           <th scope="col" class="px-6 py-3">Especialidad</th>
           <th scope="col" class="px-6 py-3">Fecha</th>
           <th scope="col" class="px-6 py-3">Hora</th>
@@ -23,7 +23,7 @@
       <tbody>
         <tr
           class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-          *ngFor="let turno of turnos"
+          *ngFor="let turno of turnos; index as i"
         >
           <th
             scope="row"
@@ -31,7 +31,7 @@
           >
             <div class="ps-3">
               <div class="text-base font-semibold">
-                {{ turno.especialista.fullName }}
+                {{ turno.paciente.fullName }}
               </div>
             </div>
           </th>
@@ -50,7 +50,7 @@
           </td>
           <td class="px-6 py-4">
             <button
-              (click)="toggleDropdown(1)"
+              (click)="toggleDropdown(i)"
               class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               Opciones
@@ -73,7 +73,7 @@
 
             <!-- Dropdown menu -->
             <div
-              [ngClass]="{ hidden: openDropdownIndex !== 1 }"
+              [ngClass]="{ hidden: openDropdownIndex !== i }"
               id="dropdown"
               class="z-10 mt-2 fixed bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
             >
@@ -82,11 +82,41 @@
                 aria-labelledby="dropdownDefaultButton"
               >
                 <button
-                  [disabled]="turno.estado === 'Cancelado'"
+                  [disabled]="
+                    turno.estado === 'Realizado' ||
+                    turno.estado === 'Cancelado' ||
+                    turno.estado === 'Rechazado' ||
+                    turno.estado === 'Aceptado'
+                  "
+                  (click)="aceptarTurno(turno)"
+                  class="w-44 flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white disabled:text-gray-400"
+                >
+                  Aceptar
+                </button>
+                <button
+                  *ngIf="turno.estado === 'Aceptado'"
+                  (click)="finalizarTurno(turno)"
+                  class="w-44 flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white disabled:text-gray-400"
+                >
+                  Finalizar
+                </button>
+                <button
+                  [disabled]="
+                    turno.estado === 'Cancelado' || turno.estado === 'Realizado'
+                  "
                   (click)="cancelarTurno(turno)"
                   class="w-44 flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white disabled:text-gray-400"
                 >
                   Cancelar
+                </button>
+                <button
+                  [disabled]="
+                    turno.estado === 'Cancelado' || turno.estado === 'Realizado'
+                  "
+                  (click)="rechazarTurno(turno)"
+                  class="w-44 flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white disabled:text-gray-400"
+                >
+                  Rechazar
                 </button>
 
                 <button
@@ -106,11 +136,18 @@
                 </button>
 
                 <button
-                  [disabled]="turno.review === ''"
-                  (click)="calificarAtencion(turno)"
+                  [disabled]="turno.atencion === ''"
+                  (click)="verCalificacion(turno)"
                   class="w-44 flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white disabled:text-gray-400"
                 >
-                  Calificar atención
+                  Ver calificación
+                </button>
+                <button
+                  [disabled]="turno.atencion === ''"
+                  (click)="cargarHistoriaClinica(turno)"
+                  class="w-44 flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white disabled:text-gray-400"
+                >
+                  Cargar historia clínica
                 </button>
               </div>
             </div>
@@ -136,7 +173,7 @@
               <span class="sr-only">Info</span>
               <div>
                 <span class="font-medium"
-                  >No has solicitado ningún turno aún.</span
+                  >No se ha solicitado ningún turno aún.</span
                 >
               </div>
             </div>
@@ -146,3 +183,17 @@
     </table>
   </div>
 </div>
+
+<app-modal-text
+  [showModal]="showModal"
+  [accion]="modalAccion"
+  [turnoId]="turnoId"
+  [msg]="msg"
+  (turnoDispatched)="
+    turnoDispatcher({
+      texto: $event.texto,
+      accion: $event.accion,
+      id: $event.id,
+    })
+  "
+></app-modal-text>

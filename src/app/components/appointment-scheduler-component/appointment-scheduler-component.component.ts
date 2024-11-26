@@ -101,8 +101,6 @@ export class AppointmentSchedulerComponentComponent
         (especialidad: any) => especialidad.especialidad === this.especialidad
       ).tiemposDisponibles[day];
 
-      console.log(availability);
-
       if (availability) {
         const startTime = new Date(
           date.toISOString().split('T')[0] + 'T' + availability.inicio
@@ -112,7 +110,6 @@ export class AppointmentSchedulerComponentComponent
         );
 
         while (startTime < endTime) {
-          console.log(this.turnos);
           const timeString = startTime.toTimeString().slice(0, 5);
           const isBooked = this.turnos.some(
             (appt) =>
@@ -134,7 +131,6 @@ export class AppointmentSchedulerComponentComponent
       }
     }
 
-    console.log(intervals);
     this.intervals = intervals;
   }
 
@@ -155,7 +151,7 @@ export class AppointmentSchedulerComponentComponent
       date: interval.date,
       time: interval.time,
       review: '',
-      atencion: 0,
+      atencion: '',
       estado: 'Pendiente',
       especialista: {
         uid: this.especialista.uid,
