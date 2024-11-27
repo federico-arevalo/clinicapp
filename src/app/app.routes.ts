@@ -52,6 +52,15 @@ export const routes: Routes = [
     canActivate: [authGuard, isEspecialistaGuard],
   },
   {
+    path: 'pacientes',
+    loadComponent: () =>
+      import('./pages/informes/informes.component').then(
+        (m) => m.InformesComponent
+      ),
+    data: { state: 'pacientes' },
+    canActivate: [authGuard, isAdminGuard],
+  },
+  {
     path: 'users',
     loadComponent: () =>
       import('./pages/users/users.component').then((m) => m.UsersComponent),

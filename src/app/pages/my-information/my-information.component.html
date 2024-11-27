@@ -52,9 +52,7 @@
         *ngIf="showMisHorarios; then misHorarios; else information"
       ></ng-content>
     </div>
-
     <!-- MI INFORMACION PACIENTE -->
-
     <div
       class="flex flex-col md:flex-row"
       *ngIf="auth.currentUser.rol === 'paciente'"
@@ -67,6 +65,24 @@
         />
         <img
           [src]="auth.userImages[1]"
+          heigh="500"
+          class="rounded-full w-48 h-48 mx-auto mb-4 border-4 border-indigo-800 dark:border-blue-900 transition-transform duration-300 hover:scale-105"
+        />
+        <h1 class="text-2xl font-bold text-indigo-800 dark:text-white mb-2">
+          {{ auth.currentUser.name + " " + auth.currentUser.lastName }}
+        </h1>
+      </div>
+
+      <ng-content *ngTemplateOutlet="information"></ng-content>
+    </div>
+    <!-- MI INFORMACION ADMIN -->
+    <div
+      class="flex flex-col md:flex-row"
+      *ngIf="auth.currentUser.rol === 'admin'"
+    >
+      <div class="md:w-1/3 text-center mb-8 md:mb-0">
+        <img
+          [src]="auth.userImages[0]"
           heigh="500"
           class="rounded-full w-48 h-48 mx-auto mb-4 border-4 border-indigo-800 dark:border-blue-900 transition-transform duration-300 hover:scale-105"
         />
