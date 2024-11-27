@@ -3,7 +3,7 @@
 >
   <div class="mt-8 lg:mt-1 w-full flex items-end justify-around">
     <h1
-      class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
+      class="mb-4 text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl text-white"
     >
       Pacientes
     </h1>
@@ -39,4 +39,10 @@
       </div>
     </div>
   </div>
+  <h2
+    *ngIf="updatedPacientes.length === 0"
+    class="mt-4 text-2xl font-extrabold leading-none tracking-tight text-white"
+  >
+    No has atendido a ningún paciente aún.
+  </h2>
 </div>

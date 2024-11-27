@@ -2,12 +2,13 @@ import { Component, Input } from '@angular/core';
 import jsPDF from 'jspdf';
 import { TurnosService } from '../../services/turnos/turnos.service';
 import { AuthService } from '../../services/auth/auth.service';
+import { CommonModule } from '@angular/common';
 // import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-download-historia-clinica',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './download-historia-clinica.component.html',
   styleUrl: './download-historia-clinica.component.scss',
 })
@@ -170,18 +171,35 @@ export class DownloadHistoriaClinicaComponent {
     ' ' +
     this.authService.currentUser.lastName;
 
+  @Input() cambiarEspecialidad: boolean = false;
+  especialidad: string = '';
+  especialidadesArray: any;
+
   constructor(
     private turnosService: TurnosService,
     private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.fetchTurnos();
+  }
+
+  fetchTurnos() {
     this.turnosService.getTurnos().subscribe((turnos: any) => {
       this.turnos = turnos
-        .filter(
-          (turno: any) =>
-            turno.paciente.uid === this.paciente && turno.estado === 'Realizado'
-        )
+        .filter((turno: any) => {
+          if (this.especialidad !== '')
+            return (
+              turno.paciente.uid === this.paciente &&
+              turno.estado === 'Realizado' &&
+              turno.especialidad === this.especialidad
+            );
+          else
+            return (
+              turno.paciente.uid === this.paciente &&
+              turno.estado === 'Realizado'
+            );
+        })
         .map((turno: any) => {
           return {
             date: turno.date,
@@ -193,7 +211,23 @@ export class DownloadHistoriaClinicaComponent {
             estado: turno.estado,
           };
         });
+
+      this.especialidadesArray = turnos
+        .filter(
+          (turno: any) =>
+            turno.paciente.uid === this.paciente && turno.estado === 'Realizado'
+        )
+        .map((turno: any) => {
+          return turno.especialidad;
+        });
+      this.especialidadesArray = [...new Set(this.especialidadesArray)];
     });
+  }
+
+  changeEspecialidad(especialidad: any) {
+    console.log(especialidad.target.value);
+    this.especialidad = especialidad.target.value;
+    this.fetchTurnos();
   }
 
   downloadPDF() {
@@ -296,7 +330,11 @@ export class DownloadHistoriaClinicaComponent {
       } else {
         pdf.setFontSize(12);
         pdf.text(
-          `Turno ${index + 1} - Fecha: ${turno.date} Hora: ${turno.time}`,
+          `Turno ${index + 1} - Fecha: ${turno.date} Hora: ${
+            turno.time
+          } Especialista: ${turno.especialista} Especialidad: ${
+            turno.especialidad
+          }`,
           10,
           yOffset
         );
