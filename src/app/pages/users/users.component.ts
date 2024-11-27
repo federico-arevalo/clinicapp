@@ -3,6 +3,7 @@ import { DatabaseService } from '../../services/database/database.service';
 import { CommonModule } from '@angular/common';
 import { IsVerifiedDirective } from '../../directives/isVerified/is-verified.directive';
 import * as XLSX from 'xlsx';
+import { TurnosService } from '../../services/turnos/turnos.service';
 
 @Component({
   selector: 'app-users',
@@ -15,7 +16,7 @@ export class UsersComponent {
   users: any;
   allUsers: any;
   imagesUrl: string[] = [];
-  fileName = 'usuarios.xlsx';
+  turnos: any;
 
   userList = [
     {
@@ -69,7 +70,10 @@ export class UsersComponent {
     },
   ];
 
-  constructor(private dbService: DatabaseService) {}
+  constructor(
+    private dbService: DatabaseService,
+    private turnosService: TurnosService
+  ) {}
 
   ngOnInit(): void {
     this.dbService.getUsers().subscribe((users: any) => {
@@ -80,6 +84,10 @@ export class UsersComponent {
           user.profilePicture = imagesUrl;
         });
       });
+    });
+
+    this.turnosService.getTurnos().subscribe((turnos: any) => {
+      this.turnos = turnos;
     });
   }
 
@@ -104,8 +112,31 @@ export class UsersComponent {
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredUsers);
 
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.utils.book_append_sheet(wb, ws, 'Usuarios');
 
-    XLSX.writeFile(wb, this.fileName);
+    XLSX.writeFile(wb, 'usuarios.xlsx');
+  }
+
+  descargarInfoTurnos(user: any) {
+    const filteredTurnos = this.turnos
+      .filter((turno: any) => turno.especialista.uid === user.uid)
+      .map((turno: any) => {
+        return {
+          fecha: turno.date,
+          hora: turno.time,
+          paciente: turno.paciente.fullName,
+          especialidad: turno.especialidad,
+          comentario: turno.comentario,
+          reseña: turno.review,
+          estado: turno.estado,
+        };
+      });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredTurnos);
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Turnos');
+
+    XLSX.writeFile(wb, 'infoTurnos.xlsx');
   }
 }

@@ -56,6 +56,7 @@
         {{ user.name + " " + user.lastName }}
       </p>
       <button
+        (click)="descargarInfoTurnos(user)"
         class="p-0 w-28 h-28 bg-red-600 rounded-full hover:bg-red-700 hover:scale-110 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none"
       >
         <img
