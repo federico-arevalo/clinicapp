@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { DatabaseService } from '../../services/database/database.service';
 import { CommonModule } from '@angular/common';
-import { IsVerifiedDirective } from '../../directives/is-verified.directive';
+import { IsVerifiedDirective } from '../../directives/isVerified/is-verified.directive';
 import * as XLSX from 'xlsx';
 
 @Component({
@@ -88,7 +88,20 @@ export class UsersComponent {
   }
 
   descargarExcel(): void {
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.allUsers);
+    const filteredUsers = this.allUsers.map((user: any) => {
+      return {
+        edad: user.age,
+        nombre: user.name,
+        apellido: user.lastName,
+        dni: user.dni,
+        email: user.email,
+        rol: user.rol,
+        obraSocial: user.obraSocial ? user.obraSocial : 'N/A',
+        especialidad: user.especialidad ? user.especialidad.join('; ') : 'N/A',
+        hablitado: user.adminVerified ? 'Habilitado' : 'Deshabilitado',
+      };
+    });
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredUsers);
 
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');

@@ -6,6 +6,7 @@ import {
   doc,
   updateDoc,
 } from '@angular/fire/firestore';
+import { collection as col } from 'firebase/firestore';
 import { Storage, ref, listAll, getDownloadURL } from '@angular/fire/storage';
 
 @Injectable({
@@ -24,8 +25,8 @@ export class DatabaseService {
     return collectionData(collection(this.firestore, 'utils'));
   }
 
-  getUserInfo(userId: string) {
-    return collectionData(collection(this.firestore, `users/${userId}`));
+  getEspecialistas() {
+    return collectionData(collection(this.firestore, 'users'));
   }
 
   getUsers() {
@@ -36,6 +37,13 @@ export class DatabaseService {
     const vehiculoRef = doc(this.firestore, 'users', id);
     updateDoc(vehiculoRef, {
       adminVerified: !usuario.adminVerified,
+    });
+  }
+
+  guardarHorarios(id: string, horarios: any) {
+    const usersRef = doc(this.firestore, 'users', id);
+    updateDoc(usersRef, {
+      tiemposDisponibles: horarios,
     });
   }
 

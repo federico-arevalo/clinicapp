@@ -1,0 +1,166 @@
+<div *ngIf="showModal" class="fixed z-10 inset-0 overflow-y-auto" id="my-modal">
+  <div
+    class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+  >
+    <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+      <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+    </div>
+    <span
+      class="hidden sm:inline-block sm:align-middle sm:h-screen"
+      aria-hidden="true"
+      >&#8203;</span
+    >
+    <!-- CANCELAR O RECHAZAR TURNO -->
+    <div
+      class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-headline"
+      *ngIf="accion === 'Cancelar' || accion === 'Rechazar'"
+    >
+      <label
+        for="message"
+        class="block mb-2 text-sm font-medium text-gray-900"
+        [ngClass]="isMandatory ? 'text-red-600' : ''"
+        >Es necesaria una justificación para cancelar el turno.</label
+      >
+      <textarea
+        id="message"
+        rows="4"
+        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-red-500 focus:border-red-500"
+        placeholder="Escribir la razón para cancelar el turno."
+        [(ngModel)]="textArea"
+      ></textarea>
+
+      <div class="mt-5 sm:mt-6 flex flex-row justify-evenly">
+        <button
+          class="inline-flex justify-center w-36 rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
+          (click)="dispatchTurno()"
+        >
+          Cancelar Turno
+        </button>
+        <button
+          class="inline-flex justify-center w-36 rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:text-sm"
+          (click)="closeModal()"
+        >
+          Volver
+        </button>
+      </div>
+    </div>
+    <!-- CALIFICAR ATENCION -->
+    <div
+      class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-headline"
+      *ngIf="accion === 'Calificar atencion'"
+    >
+      <label
+        for="message"
+        class="block mb-2 text-sm font-medium text-gray-900"
+        [ngClass]="isMandatory ? 'text-red-600' : ''"
+        >Escribe la calificación de la atención</label
+      >
+      <textarea
+        id="message"
+        rows="4"
+        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-red-500 focus:border-red-500"
+        placeholder="Calificación"
+        [(ngModel)]="textArea"
+      ></textarea>
+
+      <div class="mt-5 sm:mt-6 flex flex-row justify-evenly">
+        <button
+          class="inline-flex justify-center w-38 rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
+          (click)="dispatchTurno()"
+        >
+          Calificar atención
+        </button>
+        <button
+          class="inline-flex justify-center w-38 rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:text-sm"
+          (click)="closeModal()"
+        >
+          Volver
+        </button>
+      </div>
+    </div>
+    <!-- VER COMENTARIO O RESEÑA -->
+    <div
+      *ngIf="
+        accion === 'Ver comentario' ||
+        accion === 'Ver review' ||
+        accion === 'Ver atencion'
+      "
+      class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-headline"
+    >
+      <label
+        for="message"
+        class="block mb-2 text-sm font-medium text-gray-900"
+        [ngClass]="isMandatory ? 'text-red-600' : ''"
+        >{{
+          accion === "Ver comentario"
+            ? "Comentario"
+            : accion === "Ver atencion"
+            ? "Atención"
+            : "Reseña"
+        }}</label
+      >
+      <textarea
+        id="message"
+        rows="4"
+        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-red-500 focus:border-red-500"
+        [value]="msg"
+        readonly
+      ></textarea>
+
+      <div class="mt-5 sm:mt-6 flex flex-row justify-evenly">
+        <button
+          class="inline-flex justify-center w-36 rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:text-sm"
+          (click)="closeModal()"
+        >
+          Volver
+        </button>
+      </div>
+    </div>
+    <!-- FINALIZAR TURNO -->
+    <div
+      class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-headline"
+      *ngIf="accion === 'Realizar'"
+    >
+      <label
+        for="message"
+        class="block mb-2 text-sm font-medium text-gray-900"
+        [ngClass]="isMandatory ? 'text-red-600' : ''"
+        >Es necesaria una reseña para realizar el turno.</label
+      >
+      <textarea
+        id="message"
+        rows="4"
+        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-red-500 focus:border-red-500"
+        placeholder="Escribir la reseña para realizar el turno."
+        [(ngModel)]="textArea"
+      ></textarea>
+
+      <div class="mt-5 sm:mt-6 flex flex-row justify-evenly">
+        <button
+          class="inline-flex justify-center w-36 rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
+          (click)="dispatchTurno()"
+        >
+          Realizar Turno
+        </button>
+        <button
+          class="inline-flex justify-center w-36 rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:text-sm"
+          (click)="closeModal()"
+        >
+          Volver
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,220 @@
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+  <div
+    class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 bg-white dark:bg-gray-900"
+  >
+    <div class="flex items-center justify-around p-2 w-full">
+      <h2 class="text-4xl font-extrabold dark:text-white">Mis turnos</h2>
+      <div class="relative bg-inherit m-2">
+        <input
+          type="text"
+          id="filter"
+          name="filter"
+          class="peer bg-transparent h-10 w-72 rounded-lg text-gray-200 placeholder-transparent ring-2 px-2 ring-gray-500 focus:ring-sky-600 focus:outline-none focus:border-rose-600"
+          placeholder="Filtrar"
+          (input)="filtrarTurnos($event)"
+        /><label
+          for="filter"
+          class="absolute cursor-text left-0 -top-3 text-sm text-gray-500 bg-gray-900 mx-1 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-sky-600 peer-focus:text-sm transition-all"
+          >Filtrar</label
+        >
+      </div>
+    </div>
+    <table
+      class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 p-2"
+    >
+      <thead
+        class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+      >
+        <tr>
+          <th scope="col" class="px-6 py-3">Paciente</th>
+          <th scope="col" class="px-6 py-3">Especialidad</th>
+          <th scope="col" class="px-6 py-3">Fecha</th>
+          <th scope="col" class="px-6 py-3">Hora</th>
+          <th scope="col" class="px-6 py-3">Estado</th>
+          <th scope="col" class="px-6 py-3">Accción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+          *ngFor="let turno of filteredTurnos; index as i"
+        >
+          <th
+            scope="row"
+            class="flex items-center px-6 py-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+          >
+            <div class="ps-3">
+              <div class="text-base font-semibold">
+                {{ turno.paciente.fullName }}
+              </div>
+            </div>
+          </th>
+          <td class="px-6 py-4">{{ turno.especialidad }}</td>
+          <td class="px-6 py-4">{{ turno.date | shortDate }}</td>
+          <td class="px-6 py-4">{{ turno.time }}</td>
+          <td class="px-6 py-4">
+            <div class="flex items-center">
+              <div
+                class="h-2.5 w-2.5 rounded-full me-2"
+                appTurnosColor
+                [state]="turno.estado"
+              ></div>
+              {{ turno.estado }}
+            </div>
+          </td>
+          <td class="px-6 py-4">
+            <button
+              (click)="toggleDropdown(i)"
+              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              Opciones
+              <svg
+                class="w-2.5 h-2.5 ms-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 10 6"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m1 1 4 4 4-4"
+                />
+              </svg>
+            </button>
+
+            <!-- Dropdown menu -->
+            <div
+              [ngClass]="{ hidden: openDropdownIndex !== i }"
+              id="dropdown"
+              class="z-10 mt-2 fixed bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+            >
+              <div
+                class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                aria-labelledby="dropdownDefaultButton"
+              >
+                <button
+                  [disabled]="
+                    turno.estado === 'Realizado' ||
+                    turno.estado === 'Cancelado' ||
+                    turno.estado === 'Rechazado' ||
+                    turno.estado === 'Aceptado'
+                  "
+                  (click)="aceptarTurno(turno)"
+                  class="w-44 flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white disabled:text-gray-400"
+                >
+                  Aceptar
+                </button>
+                <button
+                  *ngIf="turno.estado === 'Aceptado'"
+                  (click)="finalizarTurno(turno)"
+                  class="w-44 flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white disabled:text-gray-400"
+                >
+                  Finalizar
+                </button>
+                <button
+                  [disabled]="
+                    turno.estado === 'Cancelado' || turno.estado === 'Realizado'
+                  "
+                  (click)="cancelarTurno(turno)"
+                  class="w-44 flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white disabled:text-gray-400"
+                >
+                  Cancelar
+                </button>
+                <button
+                  [disabled]="
+                    turno.estado === 'Cancelado' || turno.estado === 'Realizado'
+                  "
+                  (click)="rechazarTurno(turno)"
+                  class="w-44 flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white disabled:text-gray-400"
+                >
+                  Rechazar
+                </button>
+
+                <button
+                  [disabled]="turno.review === ''"
+                  (click)="verReview(turno)"
+                  class="w-44 flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white disabled:text-gray-400"
+                >
+                  Ver reseña
+                </button>
+
+                <button
+                  [disabled]="turno.comentario === ''"
+                  (click)="verComentario(turno)"
+                  class="w-44 flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white disabled:text-gray-400"
+                >
+                  Ver comentario
+                </button>
+
+                <button
+                  [disabled]="turno.atencion === ''"
+                  (click)="verCalificacion(turno)"
+                  class="w-44 flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white disabled:text-gray-400"
+                >
+                  Ver calificación
+                </button>
+                <button
+                  [disabled]="
+                    hasHistoriaClinica(turno) || turno.estado !== 'Realizado'
+                  "
+                  (click)="cargarHistoriaClinica(turno)"
+                  class="w-44 flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white disabled:text-gray-400"
+                >
+                  Cargar historia clínica
+                </button>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="turnos.length === 0">
+          <td class="px-6 py-4 text-center" colspan="6">
+            <div
+              class="flex items-center p-4 text-sm text-gray-800 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-300"
+              role="alert"
+            >
+              <svg
+                class="flex-shrink-0 inline w-4 h-4 me-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+                />
+              </svg>
+              <span class="sr-only">Info</span>
+              <div>
+                <span class="font-medium"
+                  >No se ha solicitado ningún turno aún.</span
+                >
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<app-modal-text
+  [showModal]="showModal"
+  [accion]="modalAccion"
+  [turnoId]="turnoId"
+  [msg]="msg"
+  (turnoDispatched)="
+    turnoDispatcher({
+      texto: $event.texto,
+      accion: $event.accion,
+      id: $event.id,
+    })
+  "
+></app-modal-text>
+
+<app-form-historia-clinica
+  [showForm]="showHistoriaClinicaForm"
+  [turnoId]="turnoId"
+></app-form-historia-clinica>

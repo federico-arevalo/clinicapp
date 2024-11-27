@@ -1,0 +1,274 @@
+<div
+  class="absolute left-[35%] top-[15%] max-w-xl mx-auto bg-gray-100 shadow-md rounded-md"
+  *ngIf="showForm"
+>
+  <div class="bg-blue-600 text-white p-4 flex justify-between">
+    <div class="font-bold text-lg">Cargar Historia Clinica</div>
+  </div>
+  <form
+    class="p-6 max-h-[468px] overflow-y-scroll"
+    [formGroup]="historiaClinicaForm"
+  >
+    <div class="mb-4 flex justify-around">
+      <div class="w-1/2 m-1">
+        <label class="block text-gray-700 font-bold mb-2" for="altura">
+          Altura (cm)
+        </label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="altura"
+          type="number"
+          placeholder="Altura en centimetros"
+          formControlName="altura"
+        />
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.historiaClinicaForm.controls.altura.touched &&
+            this.historiaClinicaForm.controls.altura.hasError('required')
+          "
+          >El campo es requerido</small
+        >
+      </div>
+      <div class="w-1/2 m-1">
+        <label class="block text-gray-700 font-bold mb-2" for="peso">
+          Peso (kg)
+        </label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="peso"
+          type="number"
+          placeholder="Peso en kilogramos"
+          formControlName="peso"
+        />
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.historiaClinicaForm.controls.peso.touched &&
+            this.historiaClinicaForm.controls.peso.hasError('required')
+          "
+          >El campo es requerido</small
+        >
+      </div>
+    </div>
+    <div class="mb-4 flex justify-around">
+      <div class="w-1/2 m-1">
+        <label class="block text-gray-700 font-bold mb-2" for="temperatura">
+          Temperatura (C)
+        </label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="temperatura"
+          type="number"
+          placeholder="Temperatura en grados Celsius"
+          formControlName="temperatura"
+        />
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.historiaClinicaForm.controls.temperatura.touched &&
+            this.historiaClinicaForm.controls.temperatura.hasError('required')
+          "
+          >El campo es requerido</small
+        >
+      </div>
+      <div class="w-1/2 m-1">
+        <label class="block text-gray-700 font-bold mb-2" for="presion">
+          Presion (mmHg)
+        </label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="presion"
+          type="number"
+          placeholder="Presion en mmHg"
+          formControlName="presion"
+        />
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.historiaClinicaForm.controls.presion.touched &&
+            this.historiaClinicaForm.controls.presion.hasError('required')
+          "
+          >El campo es requerido</small
+        >
+      </div>
+    </div>
+    <div class="mb-4">
+      <label class="block text-gray-700 font-bold mb-2">
+        Campos dinamicos clave-valor
+        <small
+          class="text-red-600"
+          *ngIf="this.historiaClinicaForm.controls.camposDinamicos.invalid"
+          >(Todos los campos deben ser completados)</small
+        >
+      </label>
+
+      <div formArrayName="camposDinamicos">
+        <div
+          class="mb-4 flex justify-around items-end"
+          *ngFor="let group of camposDinamicos.controls; let i = index"
+          [formGroupName]="i"
+        >
+          <div class="w-1/2 m-1">
+            <label class="block text-gray-700 font-bold mb-2"> Clave: </label>
+            <input
+              formControlName="key"
+              placeholder="Clave"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+          </div>
+          <div class="w-1/2 m-1">
+            <label class="block text-gray-700 font-bold mb-2" for="presion">
+              Valor:
+            </label>
+            <input
+              formControlName="value"
+              placeholder="Valor"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+          </div>
+          <button
+            type="button"
+            (click)="removeCampoDinamico(i)"
+            class="mb-1 flex items-center h-10 rounded-xl bg-red-600 text-xs w-24 font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg"
+          >
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                />
+              </svg>
+            </span>
+            <span class="hidden md:inline-block">Borrar</span>
+          </button>
+        </div>
+      </div>
+      <button
+        type="button"
+        (click)="addCampoDinamico()"
+        [disabled]="camposDinamicos.length >= 3"
+        class="focus:outline-none text-white disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-400 bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+      >
+        Añadir campo
+      </button>
+    </div>
+    <div class="mb-4">
+      <label class="block text-gray-700 font-bold mb-2">
+        Campos dinamicos valores especiales
+      </label>
+
+      <div formArrayName="camposEspeciales">
+        <div
+          *ngFor="let group of camposEspeciales.controls; let i = index"
+          [formGroupName]="i"
+          class="flex justify-between items-center"
+        >
+          <label class="w-fit"> {{ group.get("key")?.value }}: </label>
+          <ng-container [ngSwitch]="group.get('type')?.value">
+            <input
+              *ngSwitchCase="'rango'"
+              type="range"
+              formControlName="value"
+              min="0"
+              max="100"
+              class="w-3/5"
+            />
+            <input
+              *ngSwitchCase="'numerico'"
+              type="number"
+              formControlName="value"
+              class="w-3/5 shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+            <label
+              *ngSwitchCase="'switch'"
+              class="inline-flex items-center cursor-pointer"
+            >
+              <input
+                type="checkbox"
+                formControlName="value"
+                class="sr-only peer"
+              />
+              <div
+                class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+              ></div>
+            </label>
+          </ng-container>
+          <button
+            type="button"
+            (click)="removeCampoEspecial(i)"
+            class="mb-1 flex items-center justify-center h-10 rounded-xl bg-red-600 text-xs w-24 font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg"
+          >
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                />
+              </svg>
+            </span>
+            <span class="hidden md:inline-block">Borrar</span>
+          </button>
+        </div>
+      </div>
+      <div class="flex justify-between">
+        <input
+          #keyInput
+          placeholder="Ingresar clave"
+          class="shadow m-1 appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        />
+        <select
+          #typeInput
+          class="bg-gray-50 m-1 w-1/2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+        >
+          <option value="range">Rango (0-100)</option>
+          <option value="number">Númerico</option>
+          <option value="switch">Switch (Si/No)</option>
+        </select>
+      </div>
+
+      <button
+        [disabled]="camposEspeciales.length === 3"
+        (click)="
+          addCampoEspecial(keyInput.value, typeInput.value);
+          keyInput.value = '';
+          typeInput.value = ''
+        "
+        class="focus:outline-none mt-3 text-white bg-yellow-600 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-500 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-400"
+      >
+        Añadir campo</button
+      ><small class="text-red-600 ml-1" *ngIf="isError">{{ errorMsg }}</small>
+    </div>
+    <div class="flex justify-between">
+      <button
+        [disabled]="historiaClinicaForm.invalid"
+        (click)="onSubmit()"
+        class="bg-blue-600 text-white py-2 px-4 rounded font-bold hover:bg-blue-700 focus:outline-none focus:shadow-outline disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-400"
+      >
+        Guardar Historia Clinica
+      </button>
+      <button
+        (click)="salir()"
+        class="bg-red-600 text-white py-2 px-4 rounded font-bold hover:bg-red-700 focus:outline-none focus:shadow-outline"
+      >
+        Salir
+      </button>
+    </div>
+  </form>
+</div>

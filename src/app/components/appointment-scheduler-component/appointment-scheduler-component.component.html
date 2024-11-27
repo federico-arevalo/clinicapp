@@ -1,0 +1,15 @@
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 justify-items-center">
+  <ng-container
+    *ngFor="let interval of intervals"
+    class="grid grid-cols-2 lg:grid-cols-4 gap-4 justify-items-center"
+  >
+    <button
+      [disabled]="interval.disabled"
+      (click)="requestAppointment(interval)"
+      class="text-white rounded-lg p-2 disabled:bg-red-600 disabled:cursor-not-allowed"
+      [ngClass]="interval === selectedTurno ? 'bg-blue-700' : 'bg-green-700'"
+    >
+      {{ (interval.date | shortDate) + " " + interval.time }}
+    </button>
+  </ng-container>
+</div>

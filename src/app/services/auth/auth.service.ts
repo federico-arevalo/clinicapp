@@ -8,7 +8,7 @@ import {
 import { Router } from '@angular/router';
 import { Storage, ref, uploadBytes } from '@angular/fire/storage';
 import { collection, getDocs } from 'firebase/firestore';
-import { Firestore } from '@angular/fire/firestore';
+import { addDoc, Firestore } from '@angular/fire/firestore';
 import { DatabaseService } from '../database/database.service';
 import { Subscription } from 'rxjs';
 
@@ -96,16 +96,20 @@ export class AuthService {
         if (!result.user.emailVerified) {
           return false;
         }
-        console.log('pase igual');
         getDocs(collection(this.firestore, 'users')).then((docs: any) =>
           docs.forEach((doc: any) => {
-            if (doc.data().uid === result.user.uid)
+            if (doc.data().uid === result.user.uid) {
               // this.SetUserData({ ...doc.data() });
               localStorage.setItem('userInfo', JSON.stringify(doc.data()));
+              this.setUserLogs(
+                doc.data()?.email || email,
+                doc.data()?.name + ' ' + doc.data()?.lastName
+              );
+            }
           })
         );
         this.router.navigateByUrl('/home');
-        console.log(result);
+
         return true;
       });
   }
@@ -286,14 +290,19 @@ export class AuthService {
             especialidad: newUserData.especialidad,
             profilePicture: data.metadata.fullPath,
             rol: userType,
-            tiemposDisponibles: {
-              lunes: { inicio: '08:00', fin: '18:30' },
-              martes: { inicio: '08:00', fin: '18:30' },
-              miercoles: { inicio: '08:00', fin: '18:30' },
-              jueves: { inicio: '08:00', fin: '18:30' },
-              viernes: { inicio: '08:00', fin: '18:30' },
-              sabado: { inicio: '08:00', fin: '13:30' },
-            },
+            tiemposDisponibles: newUserData.map((especialidad: any) => {
+              return {
+                especialidad: especialidad,
+                tiemposDisponibles: {
+                  lunes: { inicio: '08:00', fin: '18:30' },
+                  martes: { inicio: '08:00', fin: '18:30' },
+                  miercoles: { inicio: '08:00', fin: '18:30' },
+                  jueves: { inicio: '08:00', fin: '18:30' },
+                  viernes: { inicio: '08:00', fin: '18:30' },
+                  sabado: { inicio: '08:00', fin: '13:30' },
+                },
+              };
+            }),
           };
 
           this.userData = newEspecialista;
@@ -318,6 +327,17 @@ export class AuthService {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  setUserLogs(user: any, name: string) {
+    const userLog = {
+      user: user,
+      name: name,
+      fecha: new Date(),
+    };
+
+    let logins = collection(this.firestore, 'logins');
+    addDoc(logins, userLog);
   }
 
   // Sign out

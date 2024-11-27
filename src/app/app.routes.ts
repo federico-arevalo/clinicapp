@@ -4,7 +4,11 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LandingComponent } from './pages/landing/landing.component';
-import { authGuard, isAdminGuard } from './guards/auth/auth.guard';
+import {
+  authGuard,
+  isAdminGuard,
+  isEspecialistaGuard,
+} from './guards/auth/auth.guard';
 
 export const routes: Routes = [
   {
@@ -37,6 +41,15 @@ export const routes: Routes = [
       import('./pages/turnos/turnos.component').then((m) => m.TurnosComponent),
     data: { state: 'turnos' },
     canActivate: [authGuard],
+  },
+  {
+    path: 'pacientes',
+    loadComponent: () =>
+      import('./pages/pacientes/pacientes.component').then(
+        (m) => m.PacientesComponent
+      ),
+    data: { state: 'pacientes' },
+    canActivate: [authGuard, isEspecialistaGuard],
   },
   {
     path: 'users',

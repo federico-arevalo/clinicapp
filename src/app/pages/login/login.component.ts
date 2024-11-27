@@ -44,7 +44,6 @@ export class LoginComponent {
         this.authService
           .SignIn(email || '', password || '')
           .then((result: any) => {
-            console.log(result);
             if (!result) {
               this.showModal = true;
               this.errorMsg = 'Usuario sin email verificado';

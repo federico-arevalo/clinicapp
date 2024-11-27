@@ -1,7 +1,7 @@
 <div
   class="bg-gradient-to-r from-indigo-800 to-blue-900 min-h-screen flex flex-col items-center justify-center p-4"
 >
-  <div class="w-full flex items-end justify-around">
+  <div class="mt-8 lg:mt-1 w-full flex items-end justify-around">
     <h1
       class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
     >
@@ -15,8 +15,9 @@
     </button>
   </div>
 
-  <div class="grid grid-cols-4 gap-4">
-    <div
+  <div class="grid lg:grid-cols-4 gap-4">
+    <!-- USERS AS CARDS -->
+    <!-- <div
       class="w-full max-w-sm bg-white border m-2 border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
       *ngFor="let user of users"
     >
@@ -46,6 +47,22 @@
           </button>
         </div>
       </div>
+    </div> -->
+    <div
+      class="grid lg:grid-cols-1 justify-items-center"
+      *ngFor="let user of users"
+    >
+      <p class="text-sm text-white leading-5">
+        {{ user.name + " " + user.lastName }}
+      </p>
+      <button
+        class="p-0 w-28 h-28 bg-red-600 rounded-full hover:bg-red-700 hover:scale-110 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none"
+      >
+        <img
+          class="w-28 h-28 rounded-full shadow-lg"
+          [src]="user.profilePicture"
+        />
+      </button>
     </div>
   </div>
 </div>
