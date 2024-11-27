@@ -111,21 +111,58 @@ export class TurnosPacienteComponent implements OnInit {
     });
   }
 
+  // filtrarTurnos(event: any) {
+  //   if (event.target.value === '') {
+  //     this.filteredTurnos = this.turnos;
+  //   } else {
+  //     this.filteredTurnos = this.turnos.filter((turno: any) => {
+  //       return (
+  //         turno.especialidad
+  //           .toLowerCase()
+  //           .includes(event.target.value.toLowerCase()) ||
+  //         turno.especialista.fullName
+  //           .toLowerCase()
+  //           .includes(event.target.value.toLowerCase())
+  //       );
+  //     });
+  //   }
+  // }
+
   filtrarTurnos(event: any) {
-    if (event.target.value === '') {
+    const searchTerm = event.target.value.toLowerCase();
+
+    if (searchTerm === '') {
       this.filteredTurnos = this.turnos;
-    } else {
-      this.filteredTurnos = this.turnos.filter((turno: any) => {
-        return (
-          turno.especialidad
-            .toLowerCase()
-            .includes(event.target.value.toLowerCase()) ||
-          turno.especialista.fullName
-            .toLowerCase()
-            .includes(event.target.value.toLowerCase())
-        );
-      });
+      return;
     }
+
+    this.filteredTurnos = this.turnos.filter((turno: any) =>
+      this.searchInObject(turno, searchTerm)
+    );
+  }
+
+  searchInObject(obj: any, searchTerm: string): boolean {
+    // Recursively search for the searchTerm in all properties of the object
+    for (const key in obj) {
+      if (obj[key] != null) {
+        const value = obj[key];
+
+        // If the value is an object or array, search recursively
+        if (typeof value === 'object') {
+          if (this.searchInObject(value, searchTerm)) {
+            return true;
+          }
+        }
+
+        // If the value is a string or number, check if it matches the search term
+        else if (typeof value === 'string' || typeof value === 'number') {
+          if (value.toString().toLowerCase().includes(searchTerm)) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
 
   toggleDropdown(index: number) {

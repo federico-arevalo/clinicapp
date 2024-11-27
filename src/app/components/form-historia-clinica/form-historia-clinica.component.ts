@@ -93,14 +93,14 @@ export class FormHistoriaClinicaComponent {
 
     // Create the correct control type
     switch (type) {
-      case 'range':
+      case 'rango':
         control = new FormControl(50, [
           Validators.required,
           Validators.min(0),
           Validators.max(100),
         ]);
         break;
-      case 'number':
+      case 'numerico':
         control = new FormControl('', [
           Validators.required,
           Validators.pattern(/^\d+$/),

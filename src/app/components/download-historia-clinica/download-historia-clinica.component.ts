@@ -175,7 +175,8 @@ export class DownloadHistoriaClinicaComponent {
       this.turnos = turnos
         .filter(
           (turno: any) =>
-            turno.paciente.uid === this.authService.currentUser.uid
+            turno.paciente.uid === this.authService.currentUser.uid &&
+            turno.estado === 'Realizado'
         )
         .map((turno: any) => {
           return {
@@ -184,6 +185,8 @@ export class DownloadHistoriaClinicaComponent {
             especialista: turno.especialista.fullName,
             especialidad: turno.especialidad,
             historiaClinica: turno.historiaClinica,
+            review: turno.review,
+            estado: turno.estado,
           };
         });
     });
@@ -229,7 +232,8 @@ export class DownloadHistoriaClinicaComponent {
         pdf.text(`Hora: ${turno.time}`, 20, yOffset + 20);
         pdf.text(`Especialista: ${turno.especialista}`, 20, yOffset + 30);
         pdf.text(`Especialidad: ${turno.especialidad}`, 20, yOffset + 40);
-        yOffset += 50;
+        pdf.text(`Reseña: ${turno.review}`, 20, yOffset + 50);
+        yOffset += 60;
 
         for (const [key, value] of Object.entries(turno.historiaClinica)) {
           // Check if we need a new page
@@ -238,7 +242,31 @@ export class DownloadHistoriaClinicaComponent {
             yOffset = 20;
           }
 
-          if (Array.isArray(value)) {
+          if (key === 'camposEspeciales' && Array.isArray(value)) {
+            pdf.text(`${key}:`, 20, yOffset);
+            yOffset += lineHeight;
+            value.forEach((item: any) => {
+              if (yOffset + lineHeight > pageHeight - 10) {
+                pdf.addPage();
+                yOffset = 20;
+              }
+              // Convert true/false to Si/No for display
+              const displayValue =
+                item.value === true
+                  ? 'Si'
+                  : item.value === false
+                  ? 'No'
+                  : item.value;
+              pdf.text(
+                `  - ${item.key || ''}: ${displayValue} ${
+                  item.type ? `(${item.type})` : ''
+                }`,
+                25,
+                yOffset
+              );
+              yOffset += lineHeight;
+            });
+          } else if (Array.isArray(value)) {
             pdf.text(`${key}:`, 20, yOffset);
             yOffset += lineHeight;
             value.forEach((item: any) => {
