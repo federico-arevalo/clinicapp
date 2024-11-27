@@ -156,9 +156,10 @@
             class="text-red-600"
             *ngIf="
               this.pacienteForm.controls.age.touched &&
-              this.pacienteForm.controls.age.hasError('min')
+              this.pacienteForm.controls.age.hasError('min') &&
+              this.especialistaForm.controls.age.hasError('max')
             "
-            >La edad debe ser mayor a 18 años</small
+            >La edad debe ser entre 18 y 60 años</small
           >
         </div>
         <div class="mb-4">
@@ -511,9 +512,10 @@
             class="text-red-600"
             *ngIf="
               this.especialistaForm.controls.age.touched &&
-              this.especialistaForm.controls.age.hasError('min')
+              this.especialistaForm.controls.age.hasError('min') &&
+              this.especialistaForm.controls.age.hasError('max')
             "
-            >La edad debe ser mayor a 18 años</small
+            >La edad debe ser entre 18 y 60 años</small
           >
         </div>
         <div class="mb-4">

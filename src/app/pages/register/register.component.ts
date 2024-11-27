@@ -37,7 +37,11 @@ export class RegisterComponent {
   pacienteForm = new FormGroup({
     name: new FormControl('', Validators.required),
     lastName: new FormControl('', Validators.required),
-    age: new FormControl('', [Validators.required, Validators.min(18)]),
+    age: new FormControl('', [
+      Validators.required,
+      Validators.min(18),
+      Validators.max(60),
+    ]),
     dni: new FormControl('', [Validators.required, Validators.max(99999999)]),
     obraSocial: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -51,7 +55,11 @@ export class RegisterComponent {
   especialistaForm = new FormGroup({
     name: new FormControl('', Validators.required),
     lastName: new FormControl('', Validators.required),
-    age: new FormControl('', [Validators.required, Validators.min(18)]),
+    age: new FormControl('', [
+      Validators.required,
+      Validators.min(18),
+      Validators.max(60),
+    ]),
     dni: new FormControl('', [Validators.required, Validators.max(99999999)]),
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required]),
