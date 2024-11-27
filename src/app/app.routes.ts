@@ -52,7 +52,7 @@ export const routes: Routes = [
     canActivate: [authGuard, isEspecialistaGuard],
   },
   {
-    path: 'pacientes',
+    path: 'informes',
     loadComponent: () =>
       import('./pages/informes/informes.component').then(
         (m) => m.InformesComponent
