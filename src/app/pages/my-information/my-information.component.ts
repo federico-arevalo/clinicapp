@@ -22,6 +22,7 @@ export class MyInformationComponent implements OnInit {
   isModifying: boolean = false;
   especialidades: any[] = [];
   selectedEspecialidad: string = '';
+  showHistoriaClinica: boolean = false;
 
   times = [
     '08:00',
@@ -167,5 +168,9 @@ export class MyInformationComponent implements OnInit {
 
   modificarHorarios() {
     this.isModifying = true;
+  }
+
+  toggleHistoriaClinica() {
+    this.showHistoriaClinica = !this.showHistoriaClinica;
   }
 }
