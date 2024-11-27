@@ -1,1 +1,42 @@
-<p>pacientes works!</p>
+<div
+  class="bg-gradient-to-r from-indigo-800 to-blue-900 min-h-screen flex flex-col items-center justify-center p-2"
+>
+  <div class="mt-8 lg:mt-1 w-full flex items-end justify-around">
+    <h1
+      class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
+    >
+      Pacientes
+    </h1>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+    <div
+      class="w-full max-w-sm bg-white border m-2 border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+      *ngFor="let paciente of updatedPacientes"
+    >
+      <div class="flex flex-col items-center pb-10 pt-10">
+        <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">
+          {{ paciente.name + " " + paciente.lastName }}
+        </h5>
+        <p class="mb-1 text-gray-500 dark:text-gray-400">Últimas atenciones</p>
+        <div
+          class="m-1 py-1 px-4 border-2 border-gray-700 rounded-lg"
+          *ngFor="let atencion of paciente.ultimasAtenciones"
+        >
+          <p class="mb-1 text-sm text-gray-500 dark:text-gray-400">
+            Fecha: {{ atencion.date | shortDate }} Hora: {{ atencion.time }}
+          </p>
+
+          <p class="mb-1 text-sm text-gray-500 dark:text-gray-400">
+            Especialidad: {{ atencion.especialidad }}
+          </p>
+        </div>
+
+        <app-download-historia-clinica
+          [paciente]="paciente.uid"
+          [nombre]="paciente.name + ' ' + paciente.lastName"
+        ></app-download-historia-clinica>
+      </div>
+    </div>
+  </div>
+</div>

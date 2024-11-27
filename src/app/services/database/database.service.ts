@@ -29,6 +29,10 @@ export class DatabaseService {
     return collectionData(collection(this.firestore, 'users'));
   }
 
+  getPacientes() {
+    return collectionData(collection(this.firestore, 'users'));
+  }
+
   getUsers() {
     return collectionData(collection(this.firestore, `users`));
   }

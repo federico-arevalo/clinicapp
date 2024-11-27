@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import jsPDF from 'jspdf';
 import { TurnosService } from '../../services/turnos/turnos.service';
 import { AuthService } from '../../services/auth/auth.service';
@@ -164,6 +164,11 @@ export class DownloadHistoriaClinicaComponent {
   //   }
   // }
   turnos: any;
+  @Input() paciente: string = this.authService.currentUser.uid;
+  @Input() nombre: string =
+    this.authService.currentUser.name +
+    ' ' +
+    this.authService.currentUser.lastName;
 
   constructor(
     private turnosService: TurnosService,
@@ -175,8 +180,7 @@ export class DownloadHistoriaClinicaComponent {
       this.turnos = turnos
         .filter(
           (turno: any) =>
-            turno.paciente.uid === this.authService.currentUser.uid &&
-            turno.estado === 'Realizado'
+            turno.paciente.uid === this.paciente && turno.estado === 'Realizado'
         )
         .map((turno: any) => {
           return {
@@ -210,6 +214,7 @@ export class DownloadHistoriaClinicaComponent {
     pdf.setFontSize(12);
     pdf.text(`Fecha: ${currentDate.toLocaleDateString()}`, 50, 30);
     pdf.text(`Hora: ${currentDate.toLocaleTimeString()}`, 50, 40);
+    pdf.text(`Paciente: ${this.nombre}`, 50, 50);
     yOffset += 40;
 
     pdf.setFontSize(14);
@@ -295,7 +300,11 @@ export class DownloadHistoriaClinicaComponent {
           10,
           yOffset
         );
-        pdf.text('El turno no tiene historia clínica.', 20, yOffset + 10);
+        pdf.text(
+          'No se ha completado la historia clínica para este turno.',
+          20,
+          yOffset + 10
+        );
         yOffset += 20;
       }
     });

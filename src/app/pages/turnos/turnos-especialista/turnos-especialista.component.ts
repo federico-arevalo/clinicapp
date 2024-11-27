@@ -213,7 +213,7 @@ export class TurnosEspecialistaComponent {
       this.turnosService.modificarTurno(modal.id, 'Cancelado', modal.texto!);
     } else if (modal.accion === 'Rechazar') {
       this.turnosService.modificarTurno(modal.id, 'Rechazado', modal.texto!);
-    } else if (modal.accion === 'Finalizar') {
+    } else if (modal.accion === 'Realizar') {
       this.turnosService.modificarTurno(modal.id, 'Realizado', modal.texto!);
     }
   }
