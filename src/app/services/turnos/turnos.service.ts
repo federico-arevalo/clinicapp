@@ -47,6 +47,13 @@ export class TurnosService {
     });
   }
 
+  guardarHistoriaClinica(id: string, historiaClinica: any) {
+    const turnosRef = doc(this.firestore, 'turnos', id);
+    updateDoc(turnosRef, {
+      historiaClinica: historiaClinica,
+    });
+  }
+
   modificarTurno(id: string, estado: string, comentario: string) {
     const turnosRef = doc(this.firestore, 'turnos', id);
     updateDoc(turnosRef, {

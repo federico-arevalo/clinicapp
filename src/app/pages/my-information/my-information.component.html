@@ -53,6 +53,9 @@
       <ng-content
         *ngIf="showMisHorarios; then misHorarios; else information"
       ></ng-content>
+      <app-download-historia-clinica
+        *ngIf="auth.currentUser.rol === 'paciente'"
+      ></app-download-historia-clinica>
     </div>
   </div>
 </div>

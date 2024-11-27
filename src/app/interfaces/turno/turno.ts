@@ -9,4 +9,14 @@ export interface Turno {
   review: string;
   comentario: string;
   atencion: string;
+  historiaClinica:
+    | {
+        altura: number;
+        peso: number;
+        temperatura: number;
+        presion: number;
+        camposDinamicos: any;
+        camposEspeciales: any;
+      }
+    | {};
 }

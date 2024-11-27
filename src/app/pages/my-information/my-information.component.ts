@@ -3,11 +3,16 @@ import { AuthService } from '../../services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DatabaseService } from '../../services/database/database.service';
+import { DownloadHistoriaClinicaComponent } from '../../components/download-historia-clinica/download-historia-clinica.component';
 
 @Component({
   selector: 'app-my-information',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    DownloadHistoriaClinicaComponent,
+  ],
   templateUrl: './my-information.component.html',
   styleUrl: './my-information.component.scss',
 })

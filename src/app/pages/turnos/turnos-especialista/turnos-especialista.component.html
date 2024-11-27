@@ -2,8 +2,22 @@
   <div
     class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 bg-white dark:bg-gray-900"
   >
-    <div class="flex items-center justify-center p-2 w-full">
+    <div class="flex items-center justify-around p-2 w-full">
       <h2 class="text-4xl font-extrabold dark:text-white">Mis turnos</h2>
+      <div class="relative bg-inherit m-2">
+        <input
+          type="text"
+          id="filter"
+          name="filter"
+          class="peer bg-transparent h-10 w-72 rounded-lg text-gray-200 placeholder-transparent ring-2 px-2 ring-gray-500 focus:ring-sky-600 focus:outline-none focus:border-rose-600"
+          placeholder="Filtrar"
+          (input)="filtrarTurnos($event)"
+        /><label
+          for="filter"
+          class="absolute cursor-text left-0 -top-3 text-sm text-gray-500 bg-gray-900 mx-1 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-sky-600 peer-focus:text-sm transition-all"
+          >Filtrar</label
+        >
+      </div>
     </div>
     <table
       class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 p-2"
@@ -23,7 +37,7 @@
       <tbody>
         <tr
           class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-          *ngFor="let turno of turnos; index as i"
+          *ngFor="let turno of filteredTurnos; index as i"
         >
           <th
             scope="row"
@@ -143,7 +157,9 @@
                   Ver calificación
                 </button>
                 <button
-                  [disabled]="turno.atencion === ''"
+                  [disabled]="
+                    hasHistoriaClinica(turno) || turno.estado !== 'Realizado'
+                  "
                   (click)="cargarHistoriaClinica(turno)"
                   class="w-44 flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white disabled:text-gray-400"
                 >
@@ -197,3 +213,8 @@
     })
   "
 ></app-modal-text>
+
+<app-form-historia-clinica
+  [showForm]="showHistoriaClinicaForm"
+  [turnoId]="turnoId"
+></app-form-historia-clinica>

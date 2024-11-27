@@ -53,6 +53,7 @@ export class TurnosPacienteComponent implements OnInit {
   createdTurno!: Turno;
 
   turnos: any[] = [];
+  filteredTurnos: any[] = [];
 
   constructor(
     private el: ElementRef,
@@ -77,6 +78,10 @@ export class TurnosPacienteComponent implements OnInit {
       });
     });
 
+    this.fetchTurnos();
+  }
+
+  fetchTurnos() {
     this.turnosService.getTurnos().subscribe((turnos: any) => {
       this.turnos = turnos
         .filter(
@@ -98,10 +103,29 @@ export class TurnosPacienteComponent implements OnInit {
             paciente: turno.paciente,
             especialidad: turno.especialidad,
             comentario: turno.comentario,
+            historiaClinica: turno.historiaClinica,
           };
         });
+      this.filteredTurnos = this.turnos;
       this.showSpinner = false;
     });
+  }
+
+  filtrarTurnos(event: any) {
+    if (event.target.value === '') {
+      this.filteredTurnos = this.turnos;
+    } else {
+      this.filteredTurnos = this.turnos.filter((turno: any) => {
+        return (
+          turno.especialidad
+            .toLowerCase()
+            .includes(event.target.value.toLowerCase()) ||
+          turno.especialista.fullName
+            .toLowerCase()
+            .includes(event.target.value.toLowerCase())
+        );
+      });
+    }
   }
 
   toggleDropdown(index: number) {

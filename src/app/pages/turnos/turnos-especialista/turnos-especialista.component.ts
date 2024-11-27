@@ -7,6 +7,7 @@ import { DatabaseService } from '../../../services/database/database.service';
 import { TurnosService } from '../../../services/turnos/turnos.service';
 import { TurnosColorDirective } from '../../../directives/turnosColor/turnos-color.directive';
 import { ModalTextComponent } from '../../../components/modal-text/modal-text.component';
+import { FormHistoriaClinicaComponent } from '../../../components/form-historia-clinica/form-historia-clinica.component';
 
 @Component({
   selector: 'app-turnos-especialista',
@@ -16,6 +17,7 @@ import { ModalTextComponent } from '../../../components/modal-text/modal-text.co
     CommonModule,
     TurnosColorDirective,
     ModalTextComponent,
+    FormHistoriaClinicaComponent,
   ],
   templateUrl: './turnos-especialista.component.html',
   styleUrl: './turnos-especialista.component.scss',
@@ -47,10 +49,12 @@ export class TurnosEspecialistaComponent {
   showModal: boolean = false;
   turnoId: string = '';
   msg: string = '';
+  showHistoriaClinicaForm: boolean = false;
 
   createdTurno!: Turno;
 
   turnos: any[] = [];
+  filteredTurnos: any[] = [];
 
   constructor(
     private db: DatabaseService,
@@ -74,6 +78,10 @@ export class TurnosEspecialistaComponent {
       });
     });
 
+    this.fetchTurnos();
+  }
+
+  fetchTurnos() {
     this.turnosService.getTurnos().subscribe((turnos: any) => {
       this.turnos = turnos
         .filter(
@@ -95,10 +103,66 @@ export class TurnosEspecialistaComponent {
             paciente: turno.paciente,
             especialidad: turno.especialidad,
             comentario: turno.comentario,
+            historiaClinica: turno.historiaClinica,
           };
         });
       this.showSpinner = false;
+      this.filteredTurnos = this.turnos;
     });
+  }
+
+  // filtrarTurnos(event: any) {
+  //   if (event.target.value === '') {
+  //     this.filteredTurnos = this.turnos;
+  //   } else {
+  //     this.filteredTurnos = this.turnos.filter((turno: any) => {
+  //       return (
+  //         turno.especialidad
+  //           .toLowerCase()
+  //           .includes(event.target.value.toLowerCase()) ||
+  //         turno.paciente.fullName
+  //           .toLowerCase()
+  //           .includes(event.target.value.toLowerCase())
+  //       );
+  //     });
+  //   }
+  // }
+
+  filtrarTurnos(event: any) {
+    const searchTerm = event.target.value.toLowerCase();
+
+    if (searchTerm === '') {
+      this.filteredTurnos = this.turnos;
+      return;
+    }
+
+    this.filteredTurnos = this.turnos.filter((turno: any) =>
+      this.searchInObject(turno, searchTerm)
+    );
+  }
+
+  searchInObject(obj: any, searchTerm: string): boolean {
+    // Recursively search for the searchTerm in all properties of the object
+    for (const key in obj) {
+      if (obj[key] != null) {
+        const value = obj[key];
+
+        // If the value is an object or array, search recursively
+        if (typeof value === 'object') {
+          if (this.searchInObject(value, searchTerm)) {
+            return true;
+          }
+        }
+
+        // If the value is a string or number, check if it matches the search term
+        else if (typeof value === 'string' || typeof value === 'number') {
+          if (value.toString().toLowerCase().includes(searchTerm)) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
 
   toggleDropdown(index: number) {
@@ -188,7 +252,17 @@ export class TurnosEspecialistaComponent {
   }
 
   cargarHistoriaClinica(turno: Turno) {
-    console.log(turno);
+    this.showHistoriaClinicaForm = false;
+    this.turnoId = turno.id;
+
+    setTimeout(() => {
+      this.showHistoriaClinicaForm = true;
+    }, 100);
+
     this.openDropdownIndex = null;
+  }
+
+  hasHistoriaClinica(turno: Turno) {
+    return Object.keys(turno.historiaClinica).length !== 0;
   }
 }

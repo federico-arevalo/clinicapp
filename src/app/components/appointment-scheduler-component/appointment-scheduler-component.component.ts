@@ -134,6 +134,30 @@ export class AppointmentSchedulerComponentComponent
     this.intervals = intervals;
   }
 
+  getButtonClasses(interval: {
+    date: string;
+    time: string;
+    disabled: boolean;
+  }): object {
+    return {
+      'bg-blue-700': interval === this.selectedTurno,
+      'bg-green-700': interval !== this.selectedTurno,
+      'bg-yellow-700 border-solid border-2 border-yellow-3': this.isToday(
+        interval.date
+      ),
+    };
+  }
+
+  isToday(dateString: string): boolean {
+    const today = new Date();
+    const inputDate = new Date(dateString);
+    return (
+      today.getFullYear() === inputDate.getFullYear() &&
+      today.getMonth() === inputDate.getMonth() &&
+      today.getDate() === inputDate.getDate()
+    );
+  }
+
   requestAppointment(interval: {
     date: string;
     time: string;
@@ -163,6 +187,7 @@ export class AppointmentSchedulerComponentComponent
         uid: this.paciente.uid,
         fullName: this.paciente.fullName,
       },
+      historiaClinica: {},
     };
 
     this.turnoCreated.emit(turno);

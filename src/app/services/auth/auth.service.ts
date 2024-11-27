@@ -8,7 +8,7 @@ import {
 import { Router } from '@angular/router';
 import { Storage, ref, uploadBytes } from '@angular/fire/storage';
 import { collection, getDocs } from 'firebase/firestore';
-import { Firestore } from '@angular/fire/firestore';
+import { addDoc, Firestore } from '@angular/fire/firestore';
 import { DatabaseService } from '../database/database.service';
 import { Subscription } from 'rxjs';
 
@@ -98,12 +98,18 @@ export class AuthService {
         }
         getDocs(collection(this.firestore, 'users')).then((docs: any) =>
           docs.forEach((doc: any) => {
-            if (doc.data().uid === result.user.uid)
+            if (doc.data().uid === result.user.uid) {
               // this.SetUserData({ ...doc.data() });
               localStorage.setItem('userInfo', JSON.stringify(doc.data()));
+              this.setUserLogs(
+                doc.data()?.email || email,
+                doc.data()?.name + ' ' + doc.data()?.lastName
+              );
+            }
           })
         );
         this.router.navigateByUrl('/home');
+
         return true;
       });
   }
@@ -321,6 +327,17 @@ export class AuthService {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  setUserLogs(user: any, name: string) {
+    const userLog = {
+      user: user,
+      name: name,
+      fecha: new Date(),
+    };
+
+    let logins = collection(this.firestore, 'logins');
+    addDoc(logins, userLog);
   }
 
   // Sign out
