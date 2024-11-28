@@ -192,7 +192,7 @@ export class CreateNewUsersComponent {
             ...this.adminForm.value,
             especialidad: this.selectedEspecialidades,
           },
-          { profilePicture: $event.target.form[9].files[0] }
+          { profilePicture: $event.target.form[7].files[0] }
         )
         .catch((e: any) => {
           this.showModal = true;

@@ -798,8 +798,8 @@
         <small
           class="text-red-600"
           *ngIf="
-            this.especialistaForm.controls.name.touched &&
-            this.especialistaForm.controls.name.hasError('required')
+            this.adminForm.controls.name.touched &&
+            this.adminForm.controls.name.hasError('required')
           "
           >El nombre es requerido</small
         >
@@ -833,8 +833,8 @@
         <small
           class="text-red-600"
           *ngIf="
-            this.especialistaForm.controls.lastName.touched &&
-            this.especialistaForm.controls.lastName.hasError('required')
+            this.adminForm.controls.lastName.touched &&
+            this.adminForm.controls.lastName.hasError('required')
           "
           >El apellido es requerido</small
         >
@@ -867,16 +867,16 @@
         <small
           class="text-red-600"
           *ngIf="
-            this.especialistaForm.controls.age.touched &&
-            this.especialistaForm.controls.age.hasError('required')
+            this.adminForm.controls.age.touched &&
+            this.adminForm.controls.age.hasError('required')
           "
           >La edad es requerida</small
         ><small
           class="text-red-600"
           *ngIf="
-            this.especialistaForm.controls.age.touched &&
-            (this.especialistaForm.controls.age.hasError('min') ||
-              this.especialistaForm.controls.age.hasError('max'))
+            this.adminForm.controls.age.touched &&
+            (this.adminForm.controls.age.hasError('min') ||
+              this.adminForm.controls.age.hasError('max'))
           "
           >La edad debe ser entre 18 y 60 años</small
         >
@@ -905,15 +905,15 @@
         <small
           class="text-red-600"
           *ngIf="
-            this.especialistaForm.controls.dni.touched &&
-            this.especialistaForm.controls.dni.hasError('required')
+            this.adminForm.controls.dni.touched &&
+            this.adminForm.controls.dni.hasError('required')
           "
           >El DNI es requerido</small
         ><small
           class="text-red-600"
           *ngIf="
-            this.especialistaForm.controls.dni.touched &&
-            this.especialistaForm.controls.dni.hasError('max')
+            this.adminForm.controls.dni.touched &&
+            this.adminForm.controls.dni.hasError('max')
           "
           >El DNI debe tener 8 dígitos</small
         >
@@ -946,8 +946,8 @@
         <small
           class="text-red-600"
           *ngIf="
-            this.especialistaForm.controls.email.touched &&
-            this.especialistaForm.controls.email.hasError('required')
+            this.adminForm.controls.email.touched &&
+            this.adminForm.controls.email.hasError('required')
           "
           >El email es requerido</small
         >
@@ -978,8 +978,8 @@
         <small
           class="text-red-600"
           *ngIf="
-            this.especialistaForm.controls.password.touched &&
-            this.especialistaForm.controls.password.hasError('required')
+            this.adminForm.controls.password.touched &&
+            this.adminForm.controls.password.hasError('required')
           "
           >La contraseña es requerida</small
         >
@@ -1010,16 +1010,16 @@
         <small
           class="text-red-600"
           *ngIf="
-            this.especialistaForm.controls.repeatPassword.touched &&
-            this.especialistaForm.controls.repeatPassword.hasError('required')
+            this.adminForm.controls.repeatPassword.touched &&
+            this.adminForm.controls.repeatPassword.hasError('required')
           "
           >La contraseña es requerida</small
         >
         <small
           class="text-red-600 ml-1"
           *ngIf="
-            this.especialistaForm.controls.repeatPassword.value !==
-            this.especialistaForm.controls.password.value
+            this.adminForm.controls.repeatPassword.value !==
+            this.adminForm.controls.password.value
           "
           >Las contraseñas no coinciden</small
         >
@@ -1044,8 +1044,8 @@
         <small
           class="text-red-600"
           *ngIf="
-            this.especialistaForm.controls.profilePicture.touched &&
-            this.especialistaForm.controls.profilePicture.hasError('required')
+            this.adminForm.controls.profilePicture.touched &&
+            this.adminForm.controls.profilePicture.hasError('required')
           "
           >La foto es requerida</small
         >
@@ -1060,7 +1060,7 @@
         type="submit"
         class="bg-rose-500 hover:bg-rose-700 text-white font-semibold rounded-md mt-2 py-2 px-4 w-full"
         (click)="onRegister($event, 'admin')"
-        [disabled]="!especialistaForm.valid"
+        [disabled]="!adminForm.valid"
         [ngClass]="{
           'bg-slate-400 hover:bg-slate-400': !adminForm.valid
         }"
