@@ -28,10 +28,6 @@ export class TurnosEspecialistaComponent {
   openDropdownIndex: number | null = null;
 
   currentStep = 1;
-  form = document.getElementById('multi-step-form');
-  prevBtn = document.getElementById('prevBtn');
-  nextBtn = document.getElementById('nextBtn');
-  submitBtn = document.getElementById('submitBtn');
   progressBar!: HTMLElement;
 
   especialidades: any[] = [];
