@@ -5,6 +5,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DatabaseService } from '../../services/database/database.service';
 import { DownloadHistoriaClinicaComponent } from '../../components/download-historia-clinica/download-historia-clinica.component';
 import { FormatDNIPipe } from '../../pipes/format-dni.pipe';
+import { RolColorDirective } from '../../directives/rolColor/rol-color.directive';
 
 @Component({
   selector: 'app-my-information',
@@ -14,6 +15,7 @@ import { FormatDNIPipe } from '../../pipes/format-dni.pipe';
     ReactiveFormsModule,
     DownloadHistoriaClinicaComponent,
     FormatDNIPipe,
+    RolColorDirective,
   ],
   templateUrl: './my-information.component.html',
   styleUrl: './my-information.component.scss',
