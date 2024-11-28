@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { IsVerifiedDirective } from '../../directives/isVerified/is-verified.directive';
 import * as XLSX from 'xlsx';
 import { TurnosService } from '../../services/turnos/turnos.service';
+import { CreateNewUsersComponent } from '../../components/create-new-users/create-new-users.component';
 
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [CommonModule, IsVerifiedDirective],
+  imports: [CommonModule, IsVerifiedDirective, CreateNewUsersComponent],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
 })
@@ -18,57 +19,7 @@ export class UsersComponent {
   imagesUrl: string[] = [];
   turnos: any;
 
-  userList = [
-    {
-      id: 1,
-
-      name: 'Leanne Graham',
-
-      username: 'Bret',
-
-      email: 'Sincere@april.biz',
-    },
-
-    {
-      id: 2,
-
-      name: 'Ervin Howell',
-
-      username: 'Antonette',
-
-      email: 'Shanna@melissa.tv',
-    },
-
-    {
-      id: 3,
-
-      name: 'Clementine Bauch',
-
-      username: 'Samantha',
-
-      email: 'Nathan@yesenia.net',
-    },
-
-    {
-      id: 4,
-
-      name: 'Patricia Lebsack',
-
-      username: 'Karianne',
-
-      email: 'Julianne.OConner@kory.org',
-    },
-
-    {
-      id: 5,
-
-      name: 'Chelsey Dietrich',
-
-      username: 'Kamren',
-
-      email: 'Lucio_Hettinger@annie.ca',
-    },
-  ];
+  userList = 'users';
 
   constructor(
     private dbService: DatabaseService,
@@ -138,5 +89,9 @@ export class UsersComponent {
     XLSX.utils.book_append_sheet(wb, ws, 'Turnos');
 
     XLSX.writeFile(wb, 'infoTurnos.xlsx');
+  }
+
+  changeUserList(type: string) {
+    this.userList = type;
   }
 }

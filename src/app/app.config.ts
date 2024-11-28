@@ -16,6 +16,7 @@ import {
   RecaptchaSettings,
   ReCaptchaV3Service,
 } from 'ng-recaptcha';
+import { provideHttpClient } from '@angular/common/http';
 
 const firebase = {
   projectId: 'federico-arevalo-clinica',
@@ -29,6 +30,7 @@ const firebase = {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimations(),
+    provideHttpClient(),
     provideAnimationsAsync(),
     provideRouter(routes),
     provideFirebaseApp(() => initializeApp(firebase)),

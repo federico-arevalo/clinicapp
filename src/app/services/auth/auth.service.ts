@@ -94,6 +94,7 @@ export class AuthService {
         // this.SetUserData(result.user);
         // this.router.navigate(['home']);
         if (!result.user.emailVerified) {
+          this.SendVerificationMail();
           return false;
         }
         getDocs(collection(this.firestore, 'users')).then((docs: any) =>
