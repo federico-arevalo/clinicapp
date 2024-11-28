@@ -28,10 +28,6 @@ export class TurnosPacienteComponent implements OnInit {
   openDropdownIndex: number | null = null;
 
   currentStep = 1;
-  form = document.getElementById('multi-step-form');
-  prevBtn = document.getElementById('prevBtn');
-  nextBtn = document.getElementById('nextBtn');
-  submitBtn = document.getElementById('submitBtn');
   progressBar!: HTMLElement;
 
   especialidades: any[] = [];
@@ -216,8 +212,6 @@ export class TurnosPacienteComponent implements OnInit {
   prev() {
     if (this.currentStep === 2) {
       this.selectedEspecialista = null;
-    }
-    if (this.currentStep === 3) {
     }
 
     if (this.currentStep > 1) this.currentStep--;

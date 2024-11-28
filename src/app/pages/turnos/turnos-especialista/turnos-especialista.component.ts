@@ -28,10 +28,6 @@ export class TurnosEspecialistaComponent {
   openDropdownIndex: number | null = null;
 
   currentStep = 1;
-  form = document.getElementById('multi-step-form');
-  prevBtn = document.getElementById('prevBtn');
-  nextBtn = document.getElementById('nextBtn');
-  submitBtn = document.getElementById('submitBtn');
   progressBar!: HTMLElement;
 
   especialidades: any[] = [];
@@ -213,7 +209,7 @@ export class TurnosEspecialistaComponent {
       this.turnosService.modificarTurno(modal.id, 'Cancelado', modal.texto!);
     } else if (modal.accion === 'Rechazar') {
       this.turnosService.modificarTurno(modal.id, 'Rechazado', modal.texto!);
-    } else if (modal.accion === 'Finalizar') {
+    } else if (modal.accion === 'Realizar') {
       this.turnosService.modificarTurno(modal.id, 'Realizado', modal.texto!);
     }
   }

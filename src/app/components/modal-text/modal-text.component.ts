@@ -39,6 +39,11 @@ export class ModalTextComponent {
       id: this.turnoId,
     });
 
+    this.textArea = '';
+    this.turnoId = '';
+    this.msg = '';
+    this.accion = '';
+
     this.showModal = false;
   }
 }

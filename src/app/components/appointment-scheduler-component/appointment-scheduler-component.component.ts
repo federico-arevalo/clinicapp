@@ -185,7 +185,7 @@ export class AppointmentSchedulerComponentComponent
       comentario: '',
       paciente: {
         uid: this.paciente.uid,
-        fullName: this.paciente.fullName,
+        fullName: `${this.paciente.name} ${this.paciente.lastName}`,
       },
       historiaClinica: {},
     };

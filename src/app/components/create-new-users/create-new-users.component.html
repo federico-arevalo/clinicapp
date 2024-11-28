@@ -1,0 +1,1099 @@
+<div class="rounded-md w-[900px] bg-gray-900 p-16 flex flex-col items-center">
+  <div class="mt-8 lg:mt-1 w-full flex items-center justify-around">
+    <h1
+      class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-white"
+    >
+      Crear nuevo usuario
+    </h1>
+    <button
+      class="mb-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+      (click)="onCancel()"
+    >
+      Salir
+    </button>
+  </div>
+  <div class="flex justify-around mb-4">
+    <div>
+      <div class="inline-flex rounded-md shadow-sm" role="group">
+        <button
+          (click)="switchTab('paciente')"
+          type="button"
+          class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+        >
+          Paciente
+        </button>
+        <button
+          (click)="switchTab('especialista')"
+          type="button"
+          class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+        >
+          Especialista
+        </button>
+        <button
+          (click)="switchTab('admin')"
+          type="button"
+          class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+        >
+          Admin
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <ng-container [ngSwitch]="formType">
+    <ng-container
+      *ngSwitchCase="'paciente'"
+      [ngTemplateOutlet]="paciente"
+    ></ng-container>
+    <ng-container
+      *ngSwitchCase="'especialista'"
+      [ngTemplateOutlet]="especialista"
+    ></ng-container>
+    <ng-container
+      *ngSwitchCase="'admin'"
+      [ngTemplateOutlet]="admin"
+    ></ng-container>
+  </ng-container>
+
+  <!-- FORM PACIENTE -->
+  <ng-template #paciente>
+    <form [formGroup]="pacienteForm" class="bg-white rounded-md p-4 w-[600px]">
+      <h2
+        class="mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-900"
+      >
+        Crear nuevo {{ formType }}
+      </h2>
+      <div class="mb-4">
+        <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            class="h-5 w-5 text-gray-400"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+            ></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <input
+            id="name"
+            class="pl-2 w-full outline-none border-none"
+            type="text"
+            name="name"
+            placeholder="Nombre"
+            formControlName="name"
+          />
+        </div>
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.pacienteForm.controls.name.touched &&
+            this.pacienteForm.controls.name.hasError('required')
+          "
+          >El nombre es requerido</small
+        >
+      </div>
+      <div class="mb-4">
+        <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            class="h-5 w-5 text-gray-400"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+            ></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <input
+            id="lastName"
+            class="pl-2 w-full outline-none border-none"
+            type="text"
+            name="lastName"
+            placeholder="Apellido"
+            formControlName="lastName"
+          />
+        </div>
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.pacienteForm.controls.lastName.touched &&
+            this.pacienteForm.controls.lastName.hasError('required')
+          "
+          >El apellido es requerido</small
+        >
+      </div>
+      <div class="mb-4">
+        <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M3 3h18v18H3zM12 8v8m-4-4h8"
+            />
+          </svg>
+          <input
+            id="age"
+            class="pl-2 w-full outline-none border-none"
+            type="number"
+            name="age"
+            placeholder="Edad"
+            formControlName="age"
+          />
+        </div>
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.pacienteForm.controls.age.touched &&
+            this.pacienteForm.controls.age.hasError('required')
+          "
+          >La edad es requerida</small
+        ><small
+          class="text-red-600"
+          *ngIf="
+            this.pacienteForm.controls.age.touched &&
+            (this.pacienteForm.controls.age.hasError('min') ||
+              this.pacienteForm.controls.age.hasError('max'))
+          "
+          >La edad debe ser entre 18 y 60 años</small
+        >
+      </div>
+      <div class="mb-4">
+        <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <rect x="2" y="4" width="20" height="16" rx="2" />
+            <path d="M7 15h0M2 9.5h20" />
+          </svg>
+          <input
+            id="dni"
+            class="pl-2 w-full outline-none border-none"
+            type="number"
+            name="dni"
+            placeholder="DNI"
+            formControlName="dni"
+          />
+        </div>
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.pacienteForm.controls.dni.touched &&
+            this.pacienteForm.controls.dni.hasError('required')
+          "
+          >El DNI es requerido</small
+        ><small
+          class="text-red-600"
+          *ngIf="
+            this.pacienteForm.controls.dni.touched &&
+            this.pacienteForm.controls.dni.hasError('max')
+          "
+          >El DNI debe tener 8 dígitos</small
+        >
+      </div>
+      <div class="mb-4">
+        <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-gray-400"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
+            ></path>
+            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+          </svg>
+          <input
+            id="obraSocial"
+            class="pl-2 w-full outline-none border-none"
+            type="text"
+            name="obraSocial"
+            placeholder="Obra Social"
+            formControlName="obraSocial"
+          />
+        </div>
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.pacienteForm.controls.obraSocial.touched &&
+            this.pacienteForm.controls.obraSocial.hasError('required')
+          "
+          >La obra social es requerida</small
+        >
+      </div>
+      <div class="mb-4">
+        <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
+            />
+          </svg>
+          <input
+            id="email"
+            class="pl-2 w-full outline-none border-none"
+            type="email"
+            name="email"
+            placeholder="Correo eléctronico"
+            formControlName="email"
+          />
+        </div>
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.pacienteForm.controls.email.touched &&
+            this.pacienteForm.controls.email.hasError('required')
+          "
+          >El email es requerido</small
+        >
+      </div>
+      <div class="mb-4">
+        <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-gray-400"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <input
+            class="pl-2 w-full outline-none border-none"
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Contraseña"
+            formControlName="password"
+          />
+        </div>
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.pacienteForm.controls.password.touched &&
+            this.pacienteForm.controls.password.hasError('required')
+          "
+          >La contraseña es requerida</small
+        >
+      </div>
+      <div class="mb-4">
+        <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-gray-400"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <input
+            class="pl-2 w-full outline-none border-none"
+            type="password"
+            name="repeatPassword"
+            id="repeatPassword"
+            placeholder="Repetir contraseña"
+            formControlName="repeatPassword"
+          />
+        </div>
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.pacienteForm.controls.repeatPassword.touched &&
+            this.pacienteForm.controls.repeatPassword.hasError('required')
+          "
+          >La contraseña es requerida</small
+        >
+        <small
+          class="text-red-600 ml-1"
+          *ngIf="
+            this.pacienteForm.controls.repeatPassword.value !==
+            this.pacienteForm.controls.password.value
+          "
+          >Las contraseñas no coinciden</small
+        >
+      </div>
+      <div class="mb-4">
+        <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
+          <div class="mx-auto max-w-xs">
+            <label
+              for="example1"
+              class="mb-1 block text-sm font-medium text-gray-700"
+              >Primera foto</label
+            >
+            <input
+              id="firstProfilePicture"
+              name="firstProfilePicture"
+              type="file"
+              class="mt-2 block w-full text-sm file:mr-4 file:rounded-md file:border-0 file:bg-orange-500 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-white hover:file:bg-orange-700 focus:outline-none disabled:pointer-events-none disabled:opacity-60"
+              formControlName="firstProfilePicture"
+            />
+          </div>
+          <div class="mx-auto max-w-xs">
+            <label
+              for="example1"
+              class="mb-1 block text-sm font-medium text-gray-700"
+              >Segunda foto</label
+            >
+            <input
+              id="secondProfilePicture"
+              name="secondProfilePicture"
+              type="file"
+              class="mt-2 block w-full text-sm file:mr-4 file:rounded-md file:border-0 file:bg-orange-500 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-white hover:file:bg-orange-700 focus:outline-none disabled:pointer-events-none disabled:opacity-60"
+              formControlName="secondProfilePicture"
+            />
+          </div>
+        </div>
+        <small
+          class="text-red-600"
+          *ngIf="
+            (this.pacienteForm.controls.firstProfilePicture.touched &&
+              this.pacienteForm.controls.firstProfilePicture.hasError(
+                'required'
+              )) ||
+            (this.pacienteForm.controls.secondProfilePicture.touched &&
+              this.pacienteForm.controls.secondProfilePicture.hasError(
+                'required'
+              ))
+          "
+          >Las fotos son requeridas</small
+        >
+      </div>
+      <!-- <re-captcha
+              (resolved)="executeRecaptcha($event)"
+              siteKey="6LfU43sqAAAAAD3Xla1f3kWSqQY2WwcoP7sKgg15"
+              formControlName="recaptcha"
+            ></re-captcha> -->
+      <app-captcha (resultadoCaptcha)="onCaptchaPaciente($event)"></app-captcha>
+      <button
+        type="submit"
+        class="bg-rose-500 hover:bg-rose-700 text-white font-semibold rounded-md mt-2 py-2 px-4 w-full"
+        (click)="onRegister($event, 'paciente')"
+        [disabled]="!pacienteForm.valid"
+        [ngClass]="{ 'bg-slate-400 hover:bg-slate-400': !pacienteForm.valid }"
+      >
+        Registrarse
+      </button>
+    </form>
+  </ng-template>
+
+  <!-- FORM ESPECIALISTA -->
+  <ng-template #especialista
+    ><form
+      [formGroup]="especialistaForm"
+      class="bg-white rounded-md p-4 w-[600px]"
+    >
+      <h2
+        class="mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-900"
+      >
+        Crear nuevo {{ formType }}
+      </h2>
+      <div class="mb-4">
+        <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            class="h-5 w-5 text-gray-400"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+            ></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <input
+            id="name"
+            class="pl-2 w-full outline-none border-none"
+            type="text"
+            name="name"
+            placeholder="Nombre"
+            formControlName="name"
+          />
+        </div>
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.especialistaForm.controls.name.touched &&
+            this.especialistaForm.controls.name.hasError('required')
+          "
+          >El nombre es requerido</small
+        >
+      </div>
+      <div class="mb-4">
+        <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            class="h-5 w-5 text-gray-400"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+            ></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <input
+            id="lastName"
+            class="pl-2 w-full outline-none border-none"
+            type="text"
+            name="lastName"
+            placeholder="Apellido"
+            formControlName="lastName"
+          />
+        </div>
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.especialistaForm.controls.lastName.touched &&
+            this.especialistaForm.controls.lastName.hasError('required')
+          "
+          >El apellido es requerido</small
+        >
+      </div>
+      <div class="mb-4">
+        <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M3 3h18v18H3zM12 8v8m-4-4h8"
+            />
+          </svg>
+          <input
+            id="age"
+            class="pl-2 w-full outline-none border-none"
+            type="number"
+            name="age"
+            placeholder="Edad"
+            formControlName="age"
+          />
+        </div>
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.especialistaForm.controls.age.touched &&
+            this.especialistaForm.controls.age.hasError('required')
+          "
+          >La edad es requerida</small
+        ><small
+          class="text-red-600"
+          *ngIf="
+            this.especialistaForm.controls.age.touched &&
+            (this.especialistaForm.controls.age.hasError('min') ||
+              this.especialistaForm.controls.age.hasError('max'))
+          "
+          >La edad debe ser entre 18 y 60 años</small
+        >
+      </div>
+      <div class="mb-4">
+        <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <rect x="2" y="4" width="20" height="16" rx="2" />
+            <path d="M7 15h0M2 9.5h20" />
+          </svg>
+          <input
+            id="dni"
+            class="pl-2 w-full outline-none border-none"
+            type="number"
+            name="dni"
+            placeholder="DNI"
+            formControlName="dni"
+          />
+        </div>
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.especialistaForm.controls.dni.touched &&
+            this.especialistaForm.controls.dni.hasError('required')
+          "
+          >El DNI es requerido</small
+        ><small
+          class="text-red-600"
+          *ngIf="
+            this.especialistaForm.controls.dni.touched &&
+            this.especialistaForm.controls.dni.hasError('max')
+          "
+          >El DNI debe tener 8 dígitos</small
+        >
+      </div>
+      <div class="mb-4">
+        <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-gray-400"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
+            ></path>
+            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+          </svg>
+          <app-multiselect
+            (newEspecialidadEvent)="selectEspecialidades($event)"
+          />
+        </div>
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.selectedEspecialidades.length === 0 &&
+            this.hasSelectedEspecialidades
+          "
+          >La especialidad es requerida</small
+        >
+      </div>
+      <div class="mb-4">
+        <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
+            />
+          </svg>
+          <input
+            id="email"
+            class="pl-2 w-full outline-none border-none"
+            type="email"
+            name="email"
+            placeholder="Correo eléctronico"
+            formControlName="email"
+          />
+        </div>
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.especialistaForm.controls.email.touched &&
+            this.especialistaForm.controls.email.hasError('required')
+          "
+          >El email es requerido</small
+        >
+      </div>
+      <div class="mb-4">
+        <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-gray-400"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <input
+            class="pl-2 w-full outline-none border-none"
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Contraseña"
+            formControlName="password"
+          />
+        </div>
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.especialistaForm.controls.password.touched &&
+            this.especialistaForm.controls.password.hasError('required')
+          "
+          >La contraseña es requerida</small
+        >
+      </div>
+      <div class="mb-4">
+        <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-gray-400"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <input
+            class="pl-2 w-full outline-none border-none"
+            type="password"
+            name="repeatPassword"
+            id="repeatPassword"
+            placeholder="Repetir contraseña"
+            formControlName="repeatPassword"
+          />
+        </div>
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.especialistaForm.controls.repeatPassword.touched &&
+            this.especialistaForm.controls.repeatPassword.hasError('required')
+          "
+          >La contraseña es requerida</small
+        >
+        <small
+          class="text-red-600 ml-1"
+          *ngIf="
+            this.especialistaForm.controls.repeatPassword.value !==
+            this.especialistaForm.controls.password.value
+          "
+          >Las contraseñas no coinciden</small
+        >
+      </div>
+      <div class="mb-4">
+        <div class="grid justify-start border-2 py-2 px-3 rounded-2xl">
+          <div class="mx-auto max-w-xs">
+            <label
+              for="example1"
+              class="mb-1 block text-sm font-medium text-gray-700"
+              >Foto</label
+            >
+            <input
+              id="profilePicture"
+              name="profilePicture"
+              type="file"
+              class="mt-2 block w-full text-sm file:mr-4 file:rounded-md file:border-0 file:bg-orange-500 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-white hover:file:bg-orange-700 focus:outline-none disabled:pointer-events-none disabled:opacity-60"
+              formControlName="profilePicture"
+            />
+          </div>
+        </div>
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.especialistaForm.controls.profilePicture.touched &&
+            this.especialistaForm.controls.profilePicture.hasError('required')
+          "
+          >La foto es requerida</small
+        >
+      </div>
+      <!-- <re-captcha
+              (resolved)="executeRecaptcha($event)"
+              siteKey="6LfU43sqAAAAAD3Xla1f3kWSqQY2WwcoP7sKgg15"
+              formControlName="recaptcha"
+            ></re-captcha> -->
+      <app-captcha
+        (resultadoCaptcha)="onCaptchaEspecialista($event)"
+      ></app-captcha>
+      <button
+        type="submit"
+        class="bg-rose-500 hover:bg-rose-700 text-white font-semibold rounded-md mt-2 py-2 px-4 w-full"
+        (click)="onRegister($event, 'especialista')"
+        [disabled]="!especialistaForm.valid"
+        [ngClass]="{
+          'bg-slate-400 hover:bg-slate-400': !especialistaForm.valid
+        }"
+      >
+        Registrarse
+      </button>
+    </form></ng-template
+  >
+
+  <!-- FORM ADMIN -->
+  <ng-template #admin
+    ><form [formGroup]="adminForm" class="bg-white rounded-md p-4 w-[600px]">
+      <h2
+        class="mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-900"
+      >
+        Crear nuevo {{ formType }}
+      </h2>
+      <div class="mb-4">
+        <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            class="h-5 w-5 text-gray-400"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+            ></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <input
+            id="name"
+            class="pl-2 w-full outline-none border-none"
+            type="text"
+            name="name"
+            placeholder="Nombre"
+            formControlName="name"
+          />
+        </div>
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.adminForm.controls.name.touched &&
+            this.adminForm.controls.name.hasError('required')
+          "
+          >El nombre es requerido</small
+        >
+      </div>
+      <div class="mb-4">
+        <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            class="h-5 w-5 text-gray-400"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+            ></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <input
+            id="lastName"
+            class="pl-2 w-full outline-none border-none"
+            type="text"
+            name="lastName"
+            placeholder="Apellido"
+            formControlName="lastName"
+          />
+        </div>
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.adminForm.controls.lastName.touched &&
+            this.adminForm.controls.lastName.hasError('required')
+          "
+          >El apellido es requerido</small
+        >
+      </div>
+      <div class="mb-4">
+        <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M3 3h18v18H3zM12 8v8m-4-4h8"
+            />
+          </svg>
+          <input
+            id="age"
+            class="pl-2 w-full outline-none border-none"
+            type="number"
+            name="age"
+            placeholder="Edad"
+            formControlName="age"
+          />
+        </div>
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.adminForm.controls.age.touched &&
+            this.adminForm.controls.age.hasError('required')
+          "
+          >La edad es requerida</small
+        ><small
+          class="text-red-600"
+          *ngIf="
+            this.adminForm.controls.age.touched &&
+            (this.adminForm.controls.age.hasError('min') ||
+              this.adminForm.controls.age.hasError('max'))
+          "
+          >La edad debe ser entre 18 y 60 años</small
+        >
+      </div>
+      <div class="mb-4">
+        <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <rect x="2" y="4" width="20" height="16" rx="2" />
+            <path d="M7 15h0M2 9.5h20" />
+          </svg>
+          <input
+            id="dni"
+            class="pl-2 w-full outline-none border-none"
+            type="number"
+            name="dni"
+            placeholder="DNI"
+            formControlName="dni"
+          />
+        </div>
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.adminForm.controls.dni.touched &&
+            this.adminForm.controls.dni.hasError('required')
+          "
+          >El DNI es requerido</small
+        ><small
+          class="text-red-600"
+          *ngIf="
+            this.adminForm.controls.dni.touched &&
+            this.adminForm.controls.dni.hasError('max')
+          "
+          >El DNI debe tener 8 dígitos</small
+        >
+      </div>
+      <div class="mb-4">
+        <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
+            />
+          </svg>
+          <input
+            id="email"
+            class="pl-2 w-full outline-none border-none"
+            type="email"
+            name="email"
+            placeholder="Correo eléctronico"
+            formControlName="email"
+          />
+        </div>
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.adminForm.controls.email.touched &&
+            this.adminForm.controls.email.hasError('required')
+          "
+          >El email es requerido</small
+        >
+      </div>
+      <div class="mb-4">
+        <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-gray-400"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <input
+            class="pl-2 w-full outline-none border-none"
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Contraseña"
+            formControlName="password"
+          />
+        </div>
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.adminForm.controls.password.touched &&
+            this.adminForm.controls.password.hasError('required')
+          "
+          >La contraseña es requerida</small
+        >
+      </div>
+      <div class="mb-4">
+        <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-gray-400"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <input
+            class="pl-2 w-full outline-none border-none"
+            type="password"
+            name="repeatPassword"
+            id="repeatPassword"
+            placeholder="Repetir contraseña"
+            formControlName="repeatPassword"
+          />
+        </div>
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.adminForm.controls.repeatPassword.touched &&
+            this.adminForm.controls.repeatPassword.hasError('required')
+          "
+          >La contraseña es requerida</small
+        >
+        <small
+          class="text-red-600 ml-1"
+          *ngIf="
+            this.adminForm.controls.repeatPassword.value !==
+            this.adminForm.controls.password.value
+          "
+          >Las contraseñas no coinciden</small
+        >
+      </div>
+      <div class="mb-4">
+        <div class="grid justify-start border-2 py-2 px-3 rounded-2xl">
+          <div class="mx-auto max-w-xs">
+            <label
+              for="example1"
+              class="mb-1 block text-sm font-medium text-gray-700"
+              >Foto</label
+            >
+            <input
+              id="profilePicture"
+              name="profilePicture"
+              type="file"
+              class="mt-2 block w-full text-sm file:mr-4 file:rounded-md file:border-0 file:bg-orange-500 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-white hover:file:bg-orange-700 focus:outline-none disabled:pointer-events-none disabled:opacity-60"
+              formControlName="profilePicture"
+            />
+          </div>
+        </div>
+        <small
+          class="text-red-600"
+          *ngIf="
+            this.adminForm.controls.profilePicture.touched &&
+            this.adminForm.controls.profilePicture.hasError('required')
+          "
+          >La foto es requerida</small
+        >
+      </div>
+      <!-- <re-captcha
+             (resolved)="executeRecaptcha($event)"
+             siteKey="6LfU43sqAAAAAD3Xla1f3kWSqQY2WwcoP7sKgg15"
+             formControlName="recaptcha"
+           ></re-captcha> -->
+      <app-captcha (resultadoCaptcha)="onCaptchaAdmin($event)"></app-captcha>
+      <button
+        type="submit"
+        class="bg-rose-500 hover:bg-rose-700 text-white font-semibold rounded-md mt-2 py-2 px-4 w-full"
+        (click)="onRegister($event, 'admin')"
+        [disabled]="!adminForm.valid"
+        [ngClass]="{
+          'bg-slate-400 hover:bg-slate-400': !adminForm.valid
+        }"
+      >
+        Registrarse
+      </button>
+    </form></ng-template
+  >
+
+  <div
+    id="toast-success"
+    class="flex items-center w-full max-w-72 p-4 my-4 bg-white rounded-lg shadow transition-opacity duration-300 ease-in-out z-50"
+    role="alert"
+    [ngClass]="showAlert ? 'opacity-100' : 'opacity-0'"
+  >
+    <div
+      class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg"
+    >
+      <svg
+        class="w-5 h-5"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
+        <path
+          d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"
+        />
+      </svg>
+      <span class="sr-only">Check icon</span>
+    </div>
+    <div class="ms-3 text-sm font-normal">Usuario creado exitosamente.</div>
+  </div>
+</div>
+
+<app-modal [showModal]="showModal" [msg]="errorMsg"></app-modal>

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -7,35 +7,27 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { AuthService } from '../../services/auth/auth.service';
-import { MultiselectComponent } from '../../components/multiselect/multiselect.component';
-import { ModalComponent } from '../../components/modal/modal.component';
 import { ERROR_MESSAGES } from '../../utils/firebase-errors';
-import {
-  RecaptchaFormsModule,
-  RecaptchaModule,
-  RecaptchaV3Module,
-} from 'ng-recaptcha';
-import { CaptchaComponent } from '../../components/captcha/captcha.component';
+import { CaptchaComponent } from '../captcha/captcha.component';
+import { ModalComponent } from '../modal/modal.component';
+import { MultiselectComponent } from '../multiselect/multiselect.component';
+import { AuthAdminService } from '../../services/authAdmin/auth-admin.service';
 
 @Component({
-  selector: 'app-register',
+  selector: 'app-create-new-users',
   standalone: true,
-  templateUrl: './register.component.html',
-  styleUrl: './register.component.scss',
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     MultiselectComponent,
     ModalComponent,
-    RecaptchaModule,
-    RecaptchaFormsModule,
-    RecaptchaV3Module,
     CaptchaComponent,
   ],
+  templateUrl: './create-new-users.component.html',
+  styleUrl: './create-new-users.component.scss',
 })
-export class RegisterComponent {
+export class CreateNewUsersComponent {
   pacienteForm = new FormGroup({
     name: new FormControl('', Validators.required),
     lastName: new FormControl('', Validators.required),
@@ -78,14 +70,37 @@ export class RegisterComponent {
     ]),
   });
 
+  adminForm = new FormGroup({
+    name: new FormControl('', Validators.required),
+    lastName: new FormControl('', Validators.required),
+    age: new FormControl('', [
+      Validators.required,
+      Validators.min(18),
+      Validators.max(60),
+    ]),
+    dni: new FormControl('', [Validators.required, Validators.max(99999999)]),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required]),
+    repeatPassword: new FormControl('', [Validators.required]),
+    profilePicture: new FormControl('', [Validators.required]),
+    // recaptcha: new FormControl(null, Validators.required),
+    captcha: new FormControl(false, [
+      Validators.required,
+      Validators.requiredTrue,
+    ]),
+  });
+
+  @Output() salir: EventEmitter<any> = new EventEmitter<any>();
+
   selectedEspecialidades: string[] = [];
   hasSelectedEspecialidades = false;
   formType: string = '';
 
   errorMsg: string = '';
   showModal: boolean = false;
+  showAlert: boolean = false;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthAdminService) {}
 
   executeRecaptcha(token: any) {
     console.log(token);
@@ -94,8 +109,6 @@ export class RegisterComponent {
   onRegister($event: any, type: string): void {
     $event.preventDefault();
     this.showModal = false;
-    console.log(this.especialistaForm);
-    console.log($event.target.form[9].files[0]);
 
     if (type === 'paciente') {
       if (
@@ -109,9 +122,9 @@ export class RegisterComponent {
       }
       const { email, password } = this.pacienteForm.value;
       this.authService
-        .SignUp(
-          email || '',
-          password || '',
+        .crearNuevoUsuario(
+          email!,
+          password!,
           'paciente',
           this.pacienteForm.value,
           {
@@ -144,7 +157,7 @@ export class RegisterComponent {
 
       const { email, password } = this.especialistaForm.value;
       this.authService
-        .SignUp(
+        .crearNuevoUsuario(
           email || '',
           password || '',
           'especialista',
@@ -160,6 +173,42 @@ export class RegisterComponent {
           console.log(e.code);
         });
     }
+
+    if (type === 'admin') {
+      if (
+        !(this.adminForm.value.password === this.adminForm.value.repeatPassword)
+      ) {
+        console.log('las contraseñas no coindicen');
+        return;
+      }
+
+      const { email, password } = this.adminForm.value;
+      this.authService
+        .crearNuevoUsuario(
+          email || '',
+          password || '',
+          'admin',
+          {
+            ...this.adminForm.value,
+            especialidad: this.selectedEspecialidades,
+          },
+          { profilePicture: $event.target.form[7].files[0] }
+        )
+        .catch((e: any) => {
+          this.showModal = true;
+          this.errorMsg = ERROR_MESSAGES[e.code as keyof typeof ERROR_MESSAGES];
+          console.log(e.code);
+        });
+    }
+
+    this.adminForm.reset();
+    this.especialistaForm.reset();
+    this.pacienteForm.reset();
+    this.formType = '';
+    this.showAlert = true;
+    setTimeout(() => {
+      this.showAlert = false;
+    }, 3000);
   }
 
   selectEspecialidades(especialidades: string[]) {
@@ -178,5 +227,16 @@ export class RegisterComponent {
 
   onCaptchaPaciente(resultadoCaptcha: boolean) {
     this.pacienteForm.patchValue({ captcha: resultadoCaptcha });
+  }
+
+  onCaptchaAdmin(resultadoCaptcha: boolean) {
+    this.adminForm.patchValue({ captcha: resultadoCaptcha });
+  }
+
+  onCancel() {
+    this.adminForm.reset();
+    this.especialistaForm.reset();
+    this.pacienteForm.reset();
+    this.salir.emit('users');
   }
 }

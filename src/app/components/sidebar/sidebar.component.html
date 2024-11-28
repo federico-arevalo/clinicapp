@@ -2,7 +2,7 @@
   (click)="openSidebar()"
   *ngIf="isLoggedIn"
   id="open"
-  class="flex absolute items-center gap-1 bg-gray-800 text-white py-2 px-4 rounded-md hover:bg-gray-700 transition duration-300 ease-in-out transform hover:scale-110"
+  class="flex fixed items-center gap-1 bg-gray-800 text-white py-2 px-4 rounded-r-md hover:bg-gray-700 transition duration-300 ease-in-out transform hover:scale-110"
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -17,7 +17,7 @@
   Menu
 </button>
 <aside
-  class="absolute z-10 top-0 col-span-3 justify-center h-[88.8%]"
+  class="fixed z-10 top-0 col-span-3 justify-center h-[88.8%]"
   *ngIf="isLoggedIn"
   [ngClass]="isLoggedIn ? '' : 'invisible'"
   [@openClose]="sidebarState"
@@ -33,7 +33,11 @@
         Clinicapp
       </p>
     </div>
-    <div aria-label="toggler" class="flex justify-center items-center">
+    <div
+      (click)="closeSidebar()"
+      aria-label="toggler"
+      class="flex justify-center items-center"
+    >
       <button
         aria-label="close"
         id="close"
@@ -90,7 +94,7 @@
           }}
         </p>
         <p class="text-xs leading-3 text-gray-300">
-          {{ currentUser }}
+          {{ currentUser | truncate : 10 }}
         </p>
       </div>
     </div>
@@ -99,13 +103,11 @@
       class="mt-6 pt-6 flex flex-col justify-start items-center pl-4 w-full border-gray-600 border-b space-y-3 pb-5"
     >
       <button
-        class="flex jusitfy-start items-center space-x-6 w-full focus:outline-none focus:text-indigo-400 text-white rounded"
+        class="flex jusitfy-start items-center space-x-6 w-full focus:outline-none text-white focus:text-indigo-400 rounded"
         (click)="goTo('/home')"
       >
         <svg
-          class="fill-stroke"
-          width="24"
-          height="24"
+          class="h-5 w-5 ml-[2px] text-white"
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -204,13 +206,60 @@
       </button>
       <button
         class="flex jusitfy-start items-center space-x-6 w-full focus:outline-none text-white focus:text-indigo-400 rounded"
+        (click)="goTo('/pacientes')"
+        *ngIf="this.authService.currentUser.rol === 'especialista'"
+      >
+        <svg
+          class="h-5 w-5 ml-[2px] text-white"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M6 21V19C6 17.9391 6.42143 16.9217 7.17157 16.1716C7.92172 15.4214 8.93913 15 10 15H14C15.0609 15 16.0783 15.4214 16.8284 16.1716C17.5786 16.9217 18 17.9391 18 19V21"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <p class="text-base leading-4">Pacientes</p>
+      </button>
+      <button
+        class="flex jusitfy-start items-center space-x-6 w-full focus:outline-none text-white focus:text-indigo-400 rounded"
+        (click)="goTo('/informes')"
+        *ngIf="this.authService.currentUser.rol === 'admin'"
+      >
+        <svg
+          class="h-5 w-5 ml-[2px] text-white"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          viewBox="0 0 22 21"
+        >
+          <path
+            d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"
+          />
+          <path
+            d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"
+          />
+        </svg>
+        <p class="text-base leading-4">Informes</p>
+      </button>
+      <button
+        class="flex jusitfy-start items-center space-x-6 w-full focus:outline-none text-white focus:text-indigo-400 rounded"
         (click)="goTo('/users')"
         *ngIf="this.authService.currentUser.rol === 'admin'"
       >
         <svg
-          class="fill-stroke"
-          width="24"
-          height="24"
+          class="h-5 w-5 ml-[2px] text-white"
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"

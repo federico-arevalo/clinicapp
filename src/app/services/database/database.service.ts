@@ -29,8 +29,17 @@ export class DatabaseService {
     return collectionData(collection(this.firestore, 'users'));
   }
 
+  getPacientes() {
+    return collectionData(collection(this.firestore, 'users'));
+  }
+
   getUsers() {
     return collectionData(collection(this.firestore, `users`));
+  }
+
+  getLoginLogs() {
+    const logins = collection(this.firestore, 'logins');
+    return collectionData(logins, { idField: 'id' });
   }
 
   toggleUser(id: string, usuario: any) {

@@ -46,41 +46,13 @@
             <span class="text-xl">Mis horarios</span>
           </div>
         </button>
-        <button
-          class="rounded-full w-56 h-16 text-white font-semibold lg:mt-10"
-          [ngClass]="showHistoriaClinica ? 'bg-rose-500' : 'bg-gray-600'"
-          (click)="toggleHistoriaClinica()"
-          *ngIf="auth.currentUser.rol === 'paciente'"
-        >
-          <div class="flex gap-3 justify-center items-center">
-            <span>
-              <svg
-                class="w-8 h-8"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"
-                />
-              </svg>
-            </span>
-            <span class="text-xl">Historia Clinica</span>
-          </div>
-        </button>
       </div>
 
       <ng-content
         *ngIf="showMisHorarios; then misHorarios; else information"
       ></ng-content>
     </div>
-
     <!-- MI INFORMACION PACIENTE -->
-
     <div
       class="flex flex-col md:flex-row"
       *ngIf="auth.currentUser.rol === 'paciente'"
@@ -99,39 +71,27 @@
         <h1 class="text-2xl font-bold text-indigo-800 dark:text-white mb-2">
           {{ auth.currentUser.name + " " + auth.currentUser.lastName }}
         </h1>
-
-        <!-- HISTORIA CLINICA BUTTON -->
-
-        <button
-          class="rounded-full w-56 h-16 text-white font-semibold lg:mt-10"
-          [ngClass]="showHistoriaClinica ? 'bg-rose-500' : 'bg-gray-600'"
-          (click)="toggleHistoriaClinica()"
-        >
-          <div class="flex gap-3 justify-center items-center">
-            <span>
-              <svg
-                class="w-8 h-8"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"
-                />
-              </svg>
-            </span>
-            <span class="text-xl">Historia Clinica</span>
-          </div>
-        </button>
       </div>
 
-      <ng-content
-        *ngIf="showHistoriaClinica; then historiaClinica; else information"
-      ></ng-content>
+      <ng-content *ngTemplateOutlet="information"></ng-content>
+    </div>
+    <!-- MI INFORMACION ADMIN -->
+    <div
+      class="flex flex-col md:flex-row"
+      *ngIf="auth.currentUser.rol === 'admin'"
+    >
+      <div class="md:w-1/3 text-center mb-8 md:mb-0">
+        <img
+          [src]="auth.userImages[0]"
+          heigh="500"
+          class="rounded-full w-48 h-48 mx-auto mb-4 border-4 border-indigo-800 dark:border-blue-900 transition-transform duration-300 hover:scale-105"
+        />
+        <h1 class="text-2xl font-bold text-indigo-800 dark:text-white mb-2">
+          {{ auth.currentUser.name + " " + auth.currentUser.lastName }}
+        </h1>
+      </div>
+
+      <ng-content *ngTemplateOutlet="information"></ng-content>
     </div>
   </div>
 </div>
@@ -162,14 +122,17 @@
           >
             <dt class="text-sm font-medium text-gray-500">DNI</dt>
             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              {{ auth.currentUser.dni }}
+              {{ auth.currentUser.dni.toString() | formatDNI }}
             </dd>
           </div>
           <div
             class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
           >
             <dt class="text-sm font-medium text-gray-500">Rol</dt>
-            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <dd
+              class="mt-1 text-sm sm:mt-0 sm:col-span-2"
+              [appRolColor]="auth.currentUser.rol"
+            >
               {{ auth.currentUser.rol.toUpperCase() }}
             </dd>
           </div>
@@ -211,6 +174,7 @@
       </div>
       <app-download-historia-clinica
         *ngIf="auth.currentUser.rol === 'paciente'"
+        [cambiarEspecialidad]="true"
       ></app-download-historia-clinica>
     </div>
   </div>
@@ -322,5 +286,3 @@
     </button>
   </form>
 </ng-template>
-
-<ng-template #historiaClinica> </ng-template>

@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DatabaseService } from '../../services/database/database.service';
 import { DownloadHistoriaClinicaComponent } from '../../components/download-historia-clinica/download-historia-clinica.component';
+import { FormatDNIPipe } from '../../pipes/format-dni.pipe';
+import { RolColorDirective } from '../../directives/rolColor/rol-color.directive';
 
 @Component({
   selector: 'app-my-information',
@@ -12,6 +14,8 @@ import { DownloadHistoriaClinicaComponent } from '../../components/download-hist
     CommonModule,
     ReactiveFormsModule,
     DownloadHistoriaClinicaComponent,
+    FormatDNIPipe,
+    RolColorDirective,
   ],
   templateUrl: './my-information.component.html',
   styleUrl: './my-information.component.scss',
@@ -22,7 +26,6 @@ export class MyInformationComponent implements OnInit {
   isModifying: boolean = false;
   especialidades: any[] = [];
   selectedEspecialidad: string = '';
-  showHistoriaClinica: boolean = false;
 
   times = [
     '08:00',
@@ -168,9 +171,5 @@ export class MyInformationComponent implements OnInit {
 
   modificarHorarios() {
     this.isModifying = true;
-  }
-
-  toggleHistoriaClinica() {
-    this.showHistoriaClinica = !this.showHistoriaClinica;
   }
 }

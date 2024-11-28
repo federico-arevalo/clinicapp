@@ -23,7 +23,7 @@
   <div class="ms-3 text-sm font-normal">Turno creado exitosamente.</div>
 </div>
 
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+<div class="relative max-h-[1200px] overflow-x-auto shadow-md sm:rounded-lg">
   <ng-content *ngIf="showForm; then turnoForm; else allTurnos"></ng-content>
   <ng-content *ngIf="showSpinner; then loading"></ng-content>
 
@@ -52,7 +52,7 @@
 
 <ng-template #allTurnos>
   <div
-    class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 bg-white dark:bg-gray-900"
+    class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 bg-gray-900"
   >
     <div class="flex items-center justify-around p-2 w-full">
       <h2 class="text-4xl font-extrabold dark:text-white">Mis turnos</h2>
@@ -141,7 +141,7 @@
             <div
               [ngClass]="{ hidden: openDropdownIndex !== i }"
               id="dropdown"
-              class="z-10 mt-2 fixed bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+              class="z-10 mt-2 absolute bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
             >
               <div
                 class="py-2 text-sm text-gray-700 dark:text-gray-200"
@@ -306,13 +306,7 @@
         <app-appointment-scheduler-component
           [especialidad]="selectedEspecialidad"
           [especialista]="selectedEspecialista"
-          [paciente]="{
-            uid: authService.currentUser.uid,
-            fullName:
-              authService.currentUser.name +
-              ' ' +
-              authService.currentUser.lastName
-          }"
+          [paciente]="authService.currentUser"
           (turnoCreated)="createdTurno = $event"
         ></app-appointment-scheduler-component>
       </div>

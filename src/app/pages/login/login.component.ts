@@ -46,7 +46,8 @@ export class LoginComponent {
           .then((result: any) => {
             if (!result) {
               this.showModal = true;
-              this.errorMsg = 'Usuario sin email verificado';
+              this.errorMsg =
+                'Usuario sin email verificado. Revisa tu casilla de email';
             }
           })
           .catch((e: any) => {
