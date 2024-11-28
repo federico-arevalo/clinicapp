@@ -32,7 +32,7 @@ export class ModalTextComponent {
       this.isMandatory = true;
       return;
     }
-    console.log(this.accion);
+
     this.turnoDispatched.emit({
       texto: this.textArea,
       accion: this.accion,

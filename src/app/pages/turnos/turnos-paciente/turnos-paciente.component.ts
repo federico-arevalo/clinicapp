@@ -213,8 +213,6 @@ export class TurnosPacienteComponent implements OnInit {
     if (this.currentStep === 2) {
       this.selectedEspecialista = null;
     }
-    if (this.currentStep === 3) {
-    }
 
     if (this.currentStep > 1) this.currentStep--;
     this.showStep(this.currentStep);

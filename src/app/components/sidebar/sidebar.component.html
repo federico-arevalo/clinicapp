@@ -2,7 +2,7 @@
   (click)="openSidebar()"
   *ngIf="isLoggedIn"
   id="open"
-  class="flex absolute items-center gap-1 bg-gray-800 text-white py-2 px-4 rounded-r-md hover:bg-gray-700 transition duration-300 ease-in-out transform hover:scale-110"
+  class="flex fixed items-center gap-1 bg-gray-800 text-white py-2 px-4 rounded-r-md hover:bg-gray-700 transition duration-300 ease-in-out transform hover:scale-110"
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -17,7 +17,7 @@
   Menu
 </button>
 <aside
-  class="absolute z-10 top-0 col-span-3 justify-center h-[88.8%]"
+  class="fixed z-10 top-0 col-span-3 justify-center h-[88.8%]"
   *ngIf="isLoggedIn"
   [ngClass]="isLoggedIn ? '' : 'invisible'"
   [@openClose]="sidebarState"
@@ -33,7 +33,11 @@
         Clinicapp
       </p>
     </div>
-    <div aria-label="toggler" class="flex justify-center items-center">
+    <div
+      (click)="closeSidebar()"
+      aria-label="toggler"
+      class="flex justify-center items-center"
+    >
       <button
         aria-label="close"
         id="close"

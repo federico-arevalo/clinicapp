@@ -306,13 +306,7 @@
         <app-appointment-scheduler-component
           [especialidad]="selectedEspecialidad"
           [especialista]="selectedEspecialista"
-          [paciente]="{
-            uid: authService.currentUser.uid,
-            fullName:
-              authService.currentUser.name +
-              ' ' +
-              authService.currentUser.lastName
-          }"
+          [paciente]="authService.currentUser"
           (turnoCreated)="createdTurno = $event"
         ></app-appointment-scheduler-component>
       </div>
