@@ -9,14 +9,14 @@
   <div
     class="lg:px-36 md:px-52 lg:w-2/3 sm:20 p-8 w-full h-screen overflow-y-scroll flex flex-col"
   >
-    <h1 class="text-2xl font-semibold mb-4">
-      Registrarse {{ isPaciente ? "como paciente" : "como especialista" }}
-    </h1>
+    <h1 class="text-2xl font-semibold mb-4">Registrarse como {{ formType }}</h1>
     <div class="flex justify-around">
       <div>
         <button
           (click)="switchTab('paciente')"
-          [ngClass]="isPaciente ? '' : 'blur-sm'"
+          [ngClass]="
+            formType === 'paciente' ? 'border-2 border-red-500 rounded-md' : ''
+          "
         >
           <img
             height="175"
@@ -30,7 +30,11 @@
       <div>
         <button
           (click)="switchTab('especialista')"
-          [ngClass]="isPaciente ? 'blur-sm' : ''"
+          [ngClass]="
+            formType === 'especialista'
+              ? 'border-2 border-red-500 rounded-md'
+              : ''
+          "
         >
           <img
             height="175"
@@ -43,9 +47,16 @@
       </div>
     </div>
 
-    <ng-container
-      *ngTemplateOutlet="isPaciente ? paciente : especialista"
-    ></ng-container>
+    <ng-container [ngSwitch]="formType">
+      <ng-container
+        *ngSwitchCase="'paciente'"
+        [ngTemplateOutlet]="paciente"
+      ></ng-container>
+      <ng-container
+        *ngSwitchCase="'especialista'"
+        [ngTemplateOutlet]="especialista"
+      ></ng-container>
+    </ng-container>
 
     <!-- FORM PACIENTE -->
     <ng-template #paciente>
@@ -156,8 +167,8 @@
             class="text-red-600"
             *ngIf="
               this.pacienteForm.controls.age.touched &&
-              this.pacienteForm.controls.age.hasError('min') &&
-              this.especialistaForm.controls.age.hasError('max')
+              (this.pacienteForm.controls.age.hasError('min') ||
+                this.pacienteForm.controls.age.hasError('max'))
             "
             >La edad debe ser entre 18 y 60 años</small
           >
@@ -386,11 +397,14 @@
             >Las fotos son requeridas</small
           >
         </div>
-        <re-captcha
+        <!-- <re-captcha
           (resolved)="executeRecaptcha($event)"
           siteKey="6LfU43sqAAAAAD3Xla1f3kWSqQY2WwcoP7sKgg15"
           formControlName="recaptcha"
-        ></re-captcha>
+        ></re-captcha> -->
+        <app-captcha
+          (resultadoCaptcha)="onCaptchaPaciente($event)"
+        ></app-captcha>
         <button
           type="submit"
           class="bg-rose-500 hover:bg-rose-700 text-white font-semibold rounded-md mt-2 py-2 px-4 w-full"
@@ -512,8 +526,8 @@
             class="text-red-600"
             *ngIf="
               this.especialistaForm.controls.age.touched &&
-              this.especialistaForm.controls.age.hasError('min') &&
-              this.especialistaForm.controls.age.hasError('max')
+              (this.especialistaForm.controls.age.hasError('min') ||
+                this.especialistaForm.controls.age.hasError('max'))
             "
             >La edad debe ser entre 18 y 60 años</small
           >
@@ -717,11 +731,14 @@
             >La foto es requerida</small
           >
         </div>
-        <re-captcha
+        <!-- <re-captcha
           (resolved)="executeRecaptcha($event)"
           siteKey="6LfU43sqAAAAAD3Xla1f3kWSqQY2WwcoP7sKgg15"
           formControlName="recaptcha"
-        ></re-captcha>
+        ></re-captcha> -->
+        <app-captcha
+          (resultadoCaptcha)="onCaptchaEspecialista($event)"
+        ></app-captcha>
         <button
           type="submit"
           class="bg-rose-500 hover:bg-rose-700 text-white font-semibold rounded-md mt-2 py-2 px-4 w-full"

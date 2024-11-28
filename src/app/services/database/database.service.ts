@@ -37,6 +37,11 @@ export class DatabaseService {
     return collectionData(collection(this.firestore, `users`));
   }
 
+  getLoginLogs() {
+    const logins = collection(this.firestore, 'logins');
+    return collectionData(logins, { idField: 'id' });
+  }
+
   toggleUser(id: string, usuario: any) {
     const vehiculoRef = doc(this.firestore, 'users', id);
     updateDoc(vehiculoRef, {

@@ -16,6 +16,7 @@ import {
   RecaptchaModule,
   RecaptchaV3Module,
 } from 'ng-recaptcha';
+import { CaptchaComponent } from '../../components/captcha/captcha.component';
 
 @Component({
   selector: 'app-register',
@@ -31,6 +32,7 @@ import {
     RecaptchaModule,
     RecaptchaFormsModule,
     RecaptchaV3Module,
+    CaptchaComponent,
   ],
 })
 export class RegisterComponent {
@@ -49,7 +51,11 @@ export class RegisterComponent {
     repeatPassword: new FormControl('', [Validators.required]),
     firstProfilePicture: new FormControl('', [Validators.required]),
     secondProfilePicture: new FormControl('', [Validators.required]),
-    recaptcha: new FormControl(null, Validators.required),
+    // recaptcha: new FormControl(null, Validators.required),
+    captcha: new FormControl(false, [
+      Validators.required,
+      Validators.requiredTrue,
+    ]),
   });
 
   especialistaForm = new FormGroup({
@@ -65,12 +71,16 @@ export class RegisterComponent {
     password: new FormControl('', [Validators.required]),
     repeatPassword: new FormControl('', [Validators.required]),
     profilePicture: new FormControl('', [Validators.required]),
-    recaptcha: new FormControl(null, Validators.required),
+    // recaptcha: new FormControl(null, Validators.required),
+    captcha: new FormControl(false, [
+      Validators.required,
+      Validators.requiredTrue,
+    ]),
   });
 
   selectedEspecialidades: string[] = [];
   hasSelectedEspecialidades = false;
-  isPaciente = false;
+  formType: string = '';
 
   errorMsg: string = '';
   showModal: boolean = false;
@@ -159,7 +169,14 @@ export class RegisterComponent {
   }
 
   switchTab(type: string) {
-    if (type === 'paciente') this.isPaciente = true;
-    else this.isPaciente = false;
+    this.formType = type;
+  }
+
+  onCaptchaEspecialista(resultadoCaptcha: boolean) {
+    this.especialistaForm.patchValue({ captcha: resultadoCaptcha });
+  }
+
+  onCaptchaPaciente(resultadoCaptcha: boolean) {
+    this.pacienteForm.patchValue({ captcha: resultadoCaptcha });
   }
 }
