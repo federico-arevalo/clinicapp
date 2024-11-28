@@ -5,11 +5,17 @@ import { IsVerifiedDirective } from '../../directives/isVerified/is-verified.dir
 import * as XLSX from 'xlsx';
 import { TurnosService } from '../../services/turnos/turnos.service';
 import { CreateNewUsersComponent } from '../../components/create-new-users/create-new-users.component';
+import { DownloadHistoriaClinicaComponent } from '../../components/download-historia-clinica/download-historia-clinica.component';
 
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [CommonModule, IsVerifiedDirective, CreateNewUsersComponent],
+  imports: [
+    CommonModule,
+    IsVerifiedDirective,
+    CreateNewUsersComponent,
+    DownloadHistoriaClinicaComponent,
+  ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
 })
@@ -18,6 +24,7 @@ export class UsersComponent {
   allUsers: any;
   imagesUrl: string[] = [];
   turnos: any;
+  pacientes: any;
 
   userList = 'users';
 
@@ -30,6 +37,7 @@ export class UsersComponent {
     this.dbService.getUsers().subscribe((users: any) => {
       this.allUsers = users;
       this.users = users.filter((user: any) => user.rol === 'especialista');
+      this.pacientes = users.filter((user: any) => user.rol === 'paciente');
       this.users.map((user: any) => {
         this.dbService.getUserImageById(user.uid).then((imagesUrl) => {
           user.profilePicture = imagesUrl;
