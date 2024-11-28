@@ -207,19 +207,21 @@ export class AuthAdminService {
             especialidad: newUserData.especialidad,
             profilePicture: data.metadata.fullPath,
             rol: userType,
-            tiemposDisponibles: newUserData.map((especialidad: any) => {
-              return {
-                especialidad: especialidad,
-                tiemposDisponibles: {
-                  lunes: { inicio: '08:00', fin: '18:30' },
-                  martes: { inicio: '08:00', fin: '18:30' },
-                  miercoles: { inicio: '08:00', fin: '18:30' },
-                  jueves: { inicio: '08:00', fin: '18:30' },
-                  viernes: { inicio: '08:00', fin: '18:30' },
-                  sabado: { inicio: '08:00', fin: '13:30' },
-                },
-              };
-            }),
+            tiemposDisponibles: newUserData.especialidad.map(
+              (especialidad: any) => {
+                return {
+                  especialidad: especialidad,
+                  tiemposDisponibles: {
+                    lunes: { inicio: '08:00', fin: '18:30' },
+                    martes: { inicio: '08:00', fin: '18:30' },
+                    miercoles: { inicio: '08:00', fin: '18:30' },
+                    jueves: { inicio: '08:00', fin: '18:30' },
+                    viernes: { inicio: '08:00', fin: '18:30' },
+                    sabado: { inicio: '08:00', fin: '13:30' },
+                  },
+                };
+              }
+            ),
           };
 
           this.userData = newEspecialista;
