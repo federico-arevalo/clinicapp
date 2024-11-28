@@ -9,11 +9,12 @@ import {
   trigger,
 } from '@angular/animations';
 import { Router } from '@angular/router';
+import { TruncatePipe } from '../../pipes/truncate.pipe';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TruncatePipe],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
   animations: [

@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import { DatabaseService } from '../../services/database/database.service';
-import { Chart } from 'chart.js';
+import { Chart, registerables } from 'chart.js/auto';
+Chart.register(...registerables);
 
 @Component({
   selector: 'app-informes',
@@ -13,16 +14,18 @@ export class InformesComponent {
   logIngresos: any[] = [];
   logIngresosChart: any;
 
-  ctx = document.getElementById('logIngresosChart') as HTMLCanvasElement;
-
-  constructor(private db: DatabaseService) {}
+  constructor(private db: DatabaseService, private elementRef: ElementRef) {}
 
   ngOnInit() {
     this.fetchLogIngresos();
   }
 
   loadLogIngresos() {
-    this.logIngresosChart = new Chart(this.ctx, {
+    let ctx = this.elementRef.nativeElement.querySelector(
+      '#logIngresosChart'
+    ) as HTMLCanvasElement;
+
+    this.logIngresosChart = new Chart(ctx, {
       type: 'scatter',
       data: {
         datasets: [

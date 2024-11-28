@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DatabaseService } from '../../services/database/database.service';
 import { DownloadHistoriaClinicaComponent } from '../../components/download-historia-clinica/download-historia-clinica.component';
+import { FormatDNIPipe } from '../../pipes/format-dni.pipe';
 
 @Component({
   selector: 'app-my-information',
@@ -12,6 +13,7 @@ import { DownloadHistoriaClinicaComponent } from '../../components/download-hist
     CommonModule,
     ReactiveFormsModule,
     DownloadHistoriaClinicaComponent,
+    FormatDNIPipe,
   ],
   templateUrl: './my-information.component.html',
   styleUrl: './my-information.component.scss',
