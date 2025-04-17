@@ -1,62 +1,33 @@
 import { Component, ElementRef } from '@angular/core';
 import { DatabaseService } from '../../services/database/database.service';
-import { Chart, registerables } from 'chart.js/auto';
-Chart.register(...registerables);
+import * as XLSX from 'xlsx';
+import { TurnosService } from '../../services/turnos/turnos.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-informes',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './informes.component.html',
   styleUrl: './informes.component.scss',
 })
 export class InformesComponent {
   logIngresos: any[] = [];
-  logIngresosChart: any;
+  turnos: any[] = [];
+  especialistas: any[] = [];
+  especialidades: any[] = [];
 
-  constructor(private db: DatabaseService, private elementRef: ElementRef) {}
+  constructor(
+    private db: DatabaseService,
+    private turnosService: TurnosService,
+    private elementRef: ElementRef
+  ) {}
 
   ngOnInit() {
     this.fetchLogIngresos();
-  }
-
-  loadLogIngresos() {
-    let ctx = this.elementRef.nativeElement.querySelector(
-      '#logIngresosChart'
-    ) as HTMLCanvasElement;
-
-    this.logIngresosChart = new Chart(ctx, {
-      type: 'scatter',
-      data: {
-        datasets: [
-          {
-            label: 'Log de ingresos',
-            data: this.logIngresos.map((log: any) => ({
-              x: new Date(log.fechaHora).getTime(),
-              y: log.name, // Use numeric user ID
-            })),
-            backgroundColor: 'rgba(75, 192, 192, 0.6)',
-          },
-        ],
-      },
-      options: {
-        scales: {
-          x: {
-            type: 'time',
-            title: {
-              display: true,
-              text: 'Fecha y Hora',
-            },
-          },
-          y: {
-            title: {
-              display: true,
-              text: 'Usuarios',
-            },
-          },
-        },
-      },
-    });
+    this.fetchTurnos();
+    this.fetchEspecialistas();
+    this.fetchEspecialidades();
   }
 
   fetchLogIngresos() {
@@ -64,11 +35,58 @@ export class InformesComponent {
       const logIngresos = logins.map((login: any) => {
         return {
           name: login.name,
-          fechaHora: login.fecha,
+          fechaHora: new Date(login.fecha * 1000).toLocaleString(),
         };
       });
       this.logIngresos = logIngresos;
-      this.loadLogIngresos();
     });
+  }
+
+  fetchTurnos() {
+    this.turnosService.getTurnos().subscribe((turnos: any) => {
+      this.turnos = turnos;
+    });
+  }
+
+  fetchEspecialistas() {
+    this.db.getUsers().subscribe((respuesta: any) => {
+      this.especialistas = respuesta.filter(
+        (user: any) => user.rol === 'especialista'
+      );
+    });
+  }
+
+  fetchEspecialidades() {
+    this.db.getEspecialidades().subscribe((respuesta: any) => {
+      console.log(respuesta);
+      this.especialidades = respuesta[0].especialidades;
+    });
+  }
+
+  descargarIngresosExcel(): void {
+    // const logs = this.logIngresos.map((log: any) => {
+    //   return {
+    //     nombre: log.name,
+    //     fechaHora: log.fechaHora,
+    //   };
+    // });
+
+    // const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(logs);
+
+    // const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    // XLSX.utils.book_append_sheet(wb, ws, 'Ingresos');
+
+    // XLSX.writeFile(wb, 'ingresos.xlsx');
+
+    console.log(this.logIngresos);
+    console.log(this.turnos);
+    console.log(this.especialistas);
+    console.log(this.especialidades);
+  }
+
+  getCantidadTurnos(especialidad: string) {
+    return this.turnos.filter(
+      (turno: any) => turno.especialidad === especialidad
+    ).length;
   }
 }
